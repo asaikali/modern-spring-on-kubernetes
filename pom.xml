@@ -20,6 +20,7 @@
 	</properties>
 	<modules>
 		<module>template</module>
+		<module>containerize</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -52,5 +53,4 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-
 </project>
