@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  shutdown: immediate # the default vaule for this setting is immediate
+#  shutdown: graceful # tell the server to wait for executing requests to finish before shutdown
+
+spring:
+  config:
+    import: "optional:configtree:/myconfigs/"
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+
+
+management:
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true # on K8s this is turned on by default
+      group:
+        readiness:
+          include: "readinessState,example"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+

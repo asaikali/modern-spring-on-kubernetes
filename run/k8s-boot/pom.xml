@@ -5,14 +5,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.example</groupId>
-    <artifactId>containerize</artifactId>
+    <artifactId>run</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>layers-dockerfile</artifactId>
+  <artifactId>k8s-boot</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>layers-dockerfile</name>
-  <description>Demo project showing how to use a spring boot multi-layer dockerfile</description>
+  <name>k8s-boot</name>
+  <description>Demo project showing best practices for Kubernetes manifests for Spring Boot</description>
 
   <dependencies>
     <dependency>
@@ -41,11 +41,6 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
@@ -66,4 +61,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>

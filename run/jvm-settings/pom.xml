@@ -5,14 +5,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.example</groupId>
-    <artifactId>containerize</artifactId>
+    <artifactId>run</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>layers-dockerfile</artifactId>
+  <artifactId>jvm-settings</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>layers-dockerfile</name>
-  <description>Demo project showing how to use a spring boot multi-layer dockerfile</description>
+  <name>jvm-settings</name>
+  <description>Demo project showing best practices for configuring JVMs on Kubernetes</description>
 
   <dependencies>
     <dependency>
@@ -38,11 +38,6 @@
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

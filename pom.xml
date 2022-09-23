@@ -21,6 +21,7 @@
 	<modules>
 		<module>template</module>
 		<module>containerize</module>
+		<module>run</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

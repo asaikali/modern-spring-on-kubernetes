@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Billboard</title>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <h1 id="message"> Loading ... </h1>
+</body>
+<script>
+    function getMessage()
+    {
+        $.ajax({
+            url : '/random-quote',
+            type: 'GET',
+            success: function(data){
+                $('#message').text(data.quote + " -- " + data.author + " -- running on k8s:  " + data.k8s);
+            },
+            error: function (data) {
+                $('#message').text("Error: Got No Response");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        window.setInterval(getMessage, 1000);
+    });
+</script>
+</html>
