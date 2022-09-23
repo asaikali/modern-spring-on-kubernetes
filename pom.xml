@@ -26,6 +26,7 @@
         <module>config</module>
         <module>discovery</module>
         <module>gateway</module>
+        <module>observability</module>
     </modules>
     <dependencyManagement>
         <dependencies>
