@@ -9,5 +9,4 @@ public class JvmSettingsDemoApplication {
   public static void main(String[] args) {
     SpringApplication.run(JvmSettingsDemoApplication.class, args);
   }
-
 }

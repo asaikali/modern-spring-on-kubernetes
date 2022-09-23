@@ -9,5 +9,4 @@ public class BuildpackDemoApplication {
   public static void main(String[] args) {
     SpringApplication.run(BuildpackDemoApplication.class, args);
   }
-
 }

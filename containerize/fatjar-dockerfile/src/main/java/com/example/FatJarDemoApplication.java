@@ -9,5 +9,4 @@ public class FatJarDemoApplication {
   public static void main(String[] args) {
     SpringApplication.run(FatJarDemoApplication.class, args);
   }
-
 }

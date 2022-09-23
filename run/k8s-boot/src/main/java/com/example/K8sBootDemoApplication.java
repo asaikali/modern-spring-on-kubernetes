@@ -9,5 +9,4 @@ public class K8sBootDemoApplication {
   public static void main(String[] args) {
     SpringApplication.run(K8sBootDemoApplication.class, args);
   }
-
 }
