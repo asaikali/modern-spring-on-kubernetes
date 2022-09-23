@@ -25,6 +25,7 @@
         <module>run</module>
         <module>config</module>
         <module>discovery</module>
+        <module>gateway</module>
     </modules>
     <dependencyManagement>
         <dependencies>
