@@ -23,6 +23,8 @@
         <module>template</module>
         <module>containerize</module>
         <module>run</module>
+        <module>config</module>
+        <module>discovery</module>
     </modules>
     <dependencyManagement>
         <dependencies>

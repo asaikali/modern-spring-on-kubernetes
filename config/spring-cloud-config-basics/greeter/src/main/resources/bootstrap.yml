@@ -1,0 +1,13 @@
+spring:
+  config:
+    use-legacy-processing: true
+  application:
+    # name of the application that is used to identify the app to the config server
+    name: greeter
+  cloud:
+    config:
+      # network location of the config server
+      uri: http://localhost:8888  # only works in boot 2.3 or earlier unless special legacy processing mode is configured
+      # make app startup fail if it can't connect to config server rather than start
+      # with no configs
+      fail-fast: false

@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: message-service
+
+server:
+  port: 8081
+
+# expose all the spring boot actuators good for demos.
+# NEVER DO THIS in production
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+#    restart:
+#      enabled: true # needed for spring cloud k8s so it can restart app when property values changes
+    health:
+      show-details: always

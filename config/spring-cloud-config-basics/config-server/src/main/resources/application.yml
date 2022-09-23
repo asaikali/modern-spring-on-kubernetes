@@ -1,0 +1,22 @@
+# set server to use the conventional port that the config server is expected to run on
+server:
+  port: 8888
+
+# Point the config server at the git repo containing the configuration settings
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/practical-microservices/spring-cloud-config-basics-repo.git
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true  # on K8s this is turned on by default

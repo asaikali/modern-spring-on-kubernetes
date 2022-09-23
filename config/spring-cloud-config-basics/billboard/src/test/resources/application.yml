@@ -1,0 +1,3 @@
+spring:
+  config:
+    import: "optional:configserver:http://localhost:8888" # adding optional allows app to startup even if config server is not available

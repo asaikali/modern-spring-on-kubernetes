@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        strategy: restart_context

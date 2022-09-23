@@ -1,0 +1,20 @@
+# Run Eureka on the conventional port which is 8761
+server:
+  port: 8761
+
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  # set the info about where this eureka server is running useful to set when
+  # running eureka across availability zones and regions
+  datacenter: laptop
+  environment: dev
+
+spring:
+  cloud:
+    kubernetes:
+      reload:
+        enabled: false
+        strategy: restart_context

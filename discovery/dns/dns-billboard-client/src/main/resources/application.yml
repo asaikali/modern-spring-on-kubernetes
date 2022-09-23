@@ -1,0 +1,17 @@
+
+message-service: "http://localhost:8081"
+
+spring:
+  application:
+    name: billboard-java-client
+
+# expose all the spring boot actuators good for demos.
+# NEVER DO THIS in production
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

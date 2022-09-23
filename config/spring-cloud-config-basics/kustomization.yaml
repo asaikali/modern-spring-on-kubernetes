@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: config-server
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - namespace.yaml
+  - config-server/k8s/config-server.yaml
+  - greeter/k8s/greeter.yaml
+  - billboard/k8s/billboard.yaml
+

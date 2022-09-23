@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: eureka
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - namespace.yaml
+  - eureka-server/k8s/eureka-server.yaml
+  - eureka-message-service/k8s/message-service.yaml
+  - eureka-billboard-client/k8s/billboard-client.yaml
