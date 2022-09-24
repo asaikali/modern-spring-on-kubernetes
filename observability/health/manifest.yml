@@ -1,0 +1,8 @@
+---
+applications:
+- name: demo-health
+  path: target/health-0.0.1-SNAPSHOT.jar
+  instances: 1
+  random-route: true
+  health-check-type: http
+  health-check-http-endpoint: /actuator/health

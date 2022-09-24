@@ -1,0 +1,17 @@
+eureka:
+  client:
+    fetch-registry: true # We need to call other services so lets get fetch what's registered in eureka
+    register-with-eureka: false # We don't offer services for others to call so lets not register in eureka
+
+# expose all the spring boot actuators good for demos.
+# NEVER DO THIS in production
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+

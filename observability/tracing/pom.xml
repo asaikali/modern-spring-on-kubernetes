@@ -4,20 +4,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.example</groupId>
-		<artifactId>modern-spring-on-kubernetes</artifactId>
+		<artifactId>observability</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>observability</artifactId>
+	<artifactId>tracing</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>run</name>
-	<description>Projects demonstrating best practices for observing spring applications in production</description>
+	<name>tracing</name>
 	<packaging>pom</packaging>
-	
+	<description>Demo Project Showing Distributed Tracing</description>
+
 	<modules>
-		<module>health</module>
-		<module>logs</module>
-		<module>metrics</module>
-		<module>tracing</module>
+		<module>billboard-client</module>
+		<module>message-service</module>
 	</modules>
 </project>

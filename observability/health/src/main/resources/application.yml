@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+management:
+  endpoint:
+    health:
+      group:
+        foo:
+          include: db
+        bar:
+          include: db,example
+          show-details: always
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"

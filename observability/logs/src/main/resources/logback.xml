@@ -1,0 +1,14 @@
+<!-- logback.xml -->
+<configuration>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+  <property resource="git.properties" />
+  <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <customFields>{"commitId":"${git.commit.id:-}" }</customFields>
+    </encoder>
+  </appender>
+  <root level="INFO">
+    <appender-ref ref="jsonConsoleAppender"/>
+  </root>
+</configuration>
+
