@@ -16,7 +16,7 @@
 	
 	<modules>
 		<module>dns</module>
-<!--		<module>eureka</module>-->
+		<module>eureka</module>
 		<module>native</module>
 	</modules>
 </project>
