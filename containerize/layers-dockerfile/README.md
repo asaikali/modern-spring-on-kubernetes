@@ -22,7 +22,7 @@ image using a Dockerfile.
 * using the command line navigate to target folder `cd target`
 * execute the command `java -Djarmode=layertools -jar layers-dockerfile-0.0.1-SNAPSHOT.jar`
 * execute the command `java -Djarmode=layertools -jar layers-dockerfile-0.0.1-SNAPSHOT.jar list`
-* create a temporary directory `t`
+* create a temporary directory `mkdir t`
 * navigate to the new directory `cd t`
 * execute the command `java -Djarmode=layertools -jar ../layers-dockerfile-0.0.1-SNAPSHOT.jar extract`
 * using your file browser navigate into the `target/t` folder and check what is in those directories
@@ -33,7 +33,7 @@ image using a Dockerfile.
 * explore the layers in the container using `dive boot-layers:1` find the app.jar 
 
 **Resources**
- 
-* [Spring Boot Docs](https://docs.spring.io/spring-boot/docs/2.4.0-RC1/reference/html/spring-boot-features.html#layering-docker-images) 
-* [Maven Plugin](https://docs.spring.io/spring-boot/docs/2.4.0-RC1/maven-plugin/reference/htmlsingle/#repackage-layers)
-* [Gradle Plugin](https://docs.spring.io/spring-boot/docs/2.4.0-RC1/gradle-plugin/reference/htmlsingle/#packaging-layered-jars )
+
+* [Spring Boot Docs](https://docs.spring.io/spring-boot/docs/current/reference/html/container-images.html#container-images.efficient-images.layering)
+* [Maven Plugin](https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#build-image)
+* [Gradle Plugin](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#build-image)
