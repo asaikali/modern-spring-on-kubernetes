@@ -19,5 +19,6 @@
 		<module>custom-layers-dockerfile</module>
 		<module>layers-dockerfile</module>
 		<module>fatjar-dockerfile</module>
+		<module>jlink-layers-dockerfile</module>
 	</modules>
 </project>

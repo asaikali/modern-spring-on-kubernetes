@@ -18,6 +18,6 @@
 		<module>health</module>
 		<module>logs</module>
 		<module>metrics</module>
-		<module>tracing</module>
+<!--		<module>tracing</module>-->
 	</modules>
 </project>
