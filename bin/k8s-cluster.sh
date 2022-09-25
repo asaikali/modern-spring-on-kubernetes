@@ -20,11 +20,12 @@ Commands:
   stop    - stops the minikube cluster called ${PROFILE_NAME}
   delete  - delete minikube cluster called ${PROFILE_NAME}
   restart - restarts the minikube cluster called ${PROFILE_NAME}
+  ip      - prints the ip address of minikube cluster ${PROFILE_NAME}
 
 ${BOLD}Access minikube docker daemon: ${NORMAL}
 
 You can point docker-cli at docker daemon in minikube vm by running
-the command 'eval \$(minikube -p ${PROFILE_NAME}) docker-env)'
+  eval \$(minikube -p ${PROFILE_NAME} docker-env)
 
 Examples:
   $(basename $0) start
@@ -65,6 +66,11 @@ function restart_cluster() {
   start_cluster
 }
 
+function cluster_ip() {
+    set -x
+    minikube ip -p ${PROFILE_NAME}
+}
+
 readonly ACTION=${1}
 
 if [[ ${ACTION} == "start" ]]; then
@@ -75,6 +81,8 @@ elif [[ ${ACTION} == "stop" ]]; then
   stop_cluster
 elif [[ ${ACTION} == "delete" ]]; then
    delete_cluster
+elif [[ ${ACTION} == "ip" ]]; then
+   cluster_ip
 else
   usage
   exit 1

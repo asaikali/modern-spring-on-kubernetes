@@ -13,8 +13,11 @@ sample and points out interesting things to look at.
 
 ### Java development tooling 
 * [Java 17 JDK](https://adoptium.net/)
-* Favourite Java IDE [Eclipse Spring Tool Suite](https://spring.io/tools) or 
-  [IntelliJ](https://www.jetbrains.com/idea/download)
+* [Maven](https://maven.apache.org/index.html)
+* Favourite Java IDE one of
+   * [Eclipse Spring Tool Suite](https://spring.io/tools) 
+   * [IntelliJ](https://www.jetbrains.com/idea/download)
+   * [VSCode](https://code.visualstudio.com/)
 
 ### Containerization tools
 * [Docker](https://www.docker.com/products/docker-desktop)  
@@ -28,7 +31,7 @@ While Minikube and docker desktop kubernetes can be used to run the apps, the
 instructions and scripts assume kind is available so please make suer you have
 kind installed.
 
-* [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
+* [kind](https://kind.sigs.k8s.io/docs/user/quick-start/) local kubernetes cluster
 
 is to use the cluster that is built into docker desktop 
 that is what the samples have been tested with. 
@@ -36,6 +39,7 @@ that is what the samples have been tested with.
 ### Kubernetes tooling
 * [Kubernetes](https://kubernetes.io/) sample tested with Docker Desktop K8s. If you have a different k8s install you must know how to expose the app in k8s to your machine machine if you don't just use docker desktop k8s to run these demos.
 * [minikube](https://minikube.sigs.k8s.io/docs/start/)
+* [kubectl](https://code.visualstudio.com/)
 * [k9s](https://github.com/derailed/k9s) text gui for k8s
 * [carvel](https://carvel.dev/) super useful set of clis for working kubernetes and containers 
 

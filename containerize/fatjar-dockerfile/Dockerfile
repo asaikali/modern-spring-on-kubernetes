@@ -1,4 +1,3 @@
-FROM adoptopenjdk:17-jre-hotspot
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
+FROM eclipse-temurin:17-jre
+COPY target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
