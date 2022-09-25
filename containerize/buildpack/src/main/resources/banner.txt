@@ -7,3 +7,4 @@
                                  | |
                                  |_|
 
+Spring Boot version: ${spring-boot.version}
