@@ -5,30 +5,29 @@ set -eo pipefail
 #
 # Define usage and error functions
 #
+readonly PROFILE_NAME="modern-spring"
 readonly BOLD=$(tput bold)
 readonly NORMAL=$(tput sgr0)
 readonly USAGE="
 
-Deploys all the GCP infrastructure for a multicluster TAP depolyment
+Starts and stops a minikube cluster for use during the workshop.
+The cluster is started as profile called ${PROFILE_NAME}
 
 Usage: $(basename $0) [command]
 
 Commands:
-  create   - creates all the required GCP infrastructure
-  delete   - delete all the gcp infrastructure creaed by create
-  creds    - retrives kubecnofig files and service account access key
+  start   - starts a minikube cluster called ${PROFILE_NAME}
+  stop    - stops the minikube cluster called ${PROFILE_NAME}
+  delete  - delete minikube cluster called ${PROFILE_NAME}
+  restart - restarts the minikube cluster called ${PROFILE_NAME}
 
-${BOLD}You need to configure a settings.sh${NORMAL}
+${BOLD}Access minikube docker daemon: ${NORMAL}
 
-You must have a ${BOLD}settings.sh${NORMAL} defines with enviroment
-specific details such as dns name, and credentials to access Tanzunet
-and github.com. There is a settings-template.sh with comments that
-documents all the settings you need and why.
+You can point docker-cli at docker daemon in minikube vm by running
+the command 'eval \$(minikube -p ${PROFILE_NAME}) docker-env)'
 
 Examples:
-  $(basename $0) create
-  $(basename $0) delete
-  $(basename $0) creds
+  $(basename $0) start
 "
 
 function usage() {
