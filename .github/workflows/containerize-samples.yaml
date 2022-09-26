@@ -68,7 +68,7 @@ jobs:
           context: containerize/fatjar-dockerfile/
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: "ghcr.io/asaikali/fat-jar:1"
+          tags: "ghcr.io/asaikali/workshop/fat-jar:1"
 #          tags: ${{ steps.meta.outputs.tags }}
 #          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
