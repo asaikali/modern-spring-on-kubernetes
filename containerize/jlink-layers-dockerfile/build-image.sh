@@ -1,6 +1,5 @@
 #!/bin/bash
 set -x
-#./mvnw package
+./mvnw clean package -DskipTests
 docker build . -t boot-jlink-layers:1
-docker build . -f Dockerfile-alpine -t boot-jlink-layers-alpine:1
 docker images boot-*

@@ -11,7 +11,8 @@ RUN $JAVA_HOME/bin/jlink \
 
 # extract the layers of the boot application
 WORKDIR application
-COPY target/*.jar application.jar
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 # Create an run image for the application
