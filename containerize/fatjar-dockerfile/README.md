@@ -5,13 +5,13 @@ a Dockerfile.
 
 **Prerequisites** 
 
-* [Java 11 JDK](https://adoptopenjdk.net/) 
+* [Java 17 JDK](https://adoptium.net/)
 * [Docker](https://www.docker.com/products/docker-desktop) 
 * [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
 
 **Try it out** 
 
-* build the app `mvnw clean package` to produce the fat jar 
+* build the app `./mvnw clean package` to produce the fat jar 
 * check the `target/` folder, observe the size of the `fatjar-dockerfile-0.0.1-SNAPSHOT.jar` file
 * build the container `docker build . -t boot-fatjar:1` 
 * check the size of the container `boot-fatjar:1` using `docker images` 

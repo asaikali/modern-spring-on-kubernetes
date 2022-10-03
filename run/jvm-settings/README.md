@@ -5,13 +5,13 @@ container.
 
 **Prerequisites** 
 
-* [Java 11 JDK](https://adoptopenjdk.net/) 
+* [Java 17 JDK](https://adoptium.net/)
 * [Docker](https://www.docker.com/products/docker-desktop) 
 * [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
 
 **build and run the app** 
 
-* build the app `mvnw clean package` to produce the fat jar 
+* build the app `./mvnw clean package` to produce the fat jar 
 * build the container `docker build . -t jvm-settings:1` 
 * check the size of the container `jvm-settings:1` using `docker images` 
 * run the container `docker run -p 8080:8080 -t jvm-settings:1`

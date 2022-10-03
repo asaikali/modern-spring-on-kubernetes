@@ -6,7 +6,7 @@ files that you want to put into a dedicated company dependencies layer.
 
 **build and run the app**
 
-* build the app `mvnw clean package` to produce the fat jar 
+* build the app `./mvnw clean package` to produce the fat jar 
 * build the container `docker build . -t boot-custom-layers:1` 
 * check the size of the container `boot-custom-layers:1` using `docker images` 
 * run the container `docker run -p 8080:8080 -t boot-custom-layers:1`

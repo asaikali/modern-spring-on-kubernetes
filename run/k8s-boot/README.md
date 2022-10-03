@@ -5,7 +5,7 @@ actuators.
 
 **Prerequisites** 
 
-* [Java 11 JDK](https://adoptopenjdk.net/) 
+* [Java 17 JDK](https://adoptium.net/)
 * [Docker](https://www.docker.com/products/docker-desktop) 
 * [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
 * [Octant](https://github.com/vmware-tanzu/octant#installation) web gui for Kubernetes
@@ -13,7 +13,7 @@ actuators.
 
 **build and run the app** 
 
-* build the app `mvnw clean package` to produce the fat jar 
+* build the app `./mvnw clean package` to produce the fat jar 
 * build the container `docker build . -t k8s-boot:1` 
 * run the container `docker run -p 8080:8080 -t k8s-boot:1`
 * test the app using a browser `http://localhost:8080/`

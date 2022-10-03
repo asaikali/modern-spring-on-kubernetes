@@ -5,7 +5,7 @@ having to write a Dockerfile.
 
 **Prerequisites** 
 
-* [Java 11 JDK](https://adoptopenjdk.net/) 
+* [Java 17 JDK](https://adoptium.net/)
 * [Docker](https://www.docker.com/products/docker-desktop) 
 * [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
 

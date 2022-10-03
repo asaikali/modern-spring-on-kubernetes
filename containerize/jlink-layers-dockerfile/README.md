@@ -6,7 +6,7 @@ that only containers the modules needed by the application.
 
 **build and run the app** 
 
-* build the app `mvnw clean package` to produce the fat jar 
+* build the app `./mvnw clean package` to produce the fat jar 
 * build the container `docker build . -t boot-jlink-layers:1` 
 * check the size of the container `boot-jlink-layers:1` using `docker images` 
 * run the container `docker run -p 8080:8080 -t boot-jlink-layers:1`
