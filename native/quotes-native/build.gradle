@@ -38,3 +38,13 @@ dependencyManagement {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.named('bootBuildImage') {
+	if (project.hasProperty('native')) {
+		builder = 'paketobuildpacks/builder:tiny'
+		environment = ['BP_NATIVE_IMAGE': 'true',
+						'BP_BINARY_COMPRESSION_METHOD':'upx',
+						'USE_NATIVE_IMAGE_JAVA_PLATFORM_MODULE_SYSTEM':'false'
+						]
+	} 
+}

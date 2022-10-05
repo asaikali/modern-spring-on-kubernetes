@@ -16,6 +16,5 @@
 	
 	<modules>
 		<module>quotes-native</module>
-		<module>aot</module>
 	</modules>
 </project>
