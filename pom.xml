@@ -27,7 +27,7 @@
         <module>discovery</module>
         <module>gateway</module>
         <module>observability</module>
-        <module>native</module>
+        <module>aot</module>
     </modules>
     <dependencyManagement>
         <dependencies>
