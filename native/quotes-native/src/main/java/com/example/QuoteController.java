@@ -16,5 +16,4 @@ public class QuoteController {
   public Quote radomQuote() {
     return quoteRepository.findRandomQuote();
   }
-
 }
