@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '3.0.0-SNAPSHOT'
+	id 'org.springframework.boot' version '3.0.0-M5'
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 	id 'org.graalvm.buildtools.native' version '0.9.14'
 	id 'java'
@@ -48,3 +48,5 @@ tasks.named('bootBuildImage') {
 						]
 	} 
 }
+
+// test.onlyIf { !project.hasProperty('skipTests') }
