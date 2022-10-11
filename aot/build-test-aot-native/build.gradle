@@ -1,0 +1,39 @@
+plugins {
+	id 'org.springframework.boot' version '3.0.0-M5'
+	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+	id 'org.graalvm.buildtools.native' version '0.9.14'
+	id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+//tasks.named('bootBuildImage') {
+//	builder = 'paketobuildpacks/builder:tiny'
+//	environment = ['BP_NATIVE_IMAGE': 'true']
+//}
+tasks.named('bootBuildImage') {
+	if (project.hasProperty('native')) {
+		builder = 'paketobuildpacks/builder:tiny'
+		environment = ['BP_NATIVE_IMAGE': 'true',
+					   'BP_BINARY_COMPRESSION_METHOD':'upx',
+					   'USE_NATIVE_IMAGE_JAVA_PLATFORM_MODULE_SYSTEM':'false'
+		]
+	}
+}
