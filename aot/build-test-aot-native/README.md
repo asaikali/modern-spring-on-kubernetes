@@ -27,11 +27,7 @@ The following test commands allow you to test the JIT(JVM) and Native Java appli
 * Resource: `http :8080/hello mode==resource`
 * Dynamic proxy: `http :8080/hello mode==proxy`
 
-## How to run the workshop
-* [Workshop Tasks using Gradle](#workshop-tasks-with-gradle)
-* [Workshop Tasks using Maven](#workshop-tasks-with-maven)
-
-# Workshop tasks with Gradle
+# Workshop tasks w/Gradle
 
 ## Dive into AOT
 **Analyze generated AOT artifacts**
@@ -96,5 +92,3 @@ For further reference, please consider the following sections:
 ### Additional Links
 These additional references should also help you:
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
-
-# Workshop tasks with Maven

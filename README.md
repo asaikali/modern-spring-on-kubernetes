@@ -1,19 +1,21 @@
 # modern-spring-on-kubernetes
 
-Modern Spring Based Microservices on Kubernetes
+**Modern Spring Based Microservices on Kubernetes**
 
-Example applications show to use Spring Boot on Kubernetes. There are two types
-of sample application in this repo. Samples showing various approaches for
+Example applications show to use Spring Boot on Kubernetes. There are multiple types
+of sample applications in this repo. Samples showing various approaches for
 containerizing Spring applications in the `containerize` folder.
-Samples showing features for running spring applications on Kubernetes in `run`
-folder. Each sample application has a `readme.md` that explains how to run the
+Samples showing features for running Spring applications on Kubernetes in `run`
+folder. Samples showing features for AOT in the `aot` folder. Each sample application has a `README.md` that explains how to run the
 sample and points out interesting things to look at.
 
 ## Software Prerequisites
 
 ### Java development tooling 
 * [Java 17 JDK](https://adoptium.net/)
+* [Java 17 GraalVM](https://www.graalvm.org/22.2/docs/getting-started/) or [Java 17 Liberica NIK 22.2](https://bell-sw.com/pages/downloads/native-image-kit/#) (Spring Native)
 * [Maven](https://maven.apache.org/index.html)
+* [Gradle](https://gradle.org/)
 * Favourite Java IDE one of
    * [Eclipse Spring Tool Suite](https://spring.io/tools) 
    * [IntelliJ](https://www.jetbrains.com/idea/download)
@@ -75,10 +77,9 @@ Technologies covered in the workshop
 * Spring Cloud Sleuth
 * Spring Cloud Function
 * Observability with Micrometre 2 and Spring Framework 6
-* How to effectively containerized spring boot apps
-* How to effectively run spring boot apps on Kubernetes
-* High level overview of Spring Native 
-
+* How to effectively containerize Spring Boot apps
+* How to effectively run Spring Boot apps on Kubernetes
+* Understand Ahead-of-Time(AOT) and Native Images in Spring Boot 3.0
 
 Architectural topics that we will discuss
 
@@ -93,7 +94,8 @@ Architectural topics that we will discuss
 * Serverless Functions vs. Long Running Processes
 
 Come learn how to use new capabilities introduced in Spring Framework 6, 
-Spring Boot 3, and Spring Cloud 2022 running on Kubernetes to design and 
-implement modern microservices. These projects are due to GA in the Nov / Dec
-2022 timeframe, so we will be using the latest milestones or release candidates 
-or milestones available
+Spring Boot 3, and Spring Cloud 2022, running on Kubernetes, to design and 
+implement modern microservices. 
+
+These projects are due to GA in the Nov / Dec
+2022 timeframe, so we will be using the latest milestones or release candidates available.
