@@ -39,7 +39,7 @@ Instructions show you how to build/run both application and container images, us
 ### Container images
 **Build and test the Containerized JIT Application**
 * build the JIT app and containerize with buildpacks `./gradlew bootBuildImage --imageName quotes-native:jit`
-* [alternatively] you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native:jit`
+* **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native:jit`
 * check the size of the container `docker images | grep quotes*`
 * `dive` into the container to observe the container layers, including JRE, app classes and dependent libraries `dive quotes-native:jit`
 * run the container `docker run -p 8080:8080 quotes-native:jit`
@@ -47,7 +47,7 @@ Instructions show you how to build/run both application and container images, us
 
 **Build and test the Containerized Native Java Application**
 * build the Native Java app and containerize with buildpacks `./gradlew bootBuildImage -Pnative --imageName quotes-native:aot`
-* [alternatively] you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native:aot`
+* **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native:aot`
 * check the size of the container `docker images | grep quotes*`. Observe the significantly smaller size of the `quotes-native:aot` container
 * `dive` into the container to observe that only the native image has been added `dive quotes-native:aot`
 * run the container `docker run -p 8080:8080 quotes-native:aot`
@@ -72,7 +72,7 @@ Instructions show you how to build/run both application and container images, us
 ### Container images
 **Build and test the Containerized JIT Application**
 * build the JIT app and containerize with buildpacks `./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=quotes-native-maven:jit`
-* [alternatively] you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native-maven:jit`
+* **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native-maven:jit`
 * check the size of the container `docker images | grep quotes*`
 * `dive` into the container to observe the container layers, including JRE, app classes and dependent libraries `dive quotes-native-maven:jit`
 * run the container `docker run -p 8080:8080 quotes-native-maven:jit`
@@ -80,7 +80,7 @@ Instructions show you how to build/run both application and container images, us
 
 **Build and test the Containerized Native Java Application**
 * build the Native Java app and containerize with buildpacks `./gradlew bootBuildImage -Pnative --imageName quotes-native-maven:aot`
-* [alternatively] you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native-maven:aot`
+* **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native-maven:aot`
 * check the size of the container `docker images | grep quotes*`. Observe the significantly smaller size of the `quotes-native-maven:aot` container
 * `dive` into the container to observe that only the native image has been added `dive quotes-native-maven:aot`
 * run the container `docker run -p 8080:8080 quotes-native-maven:aot`
