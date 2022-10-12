@@ -27,6 +27,12 @@ The following test commands allow you to test the JIT(JVM) and Native Java appli
 * Resource: `http :8080/hello mode==resource`
 * Dynamic proxy: `http :8080/hello mode==proxy`
 
+## How to run the workshop
+* [Workshop Tasks using Gradle](#workshop-tasks-with-gradle)
+* [Workshop Tasks using Maven](#workshop-tasks-with-maven)
+
+# Workshop tasks with Gradle
+
 ## Dive into AOT
 **Analyze generated AOT artifacts**
 * check the available Gradle tasks: `./gradlew tasks --all`
@@ -43,7 +49,7 @@ The following test commands allow you to test the JIT(JVM) and Native Java appli
   * the generated Bean definitions in the `generated/aotSources/com/example/aot`, in the `BuildTestAotNativeConfiguration__BeanDefinitions.java` class
 * build and run the application on the JVM, then test with the test commands listed above `./gradlew clean bootRun`; observe the short build time
 
-## Build Native App Image and Native Tests with Gradle
+## Build Native App Image and Native Tests
 **Build a Native Image for the application**
 * to build the native app with Gradle, you need to make sure that the `org.graalvm.buildtools.native` plugin is enabled in the `build.gradle` file
   * ```
@@ -90,3 +96,5 @@ For further reference, please consider the following sections:
 ### Additional Links
 These additional references should also help you:
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
+
+# Workshop tasks with Maven

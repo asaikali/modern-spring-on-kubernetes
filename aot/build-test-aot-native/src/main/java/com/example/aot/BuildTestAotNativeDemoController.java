@@ -51,6 +51,10 @@ public class BuildTestAotNativeDemoController {
 				Resource helloService = new Resource(new ClassPathResource("hello.txt"));
 				return helloService.sayHello(name);
 			}
+			case "agent" -> {
+				AotAgent helloService = new AotAgent(new ClassPathResource("app-resources.properties"));
+				return helloService.sayHello(name);
+			}
 			case "serialization" -> {
 				Serialization service = new Serialization();
 				return service.sayHello(name);

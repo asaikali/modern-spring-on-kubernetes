@@ -22,6 +22,10 @@ public class BuildTestAotNativeRuntimeHints implements RuntimeHintsRegistrar {
         // register resource hints
         hints.resources().registerPattern("hello.txt");
 
+        // this pattern, if registered, will contribute the ResourceHint to the image
+        hints.resources().registerPattern("app-resources.properties");
+
+
         // register serialization hints
         hints.serialization().registerType(java.util.ArrayList.class);
         hints.serialization().registerType(java.lang.Long.class);

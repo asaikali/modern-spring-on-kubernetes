@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '3.0.0-M5'
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 	id 'org.graalvm.buildtools.native' version '0.9.14'
+	id 'io.spring.build.runtimehints-agent'
 	id 'java'
 }
 
@@ -18,6 +19,22 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	implementation 'org.springframework:spring-core'
+	testImplementation("org.springframework:spring-core-test")
+
+	implementation(platform("org.springframework:spring-framework-bom:6.0.0-RC1"))
+
+	testImplementation("org.springframework:spring-core-test")
+	testImplementation("org.assertj:assertj-core:3.23.1")
+
+	testImplementation(platform("org.junit:junit-bom:5.9.0"))
+	testImplementation("org.junit.jupiter:junit-jupiter-api")
+	testImplementation("org.junit.jupiter:junit-jupiter-params")
+	testImplementation("org.junit.platform:junit-platform-suite-api")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testRuntimeOnly("org.junit.platform:junit-platform-suite-engine")
 }
 
 tasks.named('test') {
