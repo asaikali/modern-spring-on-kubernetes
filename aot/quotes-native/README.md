@@ -9,11 +9,17 @@ Instructions show you how to build/run both application and container images, us
 * [Liberica NIK 22.2 - Java 17](https://bell-sw.com/pages/downloads/native-image-kit/#) - alternate Native Java Image building tool based on open-source GraalVM 
 * [Docker](https://www.docker.com/products/docker-desktop) 
 * [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
+* [cURL](https://curl.se/docs/manpage.html) or [HTTPie](https://httpie.io/) - app testing
 
 ### Install GraalVM 
 * [SDKMan - preferred method](https://sdkman.io/)
-    * GraalVM 22.2: `sdk install java 22.2.0.r17-grl` or
-    * Liberica NIK 22.2: `sdk install java 22.2.r17-nik`
+    * GraalVM 22.2 
+        * `sdk install java 22.2.0.r17-grl` - select `Y` to set as default `or`
+        * `sdk use java 22.2.0.r17-grl`
+    * Liberica NIK 22.2: 
+        * `sdk install java 22.2.r17-nik`  - select `Y` to set as default `or`
+        * `sdk use java 22.2.r17-nik`
+
 * [Using Homebrew](https://github.com/graalvm/homebrew-tap)
 * [From GraalVM Github repo](https://github.com/graalvm/graalvm-ce-builds/releases)
 
@@ -23,7 +29,7 @@ Instructions show you how to build/run both application and container images, us
 
 ## **Build and Test with Gradle**
 ### App Images
-**Build and test the JIT Application**
+**Build and test the JIT Application on a regular Java 17 JVM**
 * build the app `./gradlew build`
 * check the `build/libs` folder, observe the size of the `quotes-native-0.0.1-SNAPSHOT.jar` file
 * run the app on the JVM `./gradlew bootRun`
@@ -37,7 +43,7 @@ Instructions show you how to build/run both application and container images, us
 * test the app using a browser `http://localhost:8080/`
 
 ### Container images
-**Build and test the Containerized JIT Application**
+**Build and test the Containerized JIT Application using a regular Java 17 VM**
 * build the JIT app and containerize with buildpacks `./gradlew bootBuildImage --imageName quotes-native:jit`
 * **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native:jit`
 * check the size of the container `docker images | grep quotes*`
@@ -56,7 +62,7 @@ Instructions show you how to build/run both application and container images, us
 ## **Build and Test with Maven**
 
 ### App Images
-**Build and test the JIT Application**
+**Build and test the JIT Application on a regular Java 17 JVM**
 * build the app `./mvnw package`
 * check the `target` folder, observe the size of the `quotes-native-0.0.1-SNAPSHOT.jar` file
 * run the app on the JVM `./mvnw spring-boot:run`
@@ -70,7 +76,7 @@ Instructions show you how to build/run both application and container images, us
 * test the app using a browser `http://localhost:8080/`
 
 ### Container images
-**Build and test the Containerized JIT Application**
+**Build and test the Containerized JIT Application using a regular Java 17 JVM**
 * build the JIT app and containerize with buildpacks `./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=quotes-native-maven:jit`
 * **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native-maven:jit`
 * check the size of the container `docker images | grep quotes*`

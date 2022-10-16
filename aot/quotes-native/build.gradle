@@ -48,5 +48,3 @@ tasks.named('bootBuildImage') {
 						]
 	} 
 }
-
-// test.onlyIf { !project.hasProperty('skipTests') }
