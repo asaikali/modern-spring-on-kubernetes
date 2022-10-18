@@ -15,6 +15,7 @@
 	<description>Demo project showing how to build a Native Image for a Spring App</description>
 	<properties>
 		<java.version>17</java.version>
+		<testcontainers.version>1.17.4</testcontainers.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -52,8 +53,23 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>		
 	</dependencies>
-
+	<dependencyManagement>
+		<dependencies>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-bom</artifactId>
+			<version>${testcontainers.version}</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<build>
 		<plugins>
 			<plugin>

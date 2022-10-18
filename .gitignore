@@ -34,3 +34,4 @@ build/
 
 ### Gradle ###
 .gradle/
+test-results-native/
