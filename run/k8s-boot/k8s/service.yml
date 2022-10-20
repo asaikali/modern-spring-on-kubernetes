@@ -11,4 +11,4 @@ spec:
     targetPort: 8080
   selector:
     app: k8s-boot
-  type: NodePort
+  type: LoadBalancer

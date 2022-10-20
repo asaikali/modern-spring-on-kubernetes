@@ -30,33 +30,39 @@ spec:
           configMap:
             name: demo-configmap
       containers:
-        - image: k8s-boot:1
+        - image: gcr.io/optimize-serverless-apps/k8s-boot
           name: k8s-boot
           volumeMounts:
             - mountPath: /myconfigs
               name: demo-config-volume
           env:
-            - name: JAVA_TOOL_OPTIONS
-              value: "-XX:MaxRAMPercentage=75"
+          - name: JAVA_TOOL_OPTIONS
+            value: "-XX:MaxRAMPercentage=70"
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "250m"
-            limits:
               memory: "1024Mi"
               cpu: "1000m"
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
           livenessProbe:
-            periodSeconds: 5
-            failureThreshold: 3
             httpGet:
               path: /actuator/health/liveness
               port: 8080
+            failureThreshold: 3
+            periodSeconds: 10
           readinessProbe:
             periodSeconds: 3
             failureThreshold: 3
             httpGet:
               path: /actuator/health/readiness
               port: 8080
+          startupProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10              
           lifecycle:
             preStop:
               exec:
