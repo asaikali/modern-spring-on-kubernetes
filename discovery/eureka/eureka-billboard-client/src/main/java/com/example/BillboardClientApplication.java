@@ -11,13 +11,13 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class BillboardClientApplication {
 
-    @LoadBalanced
-    @Bean
-    RestTemplate restTemplate(){
-        return new RestTemplate();
-    }
+  @LoadBalanced
+  @Bean
+  RestTemplate restTemplate() {
+    return new RestTemplate();
+  }
 
-    public static void main(String[] args) {
-        SpringApplication.run(BillboardClientApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(BillboardClientApplication.class, args);
+  }
 }

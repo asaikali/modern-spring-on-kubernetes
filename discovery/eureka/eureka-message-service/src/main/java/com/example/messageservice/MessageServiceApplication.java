@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class MessageServiceApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(MessageServiceApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(MessageServiceApplication.class, args);
+  }
 }
