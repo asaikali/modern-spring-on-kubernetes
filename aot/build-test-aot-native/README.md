@@ -17,6 +17,7 @@ This work expands on the sample built by [Stephane Nicoll](https://github.com/sn
     * GraalVM 22.2 
         * `sdk install java 22.2.r17-grl` - select `Y` to set as default `or`
         * `sdk use java 22.2.r17-grl`
+        * `gu install native-image`
     * Liberica NIK 22.2: 
         * `sdk install java 22.2.r17-nik`  - select `Y` to set as default `or`
         * `sdk use java 22.2.r17-nik`
@@ -25,14 +26,15 @@ This work expands on the sample built by [Stephane Nicoll](https://github.com/sn
 
 ### Test commands for the Application
 The following test commands allow you to test the JIT(JVM) and Native Java applications. The behaviour must be idempotent.
-HTTPie
+
+[HTTPie](https://httpie.io/)
 * Bean creation: `http :8080/hello mode==bean`
 * Reflection: `http :8080/hello mode==reflection`
 * Serialization: `http :8080/hello mode==serialization`
 * Resource: `http :8080/hello mode==resource`
 * Dynamic proxy: `http :8080/hello mode==proxy`
 
-cURL
+[cURL](https://curl.se/)
 * Bean creation: `curl 'localhost:8080/hello?mode=bean'`
 * Reflection: `curl 'localhost:8080/hello?mode=reflection'`
 * Serialization: `curl 'localhost:8080/hello?mode=serialization'`

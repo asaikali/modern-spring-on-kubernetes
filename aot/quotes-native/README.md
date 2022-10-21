@@ -16,6 +16,7 @@ Instructions show you how to build/run both application and container images, us
     * GraalVM 22.2 
         * `sdk install java 22.2.r17-grl` - select `Y` to set as default `or`
         * `sdk use java 22.2.r17-grl`
+        * `gu install native-image`
     * Liberica NIK 22.2: 
         * `sdk install java 22.2.r17-nik`  - select `Y` to set as default `or`
         * `sdk use java 22.2.r17-nik`
@@ -24,7 +25,7 @@ Instructions show you how to build/run both application and container images, us
 * [From GraalVM Github repo](https://github.com/graalvm/graalvm-ce-builds/releases)
 
 ### Known issues
-* Spring Boot 3.0 has reached the milestone phase at this time and does not support building Native Java containers with Maven and Buildpacks. Native Java application images are supported in Maven builds.
+* Spring Boot 3.0 has reached the Release Candidate phase and requires the release of GraalVM 22.3 on October 25. Boot 3.0 M5 and GraalVM 22.2 are being used for native images until 22.3 is being released
 * `java.lang.management.ThreadInfo` is not exposed at this time in Spring Native, due to an [open issue](https://github.com/oracle/graal/issues/1039) in GraalVM - this can result in a failure of the Native Java application build with GraalVM
 
 ## **Build and Test with Gradle**

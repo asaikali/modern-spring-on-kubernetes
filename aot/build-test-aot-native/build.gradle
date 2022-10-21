@@ -23,7 +23,7 @@ dependencies {
 	implementation 'org.springframework:spring-core'
 	testImplementation("org.springframework:spring-core-test")
 
-	implementation(platform("org.springframework:spring-framework-bom:6.0.0-RC1"))
+	implementation(platform("org.springframework:spring-framework-bom:6.0.0-RC2"))
 
 	testImplementation("org.springframework:spring-core-test")
 	testImplementation("org.assertj:assertj-core:3.23.1")
