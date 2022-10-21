@@ -15,8 +15,8 @@ This work expands on the sample built by [Stephane Nicoll](https://github.com/sn
 ### Install GraalVM
 * [SDKMan - preferred method](https://sdkman.io/)
     * GraalVM 22.2 
-        * `sdk install java 22.2.0.r17-grl` - select `Y` to set as default `or`
-        * `sdk use java 22.2.0.r17-grl`
+        * `sdk install java 22.2.r17-grl` - select `Y` to set as default `or`
+        * `sdk use java 22.2.r17-grl`
     * Liberica NIK 22.2: 
         * `sdk install java 22.2.r17-nik`  - select `Y` to set as default `or`
         * `sdk use java 22.2.r17-nik`
