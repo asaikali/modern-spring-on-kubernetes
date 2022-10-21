@@ -1,0 +1,12 @@
+# Overview: build and create a release via Google Cloud Deploy for GKE
+# NOTE: currently requires SCM triggering due to dependency on the COMMIT_SHA variable
+# substitutions:
+#   _REPO_NAME: demo-app
+#   _APP_NAME: demo-app
+#   _PIPELINE_NAME: demo-app-pipeline
+steps:
+  # integration tests app with Maven
+  - name: maven:3-openjdk-17-slim
+    entrypoint: mvn
+    args: ["verify"]
+    dir: "aot/quotes-native"

@@ -1,0 +1,28 @@
+# Overview: build and create a release via Google Cloud Deploy for GKE
+# NOTE: currently requires SCM triggering due to dependency on the COMMIT_SHA variable
+# substitutions:
+#   _REPO_NAME: demo-app
+#   _APP_NAME: demo-app
+#   _PIPELINE_NAME: demo-app-pipeline
+steps:
+  # integration tests app with Maven
+  # - name: maven:3-openjdk-17-slim
+  #   entrypoint: mvn
+  #   args: ["verify"]
+  #   dir: "aot/quotes-native"
+  # build app with Maven
+  - name: maven:3-openjdk-17-slim
+    entrypoint: mvn
+    args: ["package", "-Dmaven.test.skip=true"]
+    dir: "aot/quotes-native"
+  # Build and tag using commit sha
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '.', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/aot/quotes-native', '-f', 'Dockerfile']
+    dir: "aot/quotes-native"
+  # Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/aot/quotes-native']
+
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'quotes-native-cloudbuild', '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/aot/quotes-native', '--region', 'us-central1', '--memory', '2Gi']
