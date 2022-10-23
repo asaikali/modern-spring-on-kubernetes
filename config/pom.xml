@@ -10,7 +10,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>config</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>run</name>
+	<name>config</name>
 	<description>Projects demonstrating different ways of configuring spring apps on Kubernetes</description>
 	<packaging>pom</packaging>
 	

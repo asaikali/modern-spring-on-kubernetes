@@ -10,7 +10,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>discovery</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>run</name>
+	<name>discovery</name>
 	<description>Projects demonstrating different ways of performing service discovery on Kubernetes</description>
 	<packaging>pom</packaging>
 	

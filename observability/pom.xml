@@ -10,7 +10,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>observability</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>run</name>
+	<name>observability</name>
 	<description>Projects demonstrating best practices for observing spring applications in production</description>
 	<packaging>pom</packaging>
 	
