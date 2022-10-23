@@ -5,6 +5,13 @@ spring:
 server:
   port: 8081
 
+logging:
+  pattern:
+    # add span and trace ids into the log files so it easy to copy a trace id from the log file
+    # into a the observability tool to locate a span or trace we want to undrestand
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+
 # expose all the spring boot actuators good for demos.
 # NEVER DO THIS in production
 management:
@@ -15,3 +22,7 @@ management:
   endpoint:
     health:
       show-details: always
+  tracing:
+    sampling:
+      # sends all traces to tracing server
+      probability: 1.0

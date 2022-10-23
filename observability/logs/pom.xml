@@ -48,6 +48,7 @@
           <version>5.0.0</version>
           <configuration>
             <verbose>false</verbose>
+            <generateGitPropertiesFile>true</generateGitPropertiesFile>
             <failOnNoGitDirectory>false</failOnNoGitDirectory>
           </configuration>
       </plugin>
