@@ -13,7 +13,7 @@
   <artifactId>logs</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>logs</name>
-  <description>Example of a Boot Project that ouputs logs as JSON objects</description>
+  <description>Example of a Boot Project that outputs logs as JSON objects</description>
 
   <dependencies>
     <dependency>
@@ -27,18 +27,12 @@
     <dependency>
       <groupId>net.logstash.logback</groupId>
       <artifactId>logstash-logback-encoder</artifactId>
-      <version>6.6</version>
+      <version>7.2</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.junit.vintage</groupId>
-          <artifactId>junit-vintage-engine</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 
@@ -49,9 +43,9 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
       <plugin>
-          <groupId>pl.project13.maven</groupId>
-          <artifactId>git-commit-id-plugin</artifactId>
-          <version>4.0.0</version>
+          <groupId>io.github.git-commit-id</groupId>
+          <artifactId>git-commit-id-maven-plugin</artifactId>
+          <version>5.0.0</version>
           <configuration>
             <verbose>false</verbose>
             <failOnNoGitDirectory>false</failOnNoGitDirectory>

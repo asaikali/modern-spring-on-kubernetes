@@ -11,7 +11,7 @@
 	<artifactId>health</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>distributed-tracing</name>
-	<description>Demo Project Showing Distributed Tracing</description>
+	<description>Demo Project Showing Health checks</description>
 
 	<dependencies>
 		<dependency>

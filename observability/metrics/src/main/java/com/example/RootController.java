@@ -29,6 +29,6 @@ public class RootController {
       this.checkoutService.checkout(order, creditCard);
     }
 
-    return "generated and place " + amount + " orders";
+    return "generated and placed " + amount + " orders";
   }
 }
