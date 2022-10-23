@@ -6,14 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-public class BillboardClientApplication {
-
-  @Bean
-  RestTemplate restTemplate() {
-    return new RestTemplate();
-  }
+public class TracingBillboardClientApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(BillboardClientApplication.class, args);
+    SpringApplication.run(TracingBillboardClientApplication.class, args);
   }
 }

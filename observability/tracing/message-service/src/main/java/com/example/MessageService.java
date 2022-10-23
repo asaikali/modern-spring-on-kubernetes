@@ -1,11 +1,11 @@
 package com.example;
 
+import io.micrometer.tracing.SpanName;
+import io.micrometer.tracing.annotation.NewSpan;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cloud.sleuth.SpanName;
-import org.springframework.cloud.sleuth.annotation.NewSpan;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
