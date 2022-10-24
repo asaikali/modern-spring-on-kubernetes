@@ -35,3 +35,4 @@ build/
 ### Gradle ###
 .gradle/
 test-results-native/
+.DS_Store
