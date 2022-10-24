@@ -28,4 +28,9 @@ public class Quote {
   public void setAuthor(String author) {
     this.author = author;
   }
+
+  @Override
+  public String toString() {
+    return "Quote{" + "id=" + id + ", quote='" + quote + '\'' + ", author='" + author + '\'' + '}';
+  }
 }

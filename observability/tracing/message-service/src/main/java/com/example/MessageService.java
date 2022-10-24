@@ -1,7 +1,8 @@
 package com.example;
 
-import io.micrometer.tracing.SpanName;
-import io.micrometer.tracing.annotation.NewSpan;
+import io.micrometer.observation.annotation.Observed;
+import io.micrometer.tracing.BaggageInScope;
+import io.micrometer.tracing.Tracer;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -14,26 +15,32 @@ public class MessageService {
   private final Logger logger = LoggerFactory.getLogger(MessageController.class);
   private final QuoteRepository quoteRepository;
 
-  public MessageService(QuoteRepository quoteRepository) {
+  private final Tracer tracer;
+
+  public MessageService(QuoteRepository quoteRepository, Tracer tracer) {
     this.quoteRepository = quoteRepository;
+    this.tracer = tracer;
   }
 
-  @NewSpan
-  @SpanName("radomQuote()")
-  public Quote radomQuote() {
-    logger.info("MessageService.radomQuote()");
-    return quoteRepository.findRandomQuote();
+  @Observed(
+      name = "randomQuote",
+      lowCardinalityKeyValues = {"country", "canada", "region", "east"})
+  public Quote randomQuote() {
+    BaggageInScope baggage = this.tracer.getBaggage("billboardId");
+    logger.info("MessageService.randomQuote() billboardId=" + baggage.get());
+
+    Quote quote = quoteRepository.findRandomQuote();
+
+    this.tracer.currentSpan().tag("author", quote.getAuthor());
+
+    return quote;
   }
 
-  @NewSpan
-  @SpanName("radomQuote()")
   public List<Quote> getAll() {
     logger.info("MessageService.getAll()");
     return quoteRepository.findAll();
   }
 
-  @NewSpan
-  @SpanName("radomQuote()")
   public Optional<Quote> getQuote(@PathVariable("id") Integer id) {
     logger.info("MessageService.getQuote({})", id);
     return quoteRepository.findById(id);

@@ -1,6 +1,7 @@
 package com.example;
 
-import io.micrometer.tracing.SpanName;
+import io.micrometer.tracing.BaggageInScope;
+import io.micrometer.tracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -14,7 +15,9 @@ public class BillboardController {
   private final Logger logger = LoggerFactory.getLogger(BillboardController.class);
   private final RestTemplate restTemplate;
 
-  public BillboardController(RestTemplateBuilder builder) {
+  private final Tracer tracer;
+
+  public BillboardController(RestTemplateBuilder builder, Tracer tracer) {
 
     // TLDR: Always use RestTemplateBuilder
     //
@@ -23,15 +26,24 @@ public class BillboardController {
     // the correct instrumentation setting you will not see any trace ids
     // propagated to the backend message-service
     this.restTemplate = builder.build();
+    // this.restTemplate.setRequestFactory( new HttpComponentsClientHttpRequestFactory());
+    this.tracer = tracer;
   }
 
   @GetMapping("/message")
-  @SpanName("get()")
   public String get() {
 
     logger.info("Calling message-service");
-    Quote quote = restTemplate.getForObject("http://localhost:8081/", Quote.class);
-    logger.info("Got quote object",quote);
-    return quote.getQuote() + " -- " + quote.getAuthor();
+    String billboardId = "123";
+    //
+    // The BaggageInScope needs to be closed so that spans after this code block
+    // don't have the baggage.
+    //
+    try (BaggageInScope baggage = this.tracer.createBaggage("billboardId")) {
+      baggage.set(billboardId);
+      Quote quote = restTemplate.getForObject("http://localhost:8081/", Quote.class);
+      logger.info("message-service returned {}", quote);
+      return quote.getQuote() + " -- " + quote.getAuthor();
+    }
   }
 }

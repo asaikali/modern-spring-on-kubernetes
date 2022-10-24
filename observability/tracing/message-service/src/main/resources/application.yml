@@ -1,6 +1,9 @@
 spring:
   application:
     name: message-service
+  datasource:
+    url: jdbc:h2:mem:my-h2-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+
 
 server:
   port: 8081
@@ -22,7 +25,20 @@ management:
   endpoint:
     health:
       show-details: always
+
   tracing:
+    baggage:
+      remote-fields: billboardId
     sampling:
       # sends all traces to tracing server
       probability: 1.0
+
+# For Exemplars to work we need histogram buckets
+ # management.metrics.distribution.percentiles-histogram.http.server.requests=true
+
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true

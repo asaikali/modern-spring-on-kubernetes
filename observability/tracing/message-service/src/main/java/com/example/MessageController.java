@@ -1,5 +1,7 @@
 package com.example;
 
+import io.micrometer.tracing.BaggageInScope;
+import io.micrometer.tracing.Tracer;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -16,14 +18,25 @@ public class MessageController {
   private final Logger logger = LoggerFactory.getLogger(MessageController.class);
   private final MessageService messageService;
 
-  public MessageController(MessageService messageService) {
+  private final Tracer tracer;
+
+  public MessageController(MessageService messageService, Tracer tracer) {
     this.messageService = messageService;
+
+    // we don't need a tracer for normal app coding, we are using it here
+    // to show how it can be used to access bagage that was sent over the wire from
+    // client app
+    this.tracer = tracer;
   }
 
   @GetMapping("/")
-  public Quote radomQuote() {
+  public Quote randomQuote() {
+    BaggageInScope baggage = this.tracer.getBaggage("billboardId");
+    logger.info("baggage billboardId=" + baggage.get());
+
     logger.info("returning a random quote");
-    return messageService.radomQuote();
+
+    return messageService.randomQuote();
   }
 
   @GetMapping("/quotes")

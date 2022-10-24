@@ -22,3 +22,5 @@ management:
     sampling:
       # All traces should be sent to observability platform
       probability: 1.0
+    baggage:
+      remote-fields: billboardId

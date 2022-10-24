@@ -8,8 +8,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>billboard-client-java</name>
-    <description>Demo Java Project Showing How Distributed Tracing Works</description>
+    <name>billboard-client</name>
+    <description>Demo Project Showing How Distributed Tracing Works</description>
 
     <parent>
         <groupId>com.example</groupId>
@@ -18,17 +18,48 @@
     </parent>
 
     <dependencies>
+
+        <!--
+          start of observability related dependencies
+          -->
+
+        <!-- actuator will pull in the micrometer APIs and annotations that
+             are used by application code. This includes the new Observation API
+             which has annotations to handle tracing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- This is required in order to the @Observed annotation to work
+             when put it on methods that we want to observe   -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- this dependency configures micrometer to use the zipkin
+         brave java libraries to perform the tracing operations -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-brave</artifactId>
         </dependency>
+
+        <!-- this dependency configures micrometer to send trace data
+             to a zipkin server -->
         <dependency>
             <groupId>io.zipkin.reporter2</groupId>
             <artifactId>zipkin-reporter-brave</artifactId>
         </dependency>
+
+        <!--
+          end of observability related dependencies
+        -->
+
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
