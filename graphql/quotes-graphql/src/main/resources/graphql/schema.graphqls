@@ -1,0 +1,24 @@
+
+type Query {
+    randomQuote : Quote
+    all: [Quote]
+}
+
+type Quote {
+    id : ID!,
+    quote : String
+    author : Author
+}
+
+type Author {
+    name : String
+    wikipedia_url: String
+    field: Field
+}
+
+enum Field {
+    politics
+    sports
+    science
+    movies
+}

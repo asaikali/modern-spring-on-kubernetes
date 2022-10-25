@@ -1,0 +1,17 @@
+
+server:
+  port: 8080
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+spring:
+  graphql:
+    graphiql:
+      enabled: true # you should put this setting in a dev profile or turn it in a dev environments only
+

@@ -28,6 +28,7 @@
         <module>gateway</module>
         <module>observability</module>
         <module>aot</module>
+        <module>graphql</module>
     </modules>
     <dependencyManagement>
         <dependencies>
