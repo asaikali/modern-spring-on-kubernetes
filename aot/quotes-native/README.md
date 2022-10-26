@@ -13,21 +13,20 @@ Instructions show you how to build/run both application and container images, us
 
 ### Install GraalVM 
 * [SDKMan - preferred method](https://sdkman.io/)
-    * GraalVM 22.2 
-        * `sdk install java 22.2.r17-grl` - select `Y` to set as default `or`
-        * `sdk use java 22.2.r17-grl`
+    * GraalVM 22.3 
+        * `sdk install java 22.3.r17-grl` - select `Y` to set as default `or`
+        * `sdk use java 22.3.r17-grl
         * `gu install native-image`
-    * Liberica NIK 22.2: 
-        * `sdk install java 22.2.r17-nik`  - select `Y` to set as default `or`
-        * `sdk use java 22.2.r17-nik`
+    * Liberica NIK 22.3: 
+        * `sdk install java 22.3.r17.ea-nik`  - select `Y` to set as default `or`
+        * `sdk use java 22.3.r17.ea-nik`
 * [GraalVM one-line installer]
-    * released with 22.3 on OCt 25, 2022
+    * install script released with 22.3 on OCt 25, 2022
     * `bash <(curl -sL https://get.graalvm.org/jdk) graalvm-ce-java17-22.3.0`
 * [Using Homebrew](https://github.com/graalvm/homebrew-tap)
 * [From GraalVM Github repo](https://github.com/graalvm/graalvm-ce-builds/releases)
 
 ### Known issues
-* Spring Boot 3.0 has reached the Release Candidate phase and requires the release of GraalVM 22.3 on October 25. Boot 3.0 M5 and GraalVM 22.2 are being used for native images until 22.3 is being released
 * `java.lang.management.ThreadInfo` is not exposed at this time in Spring Native, due to an [open issue](https://github.com/oracle/graal/issues/1039) in GraalVM - this can result in a failure of the Native Java application build with GraalVM
 
 ## **Build and Test with Gradle**
@@ -39,7 +38,7 @@ Instructions show you how to build/run both application and container images, us
 * test the app using a browser `http://localhost:8080/`
 
 **Build and test the Native Java Application**
-* build the app `./gradlew nativeBuild`
+* build the app `./gradlew clean nativeCompile`
 * observe the significantly longer build time for the native image
 * check the `build/native/nativeCompile` folder, observe the size of the `quotes-native` executable file. Note that the image is larger than the JIT image, but does not require the JRE for execution
 * run the app on the JVM `./build/native/nativeCompile/quotes-native` or `./gradlew nativeRun`
@@ -72,7 +71,7 @@ Instructions show you how to build/run both application and container images, us
 * test the app using a browser `http://localhost:8080/`
 
 **Build and test the Native Java Application**
-* build the app `./mvnw native:compile -Pnative./`
+* build the app `./mvnw native:compile -Pnative`
 * observe the significantly longer build time for the native image
 * check the `target` folder, observe the size of the `quotes-native` executable file. Note that the image is larger than the JIT image, but does not require the JRE for execution
 * run the app on the JVM `./target/quotes-native`
@@ -80,7 +79,7 @@ Instructions show you how to build/run both application and container images, us
 
 ### Container images
 **Build and test the Containerized JIT Application using a regular Java 17 JVM**
-* build the JIT app and containerize with buildpacks `./mvnw spring-boot:build-image -Dspring-boot:build-image.imageName=quotes-native-maven:jit -Pnative`
+* build the JIT app and containerize with buildpacks `./mvnw spring-boot:build-image -Dspring-boot:build-image.imageName=quotes-native-maven:jit`
 * **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native-maven:jit`
 * check the size of the container `docker images | grep quotes*`
 * `dive` into the container to observe the container layers, including JRE, app classes and dependent libraries `dive quotes-native-maven:jit`
@@ -88,7 +87,7 @@ Instructions show you how to build/run both application and container images, us
 * test the app using a browser `http://localhost:8080/`
 
 **Build and test the Containerized Native Java Application**
-* build the Native Java app and containerize with buildpacks `./gradlew bootBuildImage -Pnative --imageName quotes-native-maven:aot`
+* build the Native Java app and containerize with buildpacks `./gradlew bootBuildImage -Pnative --imageName quotes-native-maven:aot -Pnative`
 * **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native-maven:aot`
 * check the size of the container `docker images | grep quotes*`. Observe the significantly smaller size of the `quotes-native-maven:aot` container
 * `dive` into the container to observe that only the native image has been added `dive quotes-native-maven:aot`
