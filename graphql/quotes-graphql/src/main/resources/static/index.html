@@ -15,7 +15,7 @@
             url : '/random-quote',
             type: 'GET',
             success: function(data){
-                $('#message').text(data.quote + " -- " + data.author);
+                $('#message').text(data.quote + " -- " + data.author.name);
             },
             error: function (data) {
                 $('#message').text("Error: Got No Response");

@@ -1,9 +1,13 @@
 
 type Query {
     randomQuote : Quote
-    all: [Quote]
+    allQuotes: [Quote]
+    allAuthors: [Author]
 }
 
+type Mutation {
+    addAuthor(id:Int, name:String,field:Field,wikipediaUrl:String):Author
+}
 type Quote {
     id : ID!,
     quote : String
@@ -12,13 +16,15 @@ type Quote {
 
 type Author {
     name : String
-    wikipedia_url: String
+    wikipediaUrl: String
     field: Field
 }
 
 enum Field {
-    politics
-    sports
-    science
-    movies
+    UNKNOWN
+    POLITICS
+    PHILOSOPHY
+    SPORTS
+    SCIENCE
+    ACTING
 }
