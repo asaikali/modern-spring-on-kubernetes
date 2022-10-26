@@ -21,6 +21,9 @@ This work expands on the sample built by [Stephane Nicoll](https://github.com/sn
     * Liberica NIK 22.2: 
         * `sdk install java 22.2.r17-nik`  - select `Y` to set as default `or`
         * `sdk use java 22.2.r17-nik`
+* [GraalVM one-line installer]
+    * released with 22.3 on OCt 25, 2022
+    * `bash <(curl -sL https://get.graalvm.org/jdk) graalvm-ce-java17-22.3.0`
 * [Using Homebrew](https://github.com/graalvm/homebrew-tap)
 * [From GraalVM Github repo](https://github.com/graalvm/graalvm-ce-builds/releases)
 
@@ -64,7 +67,7 @@ The following test commands allow you to test the JIT(JVM) and Native Java appli
 ## Build Native App Image and Native Tests
 **Build a Native Image for the application**
 * to build the native app with Gradle, you need to make sure that the `org.graalvm.buildtools.native` plugin is enabled in the `build.gradle` file
-  * `plugins {id 'org.graalvm.buildtools.native' version '0.9.14'}`
+  * `plugins {id 'org.graalvm.buildtools.native' version '0.9.16'}`
 * build the native app with `./gradlew clean nativeBuild`; observe the longer build time
 * observe `/build/native/nativeCompile` folder, and the native executable `build-test-aot-native`. Note that the image is larger than the JIT image, but does not require the JRE for execution
 * run the native app `./build/native/nativeCompile/build-test-aot-native` and test with the test commands listed above

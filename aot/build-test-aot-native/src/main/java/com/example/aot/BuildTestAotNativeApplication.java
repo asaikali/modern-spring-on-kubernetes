@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class BuildTestAotNativeApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(BuildTestAotNativeApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(BuildTestAotNativeApplication.class, args);
+  }
 }

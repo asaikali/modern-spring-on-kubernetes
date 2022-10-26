@@ -16,5 +16,6 @@
 	
 	<modules>
 		<module>quotes-native</module>
+		<module>build-test-aot-native</module>
 	</modules>
 </project>

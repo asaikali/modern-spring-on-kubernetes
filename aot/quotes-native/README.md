@@ -20,7 +20,9 @@ Instructions show you how to build/run both application and container images, us
     * Liberica NIK 22.2: 
         * `sdk install java 22.2.r17-nik`  - select `Y` to set as default `or`
         * `sdk use java 22.2.r17-nik`
-
+* [GraalVM one-line installer]
+    * released with 22.3 on OCt 25, 2022
+    * `bash <(curl -sL https://get.graalvm.org/jdk) graalvm-ce-java17-22.3.0`
 * [Using Homebrew](https://github.com/graalvm/homebrew-tap)
 * [From GraalVM Github repo](https://github.com/graalvm/graalvm-ce-builds/releases)
 
@@ -70,7 +72,7 @@ Instructions show you how to build/run both application and container images, us
 * test the app using a browser `http://localhost:8080/`
 
 **Build and test the Native Java Application**
-* build the app `./mvnw package -Pnative`
+* build the app `./mvnw native:compile -Pnative./`
 * observe the significantly longer build time for the native image
 * check the `target` folder, observe the size of the `quotes-native` executable file. Note that the image is larger than the JIT image, but does not require the JRE for execution
 * run the app on the JVM `./target/quotes-native`
@@ -78,7 +80,7 @@ Instructions show you how to build/run both application and container images, us
 
 ### Container images
 **Build and test the Containerized JIT Application using a regular Java 17 JVM**
-* build the JIT app and containerize with buildpacks `./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=quotes-native-maven:jit`
+* build the JIT app and containerize with buildpacks `./mvnw spring-boot:build-image -Dspring-boot:build-image.imageName=quotes-native-maven:jit -Pnative`
 * **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native-maven:jit`
 * check the size of the container `docker images | grep quotes*`
 * `dive` into the container to observe the container layers, including JRE, app classes and dependent libraries `dive quotes-native-maven:jit`

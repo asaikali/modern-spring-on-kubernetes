@@ -2,12 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
+		<groupId>com.example</groupId>
+		<artifactId>aot</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>	
+
+	<!-- <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.0-M5</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+		<version>3.0.0-RC1</version>
+		<relativePath/> <!- lookup parent from repository 
+	</parent> -->
 	<groupId>com.example</groupId>
 	<artifactId>build-test-aot-native</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -27,8 +34,59 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>runtimehints</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>3.3.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>properties</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.22.2</version>
+						<configuration>
+							<groups>RuntimeHintsTests</groups>
+							<argLine>-javaagent:${org.springframework:spring-core-test:jar}</argLine>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 	<build>
 		<plugins>
 			<plugin>
