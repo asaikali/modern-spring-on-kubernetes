@@ -30,7 +30,9 @@ public class BillboardController {
     this.tracer = tracer;
   }
 
-  @GetMapping("/message")
+
+
+    @GetMapping("/message")
   public String get() {
 
     logger.info("Calling message-service");
