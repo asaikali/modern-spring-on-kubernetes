@@ -30,7 +30,8 @@ spec:
           configMap:
             name: demo-configmap
       containers:
-        - image: gcr.io/optimize-serverless-apps/k8s-boot
+        - image: k8s-boot:1
+          imagePullPolicy: IfNotPresent
           name: k8s-boot
           volumeMounts:
             - mountPath: /myconfigs
