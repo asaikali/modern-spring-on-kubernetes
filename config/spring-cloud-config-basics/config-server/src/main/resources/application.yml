@@ -10,6 +10,7 @@ spring:
         git:
           uri: https://github.com/practical-microservices/spring-cloud-config-basics-repo.git
 
+
 management:
   endpoints:
     web:

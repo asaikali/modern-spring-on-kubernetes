@@ -1,0 +1,20 @@
+1 GB of memory for the container
+How much memory can we give the JVM in the container
+JVM is the only thing in the container
+
+Option 1: set -xmx to 1024MB
+
+set the ram to be a percentage of contaires memory XX:MaxRAMPercentage=75
+
+---
+
+Worker Node with 10_000 millicores
+
+Worklad A
+  cpu request of 5000 millicores
+
+Workload B
+  cpu request of 2000 millicores
+
+Workload C
+  cpu requset for 4000 millicores

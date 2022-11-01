@@ -11,13 +11,14 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 public class TracingBillboardClientApplication {
 
   @Bean
-  QuoteService quoteService () {
+  QuoteService quoteService() {
     WebClient client = WebClient.builder().baseUrl("http://localhost:8081").build();
-    HttpServiceProxyFactory factory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client)).build();
+    HttpServiceProxyFactory factory =
+        HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client)).build();
 
     QuoteService service = factory.createClient(QuoteService.class);
 
-    return  service;
+    return service;
   }
 
   public static void main(String[] args) {

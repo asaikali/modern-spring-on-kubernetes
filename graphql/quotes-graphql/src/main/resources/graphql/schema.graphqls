@@ -8,6 +8,7 @@ type Query {
 type Mutation {
     addAuthor(id:Int, name:String,field:Field,wikipediaUrl:String):Author
 }
+
 type Quote {
     id : ID!,
     quote : String

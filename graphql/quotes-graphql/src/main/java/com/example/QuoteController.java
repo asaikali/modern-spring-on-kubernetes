@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 class QuoteController {
-
   private final QuotesService quotesService;
 
   QuoteController(QuotesService quotesService) {
