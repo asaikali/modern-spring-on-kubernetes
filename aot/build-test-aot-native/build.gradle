@@ -46,6 +46,12 @@ tasks.named('bootBuildImage') {
 		builder = 'paketobuildpacks/builder:tiny'
 		environment = ['BP_NATIVE_IMAGE': 'false']
 	} else {
-		buildpacks =  ['gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea', 'gcr.io/paketo-buildpacks/java-native-image']	
+		if(project.hasProperty('x86')){
+			buildpacks =  ['gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea', 'gcr.io/paketo-buildpacks/java-native-image']
+		} else {
+			if(project.hasProperty('aarm')) {
+				builder = 'dashaun/java-native-builder-arm64'
+			}
+		}
 	}
 }
