@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '3.0.0-RC1'
+	id 'org.springframework.boot' version '3.0.0-RC2'
 	id 'io.spring.dependency-management' version '1.1.0'
-	id 'org.graalvm.buildtools.native' version '0.9.16'
+	id 'org.graalvm.buildtools.native' version '0.9.17'
 	id 'io.spring.build.runtimehints-agent'
 	id 'java'
 }
@@ -23,12 +23,12 @@ dependencies {
 	implementation 'org.springframework:spring-core'
 	testImplementation("org.springframework:spring-core-test")
 
-	implementation(platform("org.springframework:spring-framework-bom:6.0.0-RC2"))
+	implementation(platform("org.springframework:spring-framework-bom:6.0.0-RC4"))
 
 	testImplementation("org.springframework:spring-core-test")
 	testImplementation("org.assertj:assertj-core:3.23.1")
 
-	testImplementation(platform("org.junit:junit-bom:5.9.0"))
+	testImplementation(platform("org.junit:junit-bom:5.9.1"))
 	testImplementation("org.junit.jupiter:junit-jupiter-api")
 	testImplementation("org.junit.jupiter:junit-jupiter-params")
 	testImplementation("org.junit.platform:junit-platform-suite-api")

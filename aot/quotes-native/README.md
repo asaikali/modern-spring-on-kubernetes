@@ -5,8 +5,8 @@ Instructions show you how to build/run both application and container images, us
 
 ### Prerequisites
 * [Java 17 JDK](https://adoptium.net/)
-* [GraalVM 22.2 - Java 17](https://www.graalvm.org/22.2/docs/getting-started/) - to build Native Java application images `or`
-* [Liberica NIK 22.2 - Java 17](https://bell-sw.com/pages/downloads/native-image-kit/#) - alternate Native Java Image building tool based on open-source GraalVM 
+* [GraalVM 22.3 - Java 17](https://www.graalvm.org/22.3/docs/getting-started/) - to build Native Java application images `or`
+* [Liberica NIK 22.3 - Java 17](https://bell-sw.com/pages/downloads/native-image-kit/#) - alternate Native Java Image building tool based on open-source GraalVM 
 * [Docker](https://www.docker.com/products/docker-desktop) 
 * [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
 * [cURL](https://curl.se/docs/manpage.html) or [HTTPie](https://httpie.io/) - app testing
@@ -18,8 +18,8 @@ Instructions show you how to build/run both application and container images, us
         * `sdk use java 22.3.r17-grl
         * `gu install native-image`
     * Liberica NIK 22.3: 
-        * `sdk install java 22.3.r17.ea-nik`  - select `Y` to set as default `or`
-        * `sdk use java 22.3.r17.ea-nik`
+        * `sdk install java 22.3.r17-nik`  - select `Y` to set as default `or`
+        * `sdk use java 22.3.r17-nik`
 * [GraalVM one-line installer]
     * install script released with 22.3 on OCt 25, 2022
     * `bash <(curl -sL https://get.graalvm.org/jdk) graalvm-ce-java17-22.3.0`
