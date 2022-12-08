@@ -1,7 +1,7 @@
 package com.example;
 
 import io.micrometer.observation.annotation.Observed;
-import io.micrometer.tracing.BaggageInScope;
+import io.micrometer.tracing.Baggage;
 import io.micrometer.tracing.Tracer;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class MessageService {
       name = "randomQuote",
       lowCardinalityKeyValues = {"country", "canada", "region", "east"})
   public Quote randomQuote() {
-    BaggageInScope baggage = this.tracer.getBaggage("billboardId");
+    Baggage baggage = this.tracer.getBaggage("billboardId");
     logger.info("MessageService.randomQuote() billboardId=" + baggage.get());
 
     Quote quote = quoteRepository.findRandomQuote();

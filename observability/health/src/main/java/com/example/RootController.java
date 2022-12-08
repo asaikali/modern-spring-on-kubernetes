@@ -17,6 +17,10 @@ public class RootController {
     return "Health Checks Will Pass: " + exampleHealthIndicator.getState();
   }
 
+  @GetMapping("/error")
+  public String generateErorr() {
+    throw new RuntimeException("oops something went wrong");
+  }
   @GetMapping("/fail")
   public String fail() {
     exampleHealthIndicator.setState(false);
