@@ -1,6 +1,6 @@
 package com.example;
 
-import io.micrometer.tracing.BaggageInScope;
+import io.micrometer.tracing.Baggage;
 import io.micrometer.tracing.Tracer;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class MessageController {
 
   @GetMapping("/")
   public Quote randomQuote() {
-    BaggageInScope baggage = this.tracer.getBaggage("billboardId");
+    Baggage baggage = this.tracer.getBaggage("billboardId");
     logger.info("baggage billboardId=" + baggage.get());
 
     logger.info("returning a random quote");

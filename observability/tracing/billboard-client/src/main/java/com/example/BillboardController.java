@@ -1,6 +1,6 @@
 package com.example;
 
-import io.micrometer.tracing.BaggageInScope;
+import io.micrometer.tracing.Baggage;
 import io.micrometer.tracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,11 +39,10 @@ public class BillboardController {
     // The BaggageInScope needs to be closed so that spans after this code block
     // don't have the baggage.
     //
-    try (BaggageInScope baggage = this.tracer.createBaggage("billboardId")) {
-      baggage.set(billboardId);
-      Quote quote = restTemplate.getForObject("http://localhost:8081/", Quote.class);
-      logger.info("message-service returned {}", quote);
-      return quote.getQuote() + " -- " + quote.getAuthor();
-    }
+   Baggage baggage = this.tracer.createBaggage("billboardId");
+    baggage.set(billboardId);
+    Quote quote = restTemplate.getForObject("http://localhost:8081/", Quote.class);
+    logger.info("message-service returned {}", quote);
+    return quote.getQuote() + " -- " + quote.getAuthor();
   }
 }
