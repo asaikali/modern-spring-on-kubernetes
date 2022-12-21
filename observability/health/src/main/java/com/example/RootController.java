@@ -21,6 +21,7 @@ public class RootController {
   public String generateErorr() {
     throw new RuntimeException("oops something went wrong");
   }
+
   @GetMapping("/fail")
   public String fail() {
     exampleHealthIndicator.setState(false);

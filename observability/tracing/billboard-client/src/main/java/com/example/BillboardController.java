@@ -35,11 +35,7 @@ public class BillboardController {
 
     logger.info("Calling message-service");
     String billboardId = "123";
-    //
-    // The BaggageInScope needs to be closed so that spans after this code block
-    // don't have the baggage.
-    //
-   Baggage baggage = this.tracer.createBaggage("billboardId");
+    Baggage baggage = this.tracer.createBaggage("billboardId");
     baggage.set(billboardId);
     Quote quote = restTemplate.getForObject("http://localhost:8081/", Quote.class);
     logger.info("message-service returned {}", quote);
