@@ -53,6 +53,8 @@ There is a lot of stuff that will be downloaded during the workshop, the hotel w
 network will likely be too so. You can save yourself a lot of time by doing the 
 following steps at home:
 
+0. install the all the required software above, you don't want to be downloading and installing 
+   all the above softawre during the workshop, it will take too long and you will fall behind.
 1. Checkout the code of this repo 
 2. run `./mvnw clean package` from the root of the repo to download all maven dependencies 
 3. Open the root of the repo in your IDE, the repo is a multi-module maven project so all 
