@@ -14,8 +14,8 @@ Instructions show you how to build/run both application and container images, us
 ### Install GraalVM 
 * [SDKMan - preferred method](https://sdkman.io/)
     * GraalVM 22.3 
-        * `sdk install java 22.3.r19-grl` - select `Y` to set as default `or`
-        * `sdk use java 22.3.r19-grl`
+        * `sdk install java  22.3.2.r17-grl` - select `Y` to set as default `or`
+        * `sdk use java 22.3.2.r17-grl`
         * `gu install native-image`
     * Liberica NIK 22.3: 
         * `sdk install java 22.3.2.r17-nik`  - select `Y` to set as default `or`

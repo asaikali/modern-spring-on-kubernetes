@@ -13,7 +13,7 @@ sample and points out interesting things to look at.
 
 ### Java development tooling 
 * [Java 17 JDK](https://adoptium.net/)
-* [Java 17 GraalVM](https://www.graalvm.org/22.2/docs/getting-started/) or [Java 17 Liberica NIK 22.2](https://bell-sw.com/pages/downloads/native-image-kit/#) (Spring Native)
+* [Java 17 GraalVM](https://www.graalvm.org/22.3/docs/getting-started/) or [Java 17 Liberica NIK 22.3](https://bell-sw.com/pages/downloads/native-image-kit/#) (Spring Native)
 * [Maven](https://maven.apache.org/index.html)
 * [Gradle](https://gradle.org/)
 * Favourite Java IDE one of
@@ -27,26 +27,38 @@ sample and points out interesting things to look at.
 
 ### Kubernetes Cluster 
 
-You will need a Kubernetes cluster running on your laptop to test the sample
-apps. The workshop samples have been tested with a kind based local cluster. 
-While Minikube and docker desktop kubernetes can be used to run the apps, the
-instructions and scripts assume kind is available so please make suer you have
-kind installed.
+You will need a Kubernetes cluster to test the sample apps. The apps have with a 
+docker desktop based Kubernetes. Other local desktop Kubernetes solutions such as
+minikube or kind will work but there might be slight differences in exposing 
+network ports. Whatever choice of k8s you bring to the workshop we assume you 
+are comfortable driving that k8s distribution. If you are new to Kubernetes 
+and want the paved documented path install docker desktop and use the k8s that
+is built into it.
 
-* [kind](https://kind.sigs.k8s.io/docs/user/quick-start/) local kubernetes cluster
-
-is to use the cluster that is built into docker desktop 
-that is what the samples have been tested with. 
+Pick your favourite laptop based k8s solution
+* [docker desktop](https://www.docker.com/products/docker-desktop/)
+* [minikube](https://minikube.sigs.k8s.io/docs/start/)
+* [kind](https://kind.sigs.k8s.io/)
+* [Rancher Desktop](https://rancherdesktop.io/)
 
 ### Kubernetes tooling
 * [Kubernetes](https://kubernetes.io/) sample tested with Docker Desktop K8s. If you have a different k8s install you must know how to expose the app in k8s to your machine machine if you don't just use docker desktop k8s to run these demos.
-* [minikube](https://minikube.sigs.k8s.io/docs/start/)
 * [kubectl](https://code.visualstudio.com/)
 * [k9s](https://github.com/derailed/k9s) text gui for k8s
 * [carvel](https://carvel.dev/) super useful set of clis for working kubernetes and containers 
 
+# Save the workshop wifi network 
 
+There is a lot of stuff that will be downloaded during the workshop, the hotel wifi 
+network will likely be too so. You can save yourself a lot of time by doing the 
+following steps at home:
 
+1. Checkout the code of this repo 
+2. run `./mvnw clean package` from the root of the repo to download all maven dependencies 
+3. Open the root of the repo in your IDE, the repo is a multi-module maven project so all 
+   the samples will be imported.
+4. cd into  `containerize/buildpack` and run the command `./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=boot-buildpack:1` this will download a bunch of required base images that are quite big almost a 1GB in size.  
+5. from the repo root run the command `docker compose -f observability/tracing/docker-compose.yaml pull` to pull the required images for the observability demos
 
 # Outline 
 
