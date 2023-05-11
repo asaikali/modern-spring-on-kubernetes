@@ -60,7 +60,7 @@ following steps at home:
 3. Open the root of the repo in your IDE, the repo is a multi-module maven project so all 
    the samples will be imported.
 4. cd into  `containerize/buildpack` and run the command `./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=boot-buildpack:1` this will download a bunch of required base images that are quite big almost a 1GB in size.  
-5. from the repo root run the command `docker compose -f observability/tracing/docker-compose.yaml pull` to pull the required images for the observability demos
+5. from the repo root run the command `docker compose -f observability/tracing/docker-compose-all.yaml pull` to pull the required images for the observability demos
 
 # Outline 
 

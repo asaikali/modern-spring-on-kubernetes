@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  openzipkin:
+    image: openzipkin/zipkin:2.23
+  tempo:
+    image: grafana/tempo
+
+  loki:
+    image: grafana/loki
+
+  prometheus:
+    image: prom/prometheus
+
+  grafana:
+    image: grafana/grafana
