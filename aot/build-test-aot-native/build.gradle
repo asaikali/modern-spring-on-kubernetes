@@ -23,7 +23,7 @@ dependencies {
 	implementation 'org.springframework:spring-core'
 	testImplementation("org.springframework:spring-core-test")
 
-	implementation(platform("org.springframework:spring-framework-bom:6.0.0-RC4"))
+	// implementation(platform("org.springframework:spring-framework-bom:6.0.0-RC4"))
 
 	testImplementation("org.springframework:spring-core-test")
 	testImplementation("org.assertj:assertj-core:3.23.1")
@@ -41,17 +41,17 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-tasks.named('bootBuildImage') {
-	if (!project.hasProperty('native')) {
-		builder = 'paketobuildpacks/builder:tiny'
-		environment = ['BP_NATIVE_IMAGE': 'false']
-	} else {
-		if(project.hasProperty('x86')){
-			buildpacks =  ['gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea', 'gcr.io/paketo-buildpacks/java-native-image']
-		} else {
-			if(project.hasProperty('aarm')) {
-				builder = 'dashaun/java-native-builder-arm64'
-			}
-		}
-	}
-}
+// tasks.named('bootBuildImage') {
+// 	if (!project.hasProperty('native')) {
+// 		builder = 'paketobuildpacks/builder:tiny'
+// 		environment = ['BP_NATIVE_IMAGE': 'false']
+// 	} else {
+// 		if(project.hasProperty('x86')){
+// 			buildpacks =  ['gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea', 'gcr.io/paketo-buildpacks/java-native-image']
+// 		} else {
+// 			if(project.hasProperty('aarm')) {
+// 				builder = 'dashaun/java-native-builder-arm64'
+// 			}
+// 		}
+// 	}
+// }
