@@ -5,3 +5,16 @@ spring:
   config:
     import: "configserver:http://localhost:8888" # only works in boot 2.4 or later
     #import: "optional:configserver:http://localhost:8888" # adding optional allows app to startup even if config server is not available
+
+---
+
+#!
+#! This configuration ony actives when the app is running on Kubernetes.
+#! Since Azure spring apps runs on K8s the settings below will only be
+#! active when the app is running on Azure Spring Apps
+#!
+spring:
+  config:
+    activate:
+      on-cloud-platform: kubernetes
+    import: "configserver:http://config-server.config-server.svc.cluster.local:8888"
