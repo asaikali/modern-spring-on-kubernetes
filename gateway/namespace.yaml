@@ -2,3 +2,29 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: gateway
+
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: gateway-reader
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
+    verbs: ["get", "list", "watch"]
+
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gateway-reader-binding
+subjects:
+  - kind: ServiceAccount
+    name: default
+    apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: gateway-reader
+  apiGroup: ""
