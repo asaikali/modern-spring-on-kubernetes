@@ -14,15 +14,15 @@ Instructions show you how to build/run both application and container images, us
 ### Install GraalVM 
 * [SDKMan - preferred method](https://sdkman.io/)
     * GraalVM 22.3 
-        * `sdk install java  22.3.2.r17-grl` - select `Y` to set as default `or`
-        * `sdk use java 22.3.2.r17-grl`
+        * `sdk install java 22.3.1.r17-grl` - select `Y` to set as default `or`
+        * `sdk use java 22.3.1.r17-grl`
         * `gu install native-image`
     * Liberica NIK 22.3: 
         * `sdk install java 22.3.2.r17-nik`  - select `Y` to set as default `or`
         * `sdk use java 22.3.2.r17-nik`
 * [GraalVM one-line installer]
-    * install script released with 22.3 on OCt 25, 2022
-    * `bash <(curl -sL https://get.graalvm.org/jdk) graalvm-ce-java17-22.3.0`
+    * install script released with 22.3 on Oct 25, 2022
+    * `bash <(curl -sL https://get.graalvm.org/jdk) graalvm-ce-java17-22.3.1`
 * [Using Homebrew](https://github.com/graalvm/homebrew-tap)
 * [From GraalVM Github repo](https://github.com/graalvm/graalvm-ce-builds/releases)
 

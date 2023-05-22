@@ -42,30 +42,13 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-//tasks.named('bootBuildImage') {
-//	if (!project.hasProperty('native')) {
-//		builder = 'paketobuildpacks/builder:tiny'
-//		environment = ['BP_NATIVE_IMAGE': 'false',
-//						'BP_BINARY_COMPRESSION_METHOD':'upx',
-//						'USE_NATIVE_IMAGE_JAVA_PLATFORM_MODULE_SYSTEM':'false'
-//						]
-//	} else {
-//		buildpacks =  ['gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea', 'gcr.io/paketo-buildpacks/java-native-image']
-//	}
-//
-//}
-
 tasks.named('bootBuildImage') {
 	if (!project.hasProperty('native')) {
-		builder = 'paketobuildpacks/builder:tiny'
+		builder = 'dashaun/builder:tiny'
 		environment = ['BP_NATIVE_IMAGE': 'false']
 	} else {
-		if(project.hasProperty('x86')){
-			buildpacks =  ['gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea', 'gcr.io/paketo-buildpacks/java-native-image']
-		} else {
-			if(project.hasProperty('aarm')) {
-				builder = 'dashaun/java-native-builder-arm64'
-			}
-		}
+		builder = 'dashaun/builder:tiny'
+		environment = ['BP_NATIVE_IMAGE': 'true']
 	}
 }
+

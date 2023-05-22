@@ -79,6 +79,10 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.graalvm.buildtools</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+			</plugin>		
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
@@ -90,12 +94,16 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.graalvm.buildtools</groupId>
+						<artifactId>native-maven-plugin</artifactId>
+					</plugin>				
+					<plugin>
 						<groupId>org.springframework.boot</groupId>
 						<artifactId>spring-boot-maven-plugin</artifactId>
 						<configuration>
 							<image>
 								<name>${project.artifactId}-maven:aot</name>
-								<builder>dashaun/java-native-builder-arm64:7.37.0</builder>
+								<builder>dashaun/builder:tiny</builder>
 							</image>
 						</configuration>
 					</plugin>
