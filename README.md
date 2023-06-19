@@ -43,7 +43,7 @@ Pick your favourite laptop based k8s solution
 
 ### Kubernetes tooling
 * [Kubernetes](https://kubernetes.io/) sample tested with Docker Desktop K8s. If you have a different k8s install you must know how to expose the app in k8s to your machine machine if you don't just use docker desktop k8s to run these demos.
-* [kubectl](https://code.visualstudio.com/)
+* [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
 * [k9s](https://github.com/derailed/k9s) text gui for k8s
 * [carvel](https://carvel.dev/) super useful set of clis for working kubernetes and containers 
 
