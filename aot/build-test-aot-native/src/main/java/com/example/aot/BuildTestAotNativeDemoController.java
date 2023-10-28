@@ -67,6 +67,7 @@ public class BuildTestAotNativeDemoController {
       }
     }
   }
+
   //	 Response from the service
   public record HelloResponse(String message) {}
 }
