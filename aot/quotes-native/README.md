@@ -4,7 +4,7 @@ Example shows how to build JIT(JVM) and Native Java images with Spring Native an
 Instructions show you how to build/run both application and container images, using either `Gradle` or `Maven`.
 
 ### Prerequisites
-* [Java 17 JDK](https://adoptium.net/)
+* [Java 21 JDK](https://adoptium.net/)
 * [GraalVM 22.3 - Java 17](https://www.graalvm.org/22.3/docs/getting-started/) - to build Native Java application images `or`
 * [Liberica NIK 22.3 - Java 17](https://bell-sw.com/pages/downloads/native-image-kit/#) - alternate Native Java Image building tool based on open-source GraalVM 
 * [Docker](https://www.docker.com/products/docker-desktop) 

@@ -1,7 +1,8 @@
 server:
   port: 8080
-  shutdown: immediate # the default vaule for this setting is immediate
-#  shutdown: graceful # tell the server to wait for executing requests to finish before shutdown
+#  shutdown: immediate # the default vaule for this setting is immediate
+  shutdown: graceful # tell the server to wait for executing requests to finish before shutdown
+
 
 spring:
   config:

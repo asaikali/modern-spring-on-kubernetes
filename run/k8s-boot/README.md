@@ -5,7 +5,7 @@ actuators.
 
 **Prerequisites** 
 
-* [Java 17 JDK](https://adoptium.net/)
+* [Java 21 JDK](https://adoptium.net/)
 * [Docker](https://www.docker.com/products/docker-desktop) 
 * [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
 * [Octant](https://github.com/vmware-tanzu/octant#installation) web gui for Kubernetes

@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.2.0-RC2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
@@ -15,8 +15,8 @@
     <name>modern-spring-on-kubernetes</name>
     <description>Modern Spring Based Microservices on Kubernetes</description>
     <properties>
-        <java.version>17</java.version>
-        <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <java.version>21</java.version>
+        <spring-cloud.version>2023.0.0-RC1</spring-cloud.version>
         <spotless.version>2.40.0</spotless.version>
     </properties>
     <modules>
@@ -65,4 +65,25 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
