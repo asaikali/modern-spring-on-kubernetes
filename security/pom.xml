@@ -16,5 +16,6 @@
 	
 	<modules>
 		<module>tls-reload</module>
+		<module>sbom</module>
 	</modules>
 </project>
