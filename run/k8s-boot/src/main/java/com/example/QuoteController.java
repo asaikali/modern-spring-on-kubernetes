@@ -18,6 +18,7 @@ public class QuoteController {
 
   @GetMapping("/random-quote")
   public Quote randomQuote() {
+    System.out.println("hello");
     Quote result = quoteRepository.findRandomQuote();
     if (CloudPlatform.KUBERNETES.isActive(environment)) {
       result.setK8s(true);

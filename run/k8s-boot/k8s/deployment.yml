@@ -30,7 +30,7 @@ spec:
           configMap:
             name: demo-configmap
       containers:
-        - image: k8s-boot:1
+        - image:  azul/zulu-openjdk:v3
           imagePullPolicy: IfNotPresent
           name: k8s-boot
           volumeMounts:

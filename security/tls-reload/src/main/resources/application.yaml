@@ -1,0 +1,11 @@
+spring.ssl.bundle.pem:
+  demo:
+    reload-on-update: true
+    keystore:
+      certificate: "certs/demo.crt"
+      private-key: "certs/demo.key"
+
+server:
+  port: 8443
+  ssl:
+    bundle: "demo"
