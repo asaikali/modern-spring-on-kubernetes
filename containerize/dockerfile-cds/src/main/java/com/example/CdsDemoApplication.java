@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LayersCdsDemoApplication {
+public class CdsDemoApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(LayersCdsDemoApplication.class, args);
+    SpringApplication.run(CdsDemoApplication.class, args);
   }
 }

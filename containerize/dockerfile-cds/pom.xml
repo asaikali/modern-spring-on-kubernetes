@@ -9,7 +9,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>layers-dockerfile-cds</artifactId>
+  <artifactId>dockerfile-cds</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>layers-dockerfile-cds</name>
   <description>Demo project showing how to use a spring boot multi-layer dockerfile with cds</description>
@@ -66,9 +66,9 @@
         <executions>
           <execution>
             <id>process-aot</id>
-            <configuration>
-              <profiles>profile-a,profile-b</profiles>
-            </configuration>
+            <goals>
+              <goal>process-aot</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

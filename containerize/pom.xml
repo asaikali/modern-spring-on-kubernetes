@@ -19,7 +19,7 @@
 		<module>buildpack-cds</module>
 		<module>custom-layers-dockerfile</module>
 		<module>layers-dockerfile</module>
-		<module>layers-dockerfile-cds</module>
+		<module>dockerfile-cds</module>
 		<module>fatjar-dockerfile</module>
 		<module>jlink-layers-dockerfile</module>
 	</modules>
