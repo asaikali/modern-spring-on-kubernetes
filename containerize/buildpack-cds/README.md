@@ -1,4 +1,4 @@
-# buildpack 
+# buildpack-cds
 
 Example showing how to containerize a java application using buildpacks without 
 having to write a Dockerfile. 
