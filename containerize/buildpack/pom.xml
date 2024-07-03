@@ -67,11 +67,23 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <executions>
           <execution>
+            <id>process-aot</id>
             <goals>
-              <goal>build-image-no-fork</goal>
+              <goal>process-aot</goal>
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <image>
+            <env>
+              <BP_SPRING_AOT_ENABLED>true</BP_SPRING_AOT_ENABLED>
+            </env>
+            <buildpacks>
+              <buildpack>paketobuildpacks/java</buildpack>
+            </buildpacks>
+            <builder>paketobuildpacks/builder-jammy-buildpackless-tiny</builder>
+          </image>
+        </configuration>
       </plugin>
     </plugins>
   </build>
