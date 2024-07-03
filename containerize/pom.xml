@@ -16,6 +16,7 @@
 	
 	<modules>
 		<module>buildpack</module>
+		<module>buildpack-cds</module>
 		<module>custom-layers-dockerfile</module>
 		<module>layers-dockerfile</module>
 		<module>fatjar-dockerfile</module>
