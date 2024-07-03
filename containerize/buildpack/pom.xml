@@ -81,6 +81,10 @@
             <buildpacks>
               <buildpack>paketobuildpacks/java</buildpack>
             </buildpacks>
+            <!-- this builder contains no buildpacks, so a buildpack must be explicit specified
+            we need this because the java buildpack is multiarch it works on AMD64 and ARM64
+            if we don't include this then we will have issues on the Apple Silicon macs.
+             -->
             <builder>paketobuildpacks/builder-jammy-buildpackless-tiny</builder>
           </image>
         </configuration>
