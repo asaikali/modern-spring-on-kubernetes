@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FatJarDemoApplication {
+public class DockerfileCdsApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(FatJarDemoApplication.class, args);
+    SpringApplication.run(DockerfileCdsApplication.class, args);
   }
 }

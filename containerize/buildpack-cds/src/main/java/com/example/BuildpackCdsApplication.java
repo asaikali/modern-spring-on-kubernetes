@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JlinkLayersDemoApplication {
+public class BuildpackCdsApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(JlinkLayersDemoApplication.class, args);
+    SpringApplication.run(BuildpackCdsApplication.class, args);
   }
 }

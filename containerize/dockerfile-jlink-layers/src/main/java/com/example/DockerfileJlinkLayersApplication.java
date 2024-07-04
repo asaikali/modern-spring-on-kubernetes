@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CustomLayersDemoApplication {
+public class DockerfileJlinkLayersApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(CustomLayersDemoApplication.class, args);
+    SpringApplication.run(DockerfileJlinkLayersApplication.class, args);
   }
 }
