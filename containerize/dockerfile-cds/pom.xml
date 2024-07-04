@@ -11,7 +11,6 @@
   <groupId>com.example</groupId>
   <artifactId>dockerfile-cds</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>layers-dockerfile-cds</name>
   <description>Demo project showing how to use a spring boot multi-layer dockerfile with cds</description>
 
   <dependencies>

@@ -17,10 +17,10 @@
 	<modules>
 		<module>buildpack</module>
 		<module>buildpack-cds</module>
-		<module>custom-layers-dockerfile</module>
-		<module>layers-dockerfile</module>
+		<module>dockerfile-custom-layers</module>
+		<module>dockerfile-layers</module>
 		<module>dockerfile-cds</module>
-		<module>fatjar-dockerfile</module>
-		<module>jlink-layers-dockerfile</module>
+		<module>dockerfile-fatjar</module>
+		<module>dockerfile-jlink-layers</module>
 	</modules>
 </project>

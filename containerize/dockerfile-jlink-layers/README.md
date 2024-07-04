@@ -1,4 +1,4 @@
-# jlink-layers-dockerfile 
+# dockerfile-jlink-layers 
 
 Example showing how to package a Spring Boot into an optimized multi-layer 
 container image using a Dockerfile, while also creating a minimal custom JRE

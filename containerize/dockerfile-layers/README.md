@@ -1,4 +1,4 @@
-# layers-dockerfile 
+# dockerfile-layers 
 
 Example showing how to package a Spring Boot into an optimized multi-layer container 
 image using a Dockerfile. 

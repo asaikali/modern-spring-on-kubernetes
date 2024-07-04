@@ -1,4 +1,4 @@
-# fatjar-dockerfile 
+# dockerfile-fatjar 
 
 Example showing how to bundle a Spring Boot fat jar into a container image using 
 a Dockerfile. 

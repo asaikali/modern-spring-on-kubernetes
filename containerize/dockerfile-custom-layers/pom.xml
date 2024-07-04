@@ -9,10 +9,10 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>fatjar-dockerfile</artifactId>
+  <artifactId>dockerfile-custom-layers</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>fatjar-dockerfile</name>
-  <description>Demo project showing anti-pattern way of containerizing the application</description>
+  <name>custom-layers-dockerfile</name>
+  <description>Demo project showing a custom layers with spring boot</description>
 
   <dependencies>
     <dependency>
@@ -27,7 +27,7 @@
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
     </dependency>
-    <dependency>
+     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
@@ -63,8 +63,13 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <layers>
+            <enabled>true</enabled>
+            <configuration>${project.basedir}/src/layers.xml</configuration>
+          </layers>
+        </configuration>
       </plugin>
     </plugins>
   </build>
-
 </project>

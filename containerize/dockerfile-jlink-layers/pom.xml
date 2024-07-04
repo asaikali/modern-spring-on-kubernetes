@@ -9,10 +9,10 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>layers-dockerfile</artifactId>
+  <artifactId>dockerfile-jlink-layers</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>layers-dockerfile</name>
-  <description>Demo project showing how to use a spring boot multi-layer dockerfile</description>
+  <name>jlink-layers-dockerfile</name>
+  <description>Demo project showing how to use a jlink and spring boot multi-layer dockerfile</description>
 
   <dependencies>
     <dependency>
