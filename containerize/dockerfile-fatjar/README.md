@@ -1,13 +1,7 @@
 # dockerfile-fatjar 
 
 Example showing how to bundle a Spring Boot fat jar into a container image using 
-a Dockerfile. 
-
-**Prerequisites** 
-
-* [Java 17 JDK](https://adoptium.net/)
-* [Docker](https://www.docker.com/products/docker-desktop) 
-* [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
+a Dockerfile.
 
 **Try it out** 
 
@@ -20,7 +14,3 @@ a Dockerfile.
 * terminate the container using `Ctrl+C` or `docker kill`
 * examine the contents of the `Dockerfile` notice the path to `app.jar` in the container 
 * explore the layers in the container using `dive boot-fatjar:1` find the app.jar 
-
-**Resources**
- 
-* [Spring Boot with Docker](https://spring.io/guides/gs/spring-boot-docker/) 

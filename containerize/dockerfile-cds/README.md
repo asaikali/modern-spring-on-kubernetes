@@ -4,11 +4,6 @@ Example showing how to package a Spring Boot into an optimized multi-layer conta
 image using a Dockerfile and AppCDS for faster startup. On my laptop
 this image starts in 1/2 the time as the image without CDS.
 
-**Prerequisites** 
-
-* [Java 17 JDK](https://adoptium.net/)
-* [Docker](https://www.docker.com/products/docker-desktop) 
-* [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
 
 **build and run the app** 
 

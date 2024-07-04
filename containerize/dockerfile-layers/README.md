@@ -3,12 +3,6 @@
 Example showing how to package a Spring Boot into an optimized multi-layer container 
 image using a Dockerfile. 
 
-**Prerequisites** 
-
-* [Java 17 JDK](https://adoptium.net/)
-* [Docker](https://www.docker.com/products/docker-desktop) 
-* [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
-
 **build and run the app** 
 
 * build the app `./mvnw clean package` to produce the fat jar 
