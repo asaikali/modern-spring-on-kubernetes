@@ -3,14 +3,6 @@
 Example showing how to  configure Kubernetes Health & Readiness Probes using spring boot 
 actuators.
 
-**Prerequisites** 
-
-* [Java 21 JDK](https://adoptium.net/)
-* [Docker](https://www.docker.com/products/docker-desktop) 
-* [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
-* [Octant](https://github.com/vmware-tanzu/octant#installation) web gui for Kubernetes
-* [Kubernetes](https://kubernetes.io/) sample tested with Docker Desktop K8s but any k8s should work. 
-
 **build and run the app** 
 
 * build the app `./mvnw clean package` to produce the fat jar 
@@ -18,7 +10,7 @@ actuators.
 * run the container `docker run -p 8080:8080 -t k8s-boot:1`
 * test the app using a browser `http://localhost:8080/`
 
-**Actuator Heath Check**
+**Actuator Health Check**
 
 * using a web browser or curl go to `http://127.0.0.1:8080/actuator/health` 
 * notice the `livenessState` and `readinessState` which are designed for use Kubernetes     
@@ -215,11 +207,11 @@ From the [Spring Boot docs](https://docs.spring.io/spring-boot/docs/2.4.0-RC1/re
 
 ## Resources
 * Relevant sections from Spring Boot docs  
-  * [Application Availability](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#boot-features-application-availability)
-  * [Kubernetes Probes](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#production-ready-kubernetes-probes)
-  * [Boot Kubernetes Deployment Guide](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#cloud-deployment-kubernetes)
-  * [Graceful shutdown](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#boot-features-graceful-shutdown)
-  * [Configuration Tree](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#features.external-config.files.configtree)
+  * [Application Availability](https://docs.spring.io/spring-boot/reference/features/spring-application.html#features.spring-application.application-availability)
+  * [Kubernetes Probes](https://docs.spring.io/spring-boot/reference/actuator/endpoints.html#actuator.endpoints.kubernetes-probes)
+  * [Boot Kubernetes Deployment Guide](https://docs.spring.io/spring-boot/how-to/deployment/cloud.html#howto.deployment.cloud.kubernetes)
+  * [Graceful shutdown](https://docs.spring.io/spring-boot/reference/web/graceful-shutdown.html#page-title)
+  * [Configuration Tree](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.files.configtree)
 
 * Guides and blog posts 
   * [Liveness and Readiness Probes with Spring Boot](https://spring.io/blog/2020/03/25/liveness-and-readiness-probes-with-spring-boot) 

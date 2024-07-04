@@ -3,12 +3,6 @@
 Example showing best practices for configuring JVM settings RAM, and CPU when running in a 
 container. 
 
-**Prerequisites** 
-
-* [Java 21 JDK](https://adoptium.net/)
-* [Docker](https://www.docker.com/products/docker-desktop) 
-* [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
-
 **build and run the app** 
 
 * build the app `./mvnw clean package` to produce the fat jar 
@@ -33,7 +27,4 @@ container.
 
 **Resources**
  
-* [JAVA_TOOL_OPTIONS env var](https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/envvars002.html)
-* [Spring Boot Docs](https://docs.spring.io/spring-boot/docs/2.5.0/reference/html/spring-boot-features.html#layering-docker-images) 
-* [Maven Plugin](https://docs.spring.io/spring-boot/docs/2.5.0/maven-plugin/reference/htmlsingle/#repackage-layers)
-* [Gradle Plugin](https://docs.spring.io/spring-boot/docs/2.5.0/gradle-plugin/reference/htmlsingle/#packaging-layered-jars )
+* [JAVA_TOOL_OPTIONS env var](https://docs.oracle.com/en/java/javase/21/troubleshoot/environment-variables-and-system-properties.html#GUID-BE6E7B7F-A4BE-45C0-9078-AA8A66754B97)

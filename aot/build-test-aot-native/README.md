@@ -6,11 +6,6 @@ It showcases how reflection, serialization, proxying and resource loading can be
 
 This work expands on the sample built by [Stephane Nicoll](https://github.com/snicoll/demo-aot-native)
 
-### Prerequisites
-* [Java 21 JDK](https://adoptium.net/)
-* [GraalVM Community Edition 21](https://www.graalvm.org/22.3/docs/getting-started/) - to build Native Java application images `or`
-* [cURL](https://curl.se/docs/manpage.html) or [HTTPie](https://httpie.io/) - app testing
-
 ### Install GraalVM
 * [SDKMan - preferred method](https://sdkman.io/)
     * GraalVM 21
