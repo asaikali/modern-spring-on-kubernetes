@@ -8,7 +8,9 @@
 # command to make an rsa based private key (Does not work in Java 21)
 # jdk claims there is no computable signature verification algorithm in ssl debug log
 # Generate cert will have Signature Algorithm: ED25519
-# seem that support is not wide sparead https://security.stackexchange.com/questions/269725/what-is-the-current-april-2023-browser-support-for-ed25519-certificate-signatu
+# seem that support is not wide spread / allowed by baseline requirements for browsers and ca's
+# https://news.ycombinator.com/item?id=24537042
+# https://security.stackexchange.com/questions/269725/what-is-the-current-april-2023-browser-support-for-ed25519-certificate-signatu
 #openssl genpkey \
 #  -algorithm Ed25519 \
 #  -out cert/demo.key
