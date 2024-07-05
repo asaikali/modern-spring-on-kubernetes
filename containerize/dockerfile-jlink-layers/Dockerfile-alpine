@@ -15,7 +15,7 @@ RUN $JAVA_HOME/bin/jlink \
 WORKDIR application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
-RUN java -Djarmode=layertools -jar application.jar extract
+RUN java -Djarmode=tools -jar application.jar extract --layers --destination /out --application-filename app.jar
 
 # Create an run image for the application
 FROM alpine:3.20.1
@@ -23,8 +23,8 @@ ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
 COPY --from=builder /javaruntime $JAVA_HOME
 WORKDIR application
-COPY --from=builder application/dependencies/ ./
-COPY --from=builder application/spring-boot-loader/ ./
-COPY --from=builder application/snapshot-dependencies/ ./
-COPY --from=builder application/application/ ./
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+COPY --from=builder /out/dependencies/ ./
+COPY --from=builder /out/snapshot-dependencies/ ./
+# COPY --from=builder /out/spring-boot-loader/ ./ not needed anymore always empty
+COPY --from=builder /out/application/ ./
+ENTRYPOINT ["java","-jar","/application/app.jar"]
