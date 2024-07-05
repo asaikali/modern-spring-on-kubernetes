@@ -31,6 +31,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<workingDirectory>../../</workingDirectory>
+					<jvmArguments>-Djavax.net.debug=ssl,handshake,trace</jvmArguments>
 				</configuration>
 			</plugin>
 		</plugins>
