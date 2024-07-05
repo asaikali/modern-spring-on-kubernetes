@@ -7,6 +7,7 @@ RUN $JAVA_HOME/bin/jlink \
          --no-man-pages \
          --no-header-files \
          --compress=2 \
+         --generate-cds-archive \
          --output /javaruntime
 
 # extract the layers of the boot application
@@ -25,5 +26,6 @@ COPY --from=builder /out/dependencies/ ./
 COPY --from=builder /out/snapshot-dependencies/ ./
 # COPY --from=builder /out/spring-boot-loader/ ./ not needed anymore always empty
 COPY --from=builder /out/application/ ./
-ENTRYPOINT ["java","-jar","/application/app.jar"]
+RUN java -Dspring.aot.enabled=true -Dspring.context.exit=onRefresh -XX:ArchiveClassesAtExit=/application/app.jsa -jar /application/app.jar
+ENTRYPOINT ["java","-Dspring.aot.enabled=true", "-XX:SharedArchiveFile=/application/app.jsa","-jar","/application/app.jar"]
 

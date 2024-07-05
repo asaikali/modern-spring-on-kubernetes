@@ -1,3 +1,4 @@
+# google distroless still does not support Java 21
 FROM eclipse-temurin:17-jre as builder
 WORKDIR application
 ARG JAR_FILE=target/*.jar

@@ -8,5 +8,6 @@ FROM eclipse-temurin:21-jre
 WORKDIR /application
 COPY --from=builder /out/dependencies/ ./
 COPY --from=builder /out/snapshot-dependencies/ ./
+# COPY --from=builder /out/spring-boot-loader/ ./ not needed anymore always empty
 COPY --from=builder /out/application/ ./
 ENTRYPOINT ["java", "-jar", "application.jar"]
