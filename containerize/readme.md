@@ -16,10 +16,10 @@ the image size is not a problem in the java world.
 
 If you use graalvm you will be able to produce some very small images with 
 distroless, from scratch base images. However, every time you make a new build
-of the app you will net a new binary that is probably 100MB+ and that will be 
-cacheable. If you take the lazy approach use a regular JRE, and leverage 
-the exploded jar mode for spring boot, you will get excellent caching on the 
-base OS, JRE, the app dependencies. Every new build of your app will probably
+of the app you will net a new binary that is not cacheable. If you take the 
+lazy approach use a regular JRE, and leverage the exploded jar mode for 
+spring boot, you will get excellent caching on the base OS, JRE, the app 
+dependencies. Every new build of your app will probably
 only consume < 10MB in the top layer that hosts your application code. 
 
 
