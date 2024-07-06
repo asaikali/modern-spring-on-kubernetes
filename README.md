@@ -12,7 +12,7 @@ sample and points out interesting things to look at.
 
 ## Software Prerequisites
 
-### Java development tooling
+### Java tooling
 
 * [Java 21 JDK](https://sdkman.io/)
 * [Java 21 GraalVM](https://sdkman.io/)
@@ -50,7 +50,7 @@ Pick your favourite laptop based k8s solution
 * [kind](https://kind.sigs.k8s.io/)
 * [Rancher Desktop](https://rancherdesktop.io/)
 
-#### Kubernetes tooling
+### Kubernetes tooling
 
 * [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
 * [k9s](https://github.com/derailed/k9s) text gui for k8s
