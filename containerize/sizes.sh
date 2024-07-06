@@ -2,6 +2,7 @@
 
 echo """
 Here is a list of popular open-source projects and their official images sizes
+on $(date +"%B %d %Y")
 """
 
 # Function to get image size in MB
