@@ -97,5 +97,20 @@ get_image_size "postgres:16"
 get_image_size "mongo:7"
 get_image_size "confluentinc/cp-kafka:7.6.1"
 print_table_footer
+
+
+# Java Runtimes
+print_table_header "Java Runtimes"
+get_image_size "bellsoft/liberica-runtime-container:jre-21-slim-glibc" "linux/amd64"
+get_image_size "eclipse-temurin:21-jre-alpine"
+get_image_size "eclipse-temurin:21-jre"
+get_image_size "amazoncorretto:21-alpine"
+get_image_size "mcr.microsoft.com/openjdk/jdk:21-distroless"
+get_image_size "eclipse-temurin:21-jdk"
+get_image_size "eclipse-temurin:21-jdk-alpine"
+get_image_size "mcr.microsoft.com/openjdk/jdk:21-ubuntu"
+print_table_footer
+
+
 echo
 

@@ -1,14 +1,15 @@
-# google distroless still does not support Java 21
-FROM eclipse-temurin:17-jre as builder
+# google distroless still does not support Java 21, lets use microsoft
+FROM mcr.microsoft.com/openjdk/jdk:21-ubuntu as builder
 WORKDIR application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM gcr.io/distroless/java17-debian11
+# Use Distroless image
+FROM mcr.microsoft.com/openjdk/jdk:21-distroless
 WORKDIR application
 COPY --from=builder application/dependencies/ ./
 COPY --from=builder application/spring-boot-loader/ ./
 COPY --from=builder application/snapshot-dependencies/ ./
 COPY --from=builder application/application/ ./
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+CMD ["org.springframework.boot.loader.launch.JarLauncher"]
