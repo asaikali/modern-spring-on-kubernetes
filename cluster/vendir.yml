@@ -3,9 +3,6 @@ kind: Config
 directories:
   - path: static
     contents:
-      - path: envoy-gateway
-        http:
-          url: https://github.com/envoyproxy/gateway/releases/download/v1.0.2/install.yaml
       - path: cert-manager
         http:
           url: https://github.com/cert-manager/cert-manager/releases/download/v1.15.0/cert-manager.yaml
@@ -15,8 +12,26 @@ directories:
       - path: rabbitmq-operator
         http:
           url: https://github.com/rabbitmq/cluster-operator/releases/download/v2.9.0/cluster-operator.yml
+      - path: contour
+        git:
+          url: https://github.com/projectcontour/contour
+          ref: release-1.29
+          shallow: true
+          depth: 1
+        includePaths:
+          - examples/contour/*
+        excludePaths:
+          - LICENSE
+        newRootPath: examples/contour/
   - path: charts/network
     contents:
+      - path: contour
+        helmChart:
+          name: contour
+          version: "18.2.9"
+          repository:
+            url: "https://charts.bitnami.com/bitnami"
+
       - path: envoy-gateway
         helmChart:
           name: gateway-helm
@@ -75,4 +90,3 @@ directories:
           version: "4.3.5"
           repository:
             url: "https://charts.bitnami.com/bitnami"
-

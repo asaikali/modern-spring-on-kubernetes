@@ -2,15 +2,22 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - http: {}
-    path: envoy-gateway
-  - http: {}
     path: cert-manager
   - http: {}
     path: cloudnative-pg
   - http: {}
     path: rabbitmq-operator
+  - git:
+      commitTitle: 'build(deps): bump github/codeql-action from 3.25.10 to 3.25.11
+        (#6532)...'
+      sha: 93859da3f6915c24ea60be78343f9a406f495a59
+    path: contour
   path: static
 - contents:
+  - helmChart:
+      appVersion: 1.29.1
+      version: 18.2.9
+    path: contour
   - helmChart:
       appVersion: v1.0.2
       version: v1.0.2

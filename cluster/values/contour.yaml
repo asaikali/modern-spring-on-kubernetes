@@ -1,0 +1,4 @@
+namespaceOverride: contour
+envoy:
+  service:
+    type: NodePort
