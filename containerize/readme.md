@@ -1,6 +1,6 @@
 # Containerize 
 
-Is Java heavyweight? will the container images be huge?. Nope, Java is pretty 
+Is Java heavyweight? will the container images be huge? Nope, Java is pretty 
 good at producing decent size container images. The table below shows the container 
 image sizes for a variety of popular open source project. Java does pretty 
 well on these measures. 
@@ -9,7 +9,7 @@ If you use jlink and boot layers as shown in the `jre` and `dockerfile-jlink-lay
 you can get a JRE image for running spring boot apps in 68MB and 
 Spring MVC + JPA app in 123MB image.
 
-In a real world Kubernetes will cache image layers on the worker nodes, this means
+In the real world, Kubernetes will cache image layers on the worker nodes, this means
 that if your apps are using `eclipse-temurin:21-jre` at 270MB that image will 
 already be on the worker node as you frequently deploy apps. Basically,
 the image size is not a problem in the java world.
