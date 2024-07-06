@@ -23,7 +23,7 @@ sample and points out interesting things to look at.
     * [IntelliJ](https://www.jetbrains.com/idea/download)
     * [VSCode](https://code.visualstudio.com/)
 
-## network tools
+### network tools
 
 * [cURL](https://curl.se/docs/manpage.html) 
 * [HTTPie](https://httpie.io/) 
