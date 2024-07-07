@@ -27,10 +27,11 @@ only consume < 10MB in the top layer that hosts your application code.
 You can run the `sizes.sh` script to re-generate the table below. 
 
 ```text
+~/dev/asaikali/modern-spring-on-kubernetes/containerize git:[main]
 ./sizes.sh
 
 Here is a list of popular open-source projects and their official images sizes
-on July 06 2024
+on July 07 2024
 
 +------------+---------------------------------------------------------+
 | Size (MB)  | Operating Systems                                       |
@@ -52,7 +53,8 @@ on July 06 2024
 | Size (MB)  | Web Servers                                             |
 +------------+---------------------------------------------------------+
 | 178        | httpd:latest                                            |
-| 193        | nginx:latest                                            |
+| 193        | nginx:stable                                            |
+| 44         | nginx:stable-alpine                                     |
 +------------+---------------------------------------------------------+
 
 +------------+---------------------------------------------------------+
@@ -98,11 +100,14 @@ on July 06 2024
 +------------+---------------------------------------------------------+
 | 153        | bellsoft/liberica-runtime-container:jre-21-slim-glibc   |
 | 188        | eclipse-temurin:21-jre-alpine                           |
+| 222        | azul/zulu-openjdk-alpine:21-jre-latest                  |
 | 270        | eclipse-temurin:21-jre                                  |
+| 313        | azul/zulu-openjdk-distroless:21-latest                  |
 | 314        | amazoncorretto:21-alpine                                |
+| 315        | azul/zulu-openjdk:21-jre-latest                         |
 | 332        | mcr.microsoft.com/openjdk/jdk:21-distroless             |
 | 429        | eclipse-temurin:21-jdk                                  |
-| 346        | eclipse-temurin:21-jdk-alpine                           |
 | 438        | mcr.microsoft.com/openjdk/jdk:21-ubuntu                 |
+| 346        | eclipse-temurin:21-jdk-alpine                           |
 +------------+---------------------------------------------------------+
 ```

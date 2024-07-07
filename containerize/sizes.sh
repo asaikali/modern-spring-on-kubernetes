@@ -57,7 +57,8 @@ echo
 # Web Servers
 print_table_header "Web Servers"
 get_image_size "httpd:latest"
-get_image_size "nginx:latest"
+get_image_size "nginx:stable"
+get_image_size "nginx:stable-alpine"
 print_table_footer
 echo
 
@@ -104,12 +105,15 @@ print_table_footer
 print_table_header "Java Runtimes"
 get_image_size "bellsoft/liberica-runtime-container:jre-21-slim-glibc" "linux/amd64"
 get_image_size "eclipse-temurin:21-jre-alpine"
+get_image_size "azul/zulu-openjdk-alpine:21-jre-latest"
 get_image_size "eclipse-temurin:21-jre"
+get_image_size "azul/zulu-openjdk-distroless:21-latest"
 get_image_size "amazoncorretto:21-alpine"
+get_image_size "azul/zulu-openjdk:21-jre-latest"
 get_image_size "mcr.microsoft.com/openjdk/jdk:21-distroless"
 get_image_size "eclipse-temurin:21-jdk"
-get_image_size "eclipse-temurin:21-jdk-alpine"
 get_image_size "mcr.microsoft.com/openjdk/jdk:21-ubuntu"
+get_image_size "eclipse-temurin:21-jdk-alpine"
 print_table_footer
 
 
