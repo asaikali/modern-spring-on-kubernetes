@@ -15,5 +15,8 @@
   <description>Demo Project Showing Web Endpoints and Clients</description>
   <modules>
     <module>graphql</module>
+    <module>mvc-annotations</module>
+    <module>mvc-functional</module>
+    <module>reactive</module>
   </modules>
 </project>
