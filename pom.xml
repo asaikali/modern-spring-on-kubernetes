@@ -28,7 +28,7 @@
         <module>route</module>
         <module>observe</module>
         <module>aot</module>
-        <module>graphql</module>
+        <module>web</module>
         <module>secure</module>
     </modules>
     <dependencyManagement>
