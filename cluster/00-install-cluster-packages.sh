@@ -7,8 +7,10 @@ normal=$(tput sgr0)
 # Define version numbers
 CERT_MANAGER_VERSION="v1.15.1"
 TRUST_MANAGER_VERSION="0.11.0"
+CERT_MANAGER_CSI_DRIVER_VERSION="v0.9.0"
+CERT_MANAGER_SPIFEE_CSI_DRIVER_VERSION="0.7.0"
 CONTOUR_VERSION="18.2.9"
-CLOUDNATIVEPG_VERSION="0.21.5"
+CLOUD_NATIVE_PG_VERSION="0.21.5"
 
 # Install or upgrade CertManager
 echo ""
@@ -52,6 +54,50 @@ if [ $? -eq 0 ]; then
 else
   echo ""
   echo "${bold}Failed to install TrustManager.${normal}"
+  echo ""
+  exit 1
+fi
+
+# Install or upgrade CertManager CSI driver
+echo ""
+echo "${bold}Installing or upgrading CertManager CSI driver...${normal}"
+echo ""
+helm upgrade --install cert-manager-csi cert-manager-csi-driver \
+  --repo https://charts.jetstack.io \
+  --namespace cert-manager \
+  --version ${CERT_MANAGER_CSI_DRIVER_VERSION} \
+  --wait
+
+# Check if CertManager CSI driver was successfully deployed
+if [ $? -eq 0 ]; then
+  echo ""
+  echo "${bold}CertManager CSI driver installed successfully.${normal}"
+  echo ""
+else
+  echo ""
+  echo "${bold}Failed to install CertManager CSI driver.${normal}"
+  echo ""
+  exit 1
+fi
+
+# Install or upgrade SPIFEE CertManager CSI driver
+echo ""
+echo "${bold}Installing or upgrading SPIFEE CertManager CSI driver...${normal}"
+echo ""
+helm upgrade --install cert-manager-csi-driver-spiffe cert-manager-csi-driver-spiffe \
+  --repo https://charts.jetstack.io \
+  --namespace cert-manager \
+  --version ${CERT_MANAGER_SPIFEE_CSI_DRIVER_VERSION} \
+  --wait
+
+# Check if SPIFEE CertManager CSI driver was successfully deployed
+if [ $? -eq 0 ]; then
+  echo ""
+  echo "${bold}SPIFEE CertManager CSI driver installed successfully.${normal}"
+  echo ""
+else
+  echo ""
+  echo "${bold}Failed to install SPIFEE CertManager CSI driver.${normal}"
   echo ""
   exit 1
 fi
@@ -102,7 +148,7 @@ helm upgrade --install cnpg cloudnative-pg \
   --repo https://cloudnative-pg.github.io/charts \
   --namespace cnpg \
   --create-namespace \
-  --version ${CLOUDNATIVEPG_VERSION} \
+  --version ${CLOUD_NATIVE_PG_VERSION} \
   --wait
 
 # Check if CloudNativePG was successfully deployed
@@ -118,7 +164,7 @@ else
 fi
 
 echo ""
-echo "${bold}Installation of CertManager, TrustManager, Contour, and CloudNativePG completed.${normal}"
+echo "${bold}Installation of CertManager, TrustManager, CertManager CSI driver, SPIFEE CertManager CSI driver, Contour, and CloudNativePG completed.${normal}"
 echo ""
 
 # List all installed Helm packages

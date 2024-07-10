@@ -1,0 +1,42 @@
+# Namespace for the CA certificate and issuer
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trellis
+---
+# Self-signed Issuer for bootstrapping the CA in the 'trellis' namespace
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: trellis-selfsigned-issuer
+  namespace: trellis
+spec:
+  selfSigned: {}
+---
+# CA Certificate with ECC and 1-Year Validity in the 'trellis' Namespace
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: trellis-ca
+  namespace: trellis
+spec:
+  isCA: true
+  commonName: trellis-ca
+  secretName: trellis-ca-key-pair
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  duration: 8760h # 1 year
+  issuerRef:
+    name: trellis-selfsigned-issuer
+    kind: Issuer
+---
+# Issuer in the 'trellis' Namespace that uses the CA Certificate
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: trellis-ca-issuer
+  namespace: trellis
+spec:
+  ca:
+    secretName: trellis-ca-key-pair
