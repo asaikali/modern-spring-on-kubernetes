@@ -5,15 +5,18 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.example</groupId>
-    <artifactId>modern-spring-on-kubernetes</artifactId>
+    <artifactId>route</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>routing</artifactId>
+  <artifactId>reactive-gateway</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <description>Demo Project showing various ways of routing traffic to app</description>
+  <description>Demo Project showing Spring Cloud Gateway</description>
+
   <modules>
-    <module>reactive-gateway</module>
+    <module>gateway-message-service</module>
+    <module>gateway-billboard-client</module>
+    <module>gateway-server</module>
   </modules>
 </project>
