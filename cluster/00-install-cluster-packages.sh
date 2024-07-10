@@ -4,6 +4,12 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 
+# Define version numbers
+CERT_MANAGER_VERSION="v1.15.1"
+TRUST_MANAGER_VERSION="0.11.0"
+CONTOUR_VERSION="18.2.9"
+CLOUDNATIVEPG_VERSION="0.21.5"
+
 # Install or upgrade CertManager
 echo ""
 echo "${bold}Installing or upgrading CertManager...${normal}"
@@ -12,7 +18,7 @@ helm upgrade --install cert-manager cert-manager \
   --repo https://charts.jetstack.io \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.15.1 \
+  --version ${CERT_MANAGER_VERSION} \
   --set crds.enabled=true \
   --wait
 
@@ -28,6 +34,28 @@ else
   exit 1
 fi
 
+# Install or upgrade TrustManager
+echo ""
+echo "${bold}Installing or upgrading TrustManager...${normal}"
+echo ""
+helm upgrade --install trust-manager trust-manager \
+  --repo https://charts.jetstack.io \
+  --namespace cert-manager \
+  --version ${TRUST_MANAGER_VERSION} \
+  --wait
+
+# Check if TrustManager was successfully deployed
+if [ $? -eq 0 ]; then
+  echo ""
+  echo "${bold}TrustManager installed successfully.${normal}"
+  echo ""
+else
+  echo ""
+  echo "${bold}Failed to install TrustManager.${normal}"
+  echo ""
+  exit 1
+fi
+
 # Install or upgrade Contour
 echo ""
 echo "${bold}Installing or upgrading Contour...${normal}"
@@ -36,7 +64,7 @@ helm upgrade --install contour contour \
   --repo https://charts.bitnami.com/bitnami \
   --namespace contour \
   --create-namespace \
-  --version 18.2.9 \
+  --version ${CONTOUR_VERSION} \
   --set envoy.service.type=NodePort \
   --set envoy.service.nodePorts.http=30080 \
   --set envoy.service.nodePorts.https=30443 \
@@ -74,7 +102,7 @@ helm upgrade --install cnpg cloudnative-pg \
   --repo https://cloudnative-pg.github.io/charts \
   --namespace cnpg \
   --create-namespace \
-  --version 0.21.5 \
+  --version ${CLOUDNATIVEPG_VERSION} \
   --wait
 
 # Check if CloudNativePG was successfully deployed
@@ -90,7 +118,7 @@ else
 fi
 
 echo ""
-echo "${bold}Installation of CertManager, Contour, and CloudNativePG completed.${normal}"
+echo "${bold}Installation of CertManager, TrustManager, Contour, and CloudNativePG completed.${normal}"
 echo ""
 
 # List all installed Helm packages
