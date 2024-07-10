@@ -1,3 +1,0 @@
-{{- if .Values.query_scheduler.podDisruptionBudget -}}
-{{- include "mimir.lib.podDisruptionBudget" (dict "ctx" $ "component" "query-scheduler") }}
-{{- end -}}

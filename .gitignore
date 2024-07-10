@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+cluster/upstream/
+
 ### STS ###
 .apt_generated
 .classpath

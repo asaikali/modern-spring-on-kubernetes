@@ -1,3 +1,0 @@
-{{- if .Values.alertmanager.enabled -}}
-{{- include "mimir.lib.serviceMonitor" (dict "ctx" $ "component" "alertmanager" "memberlist" true) }}
-{{- end -}}

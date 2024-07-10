@@ -1,3 +1,0 @@
-{{- if .Values.ruler.enabled -}}
-{{- include "mimir.lib.serviceMonitor" (dict "ctx" $ "component" "ruler" "memberlist" true) }}
-{{- end -}}

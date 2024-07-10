@@ -17,7 +17,7 @@ directories:
       commitTitle: 'build(deps): bump the artifact-actions group with 2 updates (#6544)...'
       sha: 8808fba04c292cf2a628fddc70bf9f185417e718
     path: contour
-  path: static
+  path: upstream/static
 - contents:
   - helmChart:
       appVersion: v1.0.2
@@ -35,7 +35,7 @@ directories:
       appVersion: v1.15.0
       version: v1.15.0
     path: cert-manager
-  path: charts/network
+  path: upstream/charts/network
 - contents:
   - helmChart:
       appVersion: 3.0.0
@@ -57,7 +57,7 @@ directories:
       appVersion: 2.12.0
       version: 5.3.0
     path: mimir-distributed
-  path: charts/observability
+  path: upstream/charts/observability
 - contents:
   - helmChart:
       appVersion: 1.23.2
@@ -67,5 +67,5 @@ directories:
       appVersion: 2.9.0
       version: 4.3.5
     path: rabbitmq-cluster-operator
-  path: charts/data
+  path: upstream/charts/data
 kind: LockConfig
