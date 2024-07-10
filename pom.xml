@@ -26,7 +26,7 @@
         <module>config</module>
         <module>discovery</module>
         <module>routing</module>
-        <module>observability</module>
+        <module>observe</module>
         <module>aot</module>
         <module>graphql</module>
         <module>security</module>
