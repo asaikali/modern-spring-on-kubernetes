@@ -29,7 +29,7 @@
         <module>observe</module>
         <module>aot</module>
         <module>graphql</module>
-        <module>security</module>
+        <module>secure</module>
     </modules>
     <dependencyManagement>
         <dependencies>

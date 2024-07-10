@@ -4,19 +4,23 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.example</groupId>
-		<artifactId>security</artifactId>
+		<artifactId>secure</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>tls-reload</artifactId>
+	<artifactId>sbom</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>tls-reload</name>
-	<description>Demo showing tls hot reload</description>
+	<name>sbom</name>
+	<description>Demo showing SBOM feature</description>
 	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -27,12 +31,12 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<workingDirectory>../../</workingDirectory>
-					<jvmArguments>-Djavax.net.debug=ssl,handshake,trace</jvmArguments>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
