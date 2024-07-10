@@ -5,7 +5,9 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 
 # Install or upgrade CertManager
+echo ""
 echo "${bold}Installing or upgrading CertManager...${normal}"
+echo ""
 helm upgrade --install cert-manager cert-manager \
   --repo https://charts.jetstack.io \
   --namespace cert-manager \
@@ -16,14 +18,20 @@ helm upgrade --install cert-manager cert-manager \
 
 # Check if CertManager was successfully deployed
 if [ $? -eq 0 ]; then
+  echo ""
   echo "${bold}CertManager installed successfully.${normal}"
+  echo ""
 else
+  echo ""
   echo "${bold}Failed to install CertManager.${normal}"
+  echo ""
   exit 1
 fi
 
 # Install or upgrade Contour
+echo ""
 echo "${bold}Installing or upgrading Contour...${normal}"
+echo ""
 helm upgrade --install contour contour \
   --repo https://charts.bitnami.com/bitnami \
   --namespace contour \
@@ -48,10 +56,45 @@ helm upgrade --install contour contour \
 
 # Check if Contour was successfully deployed
 if [ $? -eq 0 ]; then
+  echo ""
   echo "${bold}Contour installed successfully.${normal}"
+  echo ""
 else
+  echo ""
   echo "${bold}Failed to install Contour.${normal}"
+  echo ""
   exit 1
 fi
 
-echo "${bold}Installation of CertManager and Contour completed.${normal}"
+# Install or upgrade CloudNativePG database operator
+echo ""
+echo "${bold}Installing or upgrading CloudNativePG database operator...${normal}"
+echo ""
+helm upgrade --install cnpg cloudnative-pg \
+  --repo https://cloudnative-pg.github.io/charts \
+  --namespace cnpg \
+  --create-namespace \
+  --version 0.21.5 \
+  --wait
+
+# Check if CloudNativePG was successfully deployed
+if [ $? -eq 0 ]; then
+  echo ""
+  echo "${bold}CloudNativePG database operator installed successfully.${normal}"
+  echo ""
+else
+  echo ""
+  echo "${bold}Failed to install CloudNativePG database operator.${normal}"
+  echo ""
+  exit 1
+fi
+
+echo ""
+echo "${bold}Installation of CertManager, Contour, and CloudNativePG completed.${normal}"
+echo ""
+
+# List all installed Helm packages
+echo ""
+echo "${bold}Listing all installed Helm packages...${normal}"
+echo ""
+helm list --all-namespaces
