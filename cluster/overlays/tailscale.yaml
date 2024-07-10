@@ -1,0 +1,11 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:env", "env")
+
+#@overlay/match by=overlay.subset({"kind": "Secret", "metadata": {"name": "operator-oauth", "namespace": "tailscale"}})
+---
+stringData:
+  client_id: #@ data.values.client_id
+  client_secret: #@ data.values.client_secret
+
+
+# ytt -f secret.yaml -f overlay.yaml --data-value-yaml client_id="your-client-id" --data-value-yaml client_secret="your-client-secret"

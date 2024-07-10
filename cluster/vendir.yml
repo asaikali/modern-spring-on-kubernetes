@@ -3,6 +3,17 @@ kind: Config
 directories:
   - path: static
     contents:
+      - path: tailscale
+        git:
+          url: https://github.com/tailscale/tailscale
+          ref: "v1.68.2"
+          shallow: true
+          depth: 1
+        includePaths:
+          - cmd/k8s-operator/deploy/manifests/operator.yaml
+        newRootPath: cmd/k8s-operator/deploy/manifests/
+        excludePaths:
+          - LICENSE
       - path: cert-manager
         http:
           url: https://github.com/cert-manager/cert-manager/releases/download/v1.15.0/cert-manager.yaml
@@ -25,19 +36,24 @@ directories:
         newRootPath: examples/contour/
   - path: charts/network
     contents:
-      - path: contour
-        helmChart:
-          name: contour
-          version: "18.2.9"
-          repository:
-            url: "https://charts.bitnami.com/bitnami"
-
       - path: envoy-gateway
         helmChart:
           name: gateway-helm
           version: "v1.0.2"
           repository:
             url: "oci://docker.io/envoyproxy"
+      - path: contour
+        helmChart:
+          name: contour
+          version: "18.2.9"
+          repository:
+            url: "https://charts.bitnami.com/bitnami"
+      - path: tailscale
+        helmChart:
+          name: tailscale-operator
+          version: "1.68.1"
+          repository:
+            url: "https://pkgs.tailscale.com/helmcharts"
       - path: cert-manager
         helmChart:
           name: cert-manager

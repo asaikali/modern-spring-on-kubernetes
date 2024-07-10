@@ -1,6 +1,12 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
+  - git:
+      commitTitle: 'VERSION.txt: this is v1.68.2...'
+      sha: c79c500c7e93c8e416c77f85d106b04a4aab23ab
+      tags:
+      - v1.68.2
+    path: tailscale
   - http: {}
     path: cert-manager
   - http: {}
@@ -8,20 +14,23 @@ directories:
   - http: {}
     path: rabbitmq-operator
   - git:
-      commitTitle: 'build(deps): bump github/codeql-action from 3.25.10 to 3.25.11
-        (#6532)...'
-      sha: 93859da3f6915c24ea60be78343f9a406f495a59
+      commitTitle: 'build(deps): bump the artifact-actions group with 2 updates (#6544)...'
+      sha: 8808fba04c292cf2a628fddc70bf9f185417e718
     path: contour
   path: static
 - contents:
+  - helmChart:
+      appVersion: v1.0.2
+      version: v1.0.2
+    path: envoy-gateway
   - helmChart:
       appVersion: 1.29.1
       version: 18.2.9
     path: contour
   - helmChart:
-      appVersion: v1.0.2
-      version: v1.0.2
-    path: envoy-gateway
+      appVersion: v1.68.1
+      version: 1.68.1
+    path: tailscale
   - helmChart:
       appVersion: v1.15.0
       version: v1.15.0
