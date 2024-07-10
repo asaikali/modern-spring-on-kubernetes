@@ -25,7 +25,7 @@
         <module>run</module>
         <module>config</module>
         <module>discovery</module>
-        <module>gateway</module>
+        <module>routing</module>
         <module>observability</module>
         <module>aot</module>
         <module>graphql</module>

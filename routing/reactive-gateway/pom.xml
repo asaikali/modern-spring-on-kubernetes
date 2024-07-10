@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.example</groupId>
-    <artifactId>modern-spring-on-kubernetes</artifactId>
+    <artifactId>routing</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>gateway</artifactId>
+  <artifactId>reactive-gateway</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>Demo Project showing Spring Cloud Gateway</description>
