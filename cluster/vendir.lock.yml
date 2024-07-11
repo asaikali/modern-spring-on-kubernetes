@@ -19,6 +19,10 @@ directories:
     path: contour
   path: upstream/static
 - contents:
+  - http: {}
+    path: cert-manager
+  path: upstream/charts/values
+- contents:
   - helmChart:
       appVersion: v1.0.2
       version: v1.0.2
@@ -31,11 +35,29 @@ directories:
       appVersion: v1.68.1
       version: 1.68.1
     path: tailscale
+  path: upstream/charts/network
+- contents:
   - helmChart:
       appVersion: v1.15.0
       version: v1.15.0
     path: cert-manager
-  path: upstream/charts/network
+  - helmChart:
+      appVersion: v0.11.0
+      version: v0.11.0
+    path: trust-manager
+  - helmChart:
+      appVersion: v0.9.0
+      version: v0.9.0
+    path: cert-manager-csi-driver
+  - helmChart:
+      appVersion: v0.7.0
+      version: v0.7.0
+    path: cert-manager-csi-driver-spiffe
+  - helmChart:
+      appVersion: v0.14.1
+      version: v0.14.1
+    path: cert-manager-approver-policy
+  path: upstream/charts/security
 - contents:
   - helmChart:
       appVersion: 3.0.0
