@@ -5,7 +5,7 @@ http clients to use X.509 certificates to perform mutual tls.
 
 ## Make sure that mtl-server is running before you run this sample 
 
-1. Follow the instructions in the mtls-server project to run the server
+1. Follow the instructions in the `mtls-server` project to run the server
 
 ## Generate Client Certificate
 
