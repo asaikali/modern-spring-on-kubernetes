@@ -27,6 +27,6 @@ openssl req -x509 \
   -subj "/CN=localhost" \
   -key cert/server.key \
   -out cert/server.crt \
-  -days 1 \
+  -days 365 \
   -nodes
 

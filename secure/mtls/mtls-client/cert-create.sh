@@ -27,6 +27,6 @@ openssl req -x509 \
   -subj "/CN=client" \
   -key cert/client.key \
   -out cert/client.crt \
-  -days 1 \
+  -days 365 \
   -nodes
 
