@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MtlsClientApplication {
+public class X509ClientApplication {
   public static void main(String[] args) {
-    SpringApplication.run(MtlsClientApplication.class, args);
+    SpringApplication.run(X509ClientApplication.class, args);
   }
 }

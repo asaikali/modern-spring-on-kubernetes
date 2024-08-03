@@ -29,10 +29,10 @@ spring:
         client:
           reload-on-update: true
           truststore:
-            certificate:  "secure/mtls/mtls-server/cert/server.crt"
+            certificate:  "secure/authenticate/x509/x509-server/cert/server.crt"
           keystore:
-            certificate: "secure/mtls/mtls-client/cert/client.crt"
-            private-key: "secure/mtls/mtls-client/cert/client.key"
+            certificate: "secure/authenticate/x509/x509-client/cert/client.crt"
+            private-key: "secure/authenticate/x509/x509-client/cert/client.key"
 
 logging:
   level:

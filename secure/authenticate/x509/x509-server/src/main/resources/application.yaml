@@ -27,10 +27,10 @@ spring:
         demo:
           reload-on-update: true
           truststore:
-            certificate: "secure/mtls/mtls-client/cert/client.crt"
+            certificate: "secure/authenticate/x509/x509-client/cert/client.crt"
           keystore:
-            certificate: "secure/mtls/mtls-server/cert/server.crt"
-            private-key: "secure/mtls/mtls-server/cert/server.key"
+            certificate: "secure/authenticate/x509/x509-server/cert/server.crt"
+            private-key: "secure/authenticate/x509/x509-server/cert/server.key"
 
 server:
   port: 8443

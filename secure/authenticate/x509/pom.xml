@@ -10,7 +10,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>x509</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>Projects demonstrating mtls</description>
+	<description>Projects demonstrating mtls + Spring security integration</description>
 	<packaging>pom</packaging>
 	
 	<modules>
