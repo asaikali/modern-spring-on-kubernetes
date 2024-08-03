@@ -10,4 +10,4 @@ PARENT_DIR=$(dirname "$SCRIPT_DIR")
 cd "$PARENT_DIR" || exit
 
 # Execute the Maven command
-$PARENT_DIR/mvnw spotless:apply package -DskipTests
+$PARENT_DIR/mvnw spotless:apply clean package -DskipTests

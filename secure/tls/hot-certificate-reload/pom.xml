@@ -4,14 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.example</groupId>
-		<artifactId>secure</artifactId>
+		<artifactId>tls</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>tls-reload</artifactId>
+	<artifactId>hot-certificate-reload</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>tls-reload</name>
-	<description>Demo showing tls hot reload</description>
+	<description>Demo showing tls hot certificate reload</description>
 	
 	<dependencies>
 		<dependency>

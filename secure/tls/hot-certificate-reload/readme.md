@@ -1,4 +1,4 @@
-# tls-reload
+# hort-certificate-reload
 
 This project shows you how to configure hot tls certificate reloading for 
 Spring Boot applications.

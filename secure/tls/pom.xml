@@ -4,19 +4,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.example</groupId>
-		<artifactId>modern-spring-on-kubernetes</artifactId>
+		<artifactId>secure</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>secure</artifactId>
+	<artifactId>tls</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>security</name>
-	<description>Projects demonstrating various security features</description>
+	<description>Projects demonstrating tls configurations</description>
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>tls</module>
-		<module>sbom</module>
-		<module>authenticate</module>
+		<module>mtls</module>
+		<module>hot-certificate-reload</module>
 	</modules>
 </project>
