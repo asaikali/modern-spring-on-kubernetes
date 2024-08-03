@@ -1,9 +1,9 @@
-package com.example.demo;
+package com.example.client;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MtlsServerApplicationTests {
+class MtlsClientApplicationTests {
 
   // @Test
   void contextLoads() {}

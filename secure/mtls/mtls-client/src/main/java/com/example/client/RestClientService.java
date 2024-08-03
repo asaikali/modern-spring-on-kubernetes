@@ -1,20 +1,20 @@
-package com.example.demo;
+package com.example.client;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.web.client.RestClientSsl;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 @Service
+@Order(1)
 public class RestClientService implements CommandLineRunner {
 
   private final RestClient restClient;
 
   public RestClientService(RestClient.Builder builder, RestClientSsl sslClient) {
-    this.restClient = builder
-        .apply(sslClient.fromBundle("client"))
-        .baseUrl("https://localhost:8443")
-        .build();
+    this.restClient =
+        builder.apply(sslClient.fromBundle("client")).baseUrl("https://localhost:8443").build();
   }
 
   @Override

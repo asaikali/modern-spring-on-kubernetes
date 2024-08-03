@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.server;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.security.Provider;
