@@ -29,13 +29,14 @@ public class HelloController {
 
   @GetMapping("/")
   public String hello(HttpServletRequest request) {
-    X509Certificate[] certificates = (X509Certificate[]) request.getAttribute("jakarta.servlet.request.X509Certificate");
+    X509Certificate[] certificates =
+        (X509Certificate[]) request.getAttribute("jakarta.servlet.request.X509Certificate");
 
     if (certificates != null && certificates.length > 0) {
       X509Certificate clientCert = certificates[0];
       System.out.println("Client certificate: " + clientCert.getSubjectX500Principal().getName());
     } else {
-      System.out.println( "No client certificate found.");
+      System.out.println("No client certificate found.");
     }
 
     boolean isSecure = request.isSecure();
