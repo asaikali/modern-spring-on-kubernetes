@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TlsReloadApplication {
+public class HotCertificateReloadApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(TlsReloadApplication.class, args);
+    SpringApplication.run(HotCertificateReloadApplication.class, args);
   }
 }
