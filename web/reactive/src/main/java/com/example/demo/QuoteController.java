@@ -5,21 +5,21 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-  public class QuoteController {
+public class QuoteController {
 
-    private final QuoteRepository quoteRepository;
+  private final QuoteRepository quoteRepository;
 
-    public QuoteController(QuoteRepository quoteRepository) {
-      this.quoteRepository = quoteRepository;
-    }
+  public QuoteController(QuoteRepository quoteRepository) {
+    this.quoteRepository = quoteRepository;
+  }
 
-    @GetMapping("/random-quote")
-    public Mono<Quote> randomQuote() {
-      Quote quote = quoteRepository.findRandomQuote();
-      if (quote != null) {
-        return Mono.just(quote);
-      } else {
-        return Mono.empty();
-      }
+  @GetMapping("/random-quote")
+  public Mono<Quote> randomQuote() {
+    Quote quote = quoteRepository.findRandomQuote();
+    if (quote != null) {
+      return Mono.just(quote);
+    } else {
+      return Mono.empty();
     }
   }
+}

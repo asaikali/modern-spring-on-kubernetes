@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
   // maps to /hello/time and /hello/time/ b
-  @GetMapping({ "", "/" })
+  @GetMapping({"", "/"})
   String get() {
     return "Time is " + LocalDateTime.now();
   }
