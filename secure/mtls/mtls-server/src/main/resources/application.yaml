@@ -36,6 +36,6 @@ server:
   port: 8443
   ssl:
     bundle: "demo"
-    client-auth: need # set this when the client must use mtls
+    client-auth: NEED # set this when the client must use mtls
     # client-auth: WANT # set this when the client can choose to use mtls
     # client-auth: NONE # mtls not supported
