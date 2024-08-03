@@ -1,0 +1,10 @@
+apiVersion: policy.cert-manager.io/v1alpha1
+kind: CertificateRequestPolicy
+metadata:
+  name: default-deny-all
+spec:
+  allowed:
+    dnsNames:
+      values: [] An empty array means no DNS names are allowed.
+  selector:
+    issuerRef: {} An empty object means the policy applies to all issuers.

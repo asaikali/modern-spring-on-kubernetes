@@ -6,22 +6,26 @@ normal=$(tput sgr0)
 
 # Define version numbers
 CERT_MANAGER_VERSION="v1.15.1"
+CERT_MANAGER_APPROVER_POLICY_VERSION="0.14.1"
 TRUST_MANAGER_VERSION="0.11.0"
 CERT_MANAGER_CSI_DRIVER_VERSION="v0.9.0"
 CERT_MANAGER_SPIFEE_CSI_DRIVER_VERSION="0.7.0"
 CONTOUR_VERSION="18.2.9"
 CLOUD_NATIVE_PG_VERSION="0.21.5"
 
+# Add the Jetstack Helm repository
+helm repo add jetstack https://charts.jetstack.io --force-update
+
 # Install or upgrade CertManager
 echo ""
 echo "${bold}Installing or upgrading CertManager...${normal}"
 echo ""
-helm upgrade --install cert-manager cert-manager \
-  --repo https://charts.jetstack.io \
+helm upgrade --install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
   --version ${CERT_MANAGER_VERSION} \
   --set crds.enabled=true \
+  --set disableAutoApproval=true \
   --wait
 
 # Check if CertManager was successfully deployed
@@ -36,14 +40,38 @@ else
   exit 1
 fi
 
+# Install or upgrade cert-manager-approver-policy
+echo ""
+echo "${bold}Installing or upgrading cert-manager-approver-policy...${normal}"
+echo ""
+helm upgrade --install cert-manager-approver-policy jetstack/cert-manager-approver-policy \
+  --namespace cert-manager \
+  --version ${CERT_MANAGER_APPROVER_POLICY_VERSION} \
+  --wait
+
+# Check if cert-manager-approver-policy was successfully deployed
+if [ $? -eq 0 ]; then
+  echo ""
+  echo "${bold}cert-manager-approver-policy installed successfully.${normal}"
+  echo ""
+else
+  echo ""
+  echo "${bold}Failed to install cert-manager-approver-policy.${normal}"
+  echo ""
+  exit 1
+fi
+
 # Install or upgrade TrustManager
 echo ""
 echo "${bold}Installing or upgrading TrustManager...${normal}"
 echo ""
-helm upgrade --install trust-manager trust-manager \
-  --repo https://charts.jetstack.io \
-  --namespace cert-manager \
+helm upgrade --install trust-manager jetstack/trust-manager \
+  --namespace trust-manager \
+  --create-namespace \
   --version ${TRUST_MANAGER_VERSION} \
+  --set app.webhook.tls.approverPolicy.enabled=true \
+  --set app.webhook.tls.approverPolicy.certManagerNamespace=cert-manager \
+  --set app.trust.namespace=trust-manager \
   --wait
 
 # Check if TrustManager was successfully deployed
@@ -62,8 +90,7 @@ fi
 echo ""
 echo "${bold}Installing or upgrading CertManager CSI driver...${normal}"
 echo ""
-helm upgrade --install cert-manager-csi cert-manager-csi-driver \
-  --repo https://charts.jetstack.io \
+helm upgrade --install cert-manager-csi jetstack/cert-manager-csi-driver \
   --namespace cert-manager \
   --version ${CERT_MANAGER_CSI_DRIVER_VERSION} \
   --wait
@@ -76,28 +103,6 @@ if [ $? -eq 0 ]; then
 else
   echo ""
   echo "${bold}Failed to install CertManager CSI driver.${normal}"
-  echo ""
-  exit 1
-fi
-
-# Install or upgrade SPIFEE CertManager CSI driver
-echo ""
-echo "${bold}Installing or upgrading SPIFEE CertManager CSI driver...${normal}"
-echo ""
-helm upgrade --install cert-manager-csi-driver-spiffe cert-manager-csi-driver-spiffe \
-  --repo https://charts.jetstack.io \
-  --namespace cert-manager \
-  --version ${CERT_MANAGER_SPIFEE_CSI_DRIVER_VERSION} \
-  --wait
-
-# Check if SPIFEE CertManager CSI driver was successfully deployed
-if [ $? -eq 0 ]; then
-  echo ""
-  echo "${bold}SPIFEE CertManager CSI driver installed successfully.${normal}"
-  echo ""
-else
-  echo ""
-  echo "${bold}Failed to install SPIFEE CertManager CSI driver.${normal}"
   echo ""
   exit 1
 fi
