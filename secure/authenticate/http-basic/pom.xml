@@ -4,17 +4,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.example</groupId>
-		<artifactId>secure</artifactId>
+		<artifactId>authenticate</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>authenticate</artifactId>
+	<artifactId>http-basic</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>Projects showing various ways to authenticate</description>
+	<description>Projects demonstrating http basic authentication with spring security</description>
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>x509</module>
-		<module>http-basic</module>
+		<module>basic-server</module>
+		<module>basic-client</module>
 	</modules>
 </project>
