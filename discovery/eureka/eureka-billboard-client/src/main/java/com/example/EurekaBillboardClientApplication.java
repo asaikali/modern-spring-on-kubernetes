@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-public class BillboardClientApplication {
+public class EurekaBillboardClientApplication {
 
   @LoadBalanced
   @Bean
@@ -18,6 +18,6 @@ public class BillboardClientApplication {
   }
 
   public static void main(String[] args) {
-    SpringApplication.run(BillboardClientApplication.class, args);
+    SpringApplication.run(EurekaBillboardClientApplication.class, args);
   }
 }

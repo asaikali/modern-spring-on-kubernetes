@@ -8,9 +8,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableScheduling
-public class MessageServiceApplication {
+public class EurekaMessageServiceApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(MessageServiceApplication.class, args);
+    SpringApplication.run(EurekaMessageServiceApplication.class, args);
   }
 }

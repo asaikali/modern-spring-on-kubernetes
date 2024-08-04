@@ -1,11 +1,11 @@
-package com.example.messageservice;
+package com.example.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class MessageServiceApplicationTests {
+class MvcFunctionalApplicationTests {
 
   @Test
-  public void contextLoads() {}
+  void contextLoads() {}
 }

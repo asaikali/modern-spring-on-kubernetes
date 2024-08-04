@@ -6,9 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class MessageServiceApplication {
+public class ReactiveGatewayMessageServiceApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(MessageServiceApplication.class, args);
+    SpringApplication.run(ReactiveGatewayMessageServiceApplication.class, args);
   }
 }

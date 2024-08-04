@@ -3,7 +3,7 @@ package com.example.client;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MtlsClientApplicationTests {
+class HttpBasicClientApplicationTests {
 
   // @Test
   void contextLoads() {}
