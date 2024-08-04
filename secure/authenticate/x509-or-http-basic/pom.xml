@@ -4,18 +4,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.example</groupId>
-		<artifactId>secure</artifactId>
+		<artifactId>authenticate</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>authenticate</artifactId>
+	<artifactId>x509-or-http-basic</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>Projects showing various ways to authenticate</description>
+	<description>Projects demonstrating user authentication using http basic or x509 certs</description>
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>x509</module>
-		<module>http-basic</module>
-		<module>x509-or-http-basic</module>
+		<module>x509-or-basic-server</module>
+		<module>x509-or-basic-client</module>
 	</modules>
 </project>
