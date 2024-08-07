@@ -1,4 +1,4 @@
-# x509-server
+# x509-or-basic-server
 
 This project shows you how to configure how to configure a spring boot based
 server to require mtls and use spring security x509 authentication provider. 
