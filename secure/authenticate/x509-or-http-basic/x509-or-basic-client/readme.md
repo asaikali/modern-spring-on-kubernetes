@@ -1,4 +1,4 @@
-# x509-client
+# x509-or-basic-client
 
 This project shows you how to configure how to configure the various Spring
 http clients to use X.509 certificates to perform mutual tls and extract 

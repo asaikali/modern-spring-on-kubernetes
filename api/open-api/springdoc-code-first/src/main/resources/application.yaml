@@ -1,0 +1,23 @@
+services:
+  hello: "/hello"
+
+springdoc:
+  api-docs:
+    version: openapi_3_1
+  group-configs:
+    - group: time
+      paths-to-match:
+        - /hello/**
+    - group: users
+      paths-to-match:
+        - /users/**
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

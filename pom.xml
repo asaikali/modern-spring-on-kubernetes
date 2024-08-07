@@ -21,6 +21,7 @@
     </properties>
     <modules>
         <module>template</module>
+        <module>api</module>
         <module>containerize</module>
         <module>run</module>
         <module>config</module>
