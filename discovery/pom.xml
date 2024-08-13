@@ -15,8 +15,7 @@
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>dns</module>
+		<module>k8s</module>
 		<module>eureka</module>
-		<module>endpoint-slices</module>
 	</modules>
 </project>

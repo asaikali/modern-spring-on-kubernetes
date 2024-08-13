@@ -5,18 +5,16 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.example</groupId>
-    <artifactId>discovery</artifactId>
+    <artifactId>k8s</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>endpoint-slices</artifactId>
+  <artifactId>dns</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>Demo Project showing Spring cloud Integration with Kubernetes</description>
-
   <modules>
-    <module>k8s-native-message-service</module>
-    <module>k8s-native-billboard-client</module>
+    <module>dns-message-service</module>
+    <module>dns-billboard-client</module>
   </modules>
-
 </project>
