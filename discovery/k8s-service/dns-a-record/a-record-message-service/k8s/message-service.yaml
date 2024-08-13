@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: message-service
-          image: "native-message-service:0.0.1-SNAPSHOT"
+          image: "a-record-message-service:0.0.1-SNAPSHOT"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081

@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: billboard-client
-          image: "native-billboard-client:0.0.1-SNAPSHOT"
+          image: "a-record-billboard-client:0.0.1-SNAPSHOT"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
