@@ -5,19 +5,18 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.example</groupId>
-    <artifactId>discovery</artifactId>
+    <artifactId>k8s-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>k8s-service</artifactId>
+  <artifactId>dns-a-record</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <description>Demo Project showing various ways of doing service discovery on k8s</description>
+  <description>Demo Project showing Spring cloud Integration with Kubernetes</description>
 
   <modules>
-    <module>dns</module>
-    <module>dns-a-record</module>
-    <module>endpoint-slices</module>
+   <module>a-record-message-service</module>
+    <module>a-record-billboard-client</module>
   </modules>
 
 </project>
