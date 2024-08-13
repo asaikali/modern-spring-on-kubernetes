@@ -17,6 +17,6 @@
 	<modules>
 		<module>dns</module>
 		<module>eureka</module>
-		<module>native</module>
+		<module>k8s-native</module>
 	</modules>
 </project>
