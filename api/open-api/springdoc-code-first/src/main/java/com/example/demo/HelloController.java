@@ -21,7 +21,4 @@ public class HelloController {
   String date() {
     return "date is " + LocalDate.now();
   }
-
-
-
 }

@@ -9,7 +9,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>k8s-native</artifactId>
+  <artifactId>endpoint-slices</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>Demo Project showing Spring cloud Integration with Kubernetes</description>
