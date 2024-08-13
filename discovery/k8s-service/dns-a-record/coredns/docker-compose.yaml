@@ -1,0 +1,10 @@
+services:
+  coredns:
+    image: coredns/coredns:1.10.1
+    container_name: coredns
+    ports:
+      - "2553:2553/udp"
+    volumes:
+      - ./Corefile:/Corefile:ro
+      - ./db.example.test:/db.example.test:ro
+    command: -conf /Corefile
