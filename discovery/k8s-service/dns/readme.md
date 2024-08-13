@@ -1,4 +1,4 @@
-# cluster-ip-dns
+# dns
 
 Kubernetes assign each ClusterIP service a name in the DNS system of the cluster. 
 This can be used to do service discovery simply by using the k8s assigned dns 

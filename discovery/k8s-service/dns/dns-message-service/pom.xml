@@ -4,15 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>k8s-native-message-service</artifactId>
+    <artifactId>dns-message-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>native-message-service</name>
-
     <parent>
         <groupId>com.example</groupId>
-        <artifactId>endpoint-slices</artifactId>
+        <artifactId>dns</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -36,10 +34,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-kubernetes-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
