@@ -1,6 +1,6 @@
-# Discovery
+# endpoint-slices
 
-This sample shows to use the Spring Cloud Kuberentes native service
+This sample shows to use the Spring Cloud Kubernetes native service
 discovery.
 
 ### Deploy to K8s

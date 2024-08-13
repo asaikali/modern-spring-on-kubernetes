@@ -1,4 +1,9 @@
-# Discovery using dns
+# cluster-ip-dns
+
+Kubernetes assign each ClusterIP service a name in the DNS system of the cluster. 
+This can be used to do service discovery simply by using the k8s assigned dns 
+name. In this scenario Kubernetes does the LoadBalancing there is no service 
+discovery at all.
 
 ### Deploy to K8s
 

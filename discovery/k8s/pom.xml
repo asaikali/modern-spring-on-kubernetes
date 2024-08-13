@@ -16,7 +16,7 @@
 
   <modules>
    <module>endpoint-slices</module>
-    <module>dns</module>
+    <module>cluster-ip-dns</module>
   </modules>
 
 </project>
