@@ -33,6 +33,7 @@ public class DnsService {
         try {
             resolver = new SimpleResolver(dnsServerIp);
             resolver.setPort(dnsServerPort);
+            resolver.setTCP(true);
         } catch (UnknownHostException e) {
             throw new UnknownHostException("Failed to create resolver for DNS server: " + dnsServerIp);
         }

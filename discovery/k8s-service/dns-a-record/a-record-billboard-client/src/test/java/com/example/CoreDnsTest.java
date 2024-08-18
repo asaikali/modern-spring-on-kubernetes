@@ -1,15 +1,16 @@
 package com.example;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.example.discovery.DnsService;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.InternetProtocol;
 import com.github.dockerjava.api.model.NetworkSettings;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Map;
-import javax.sound.sampled.Port;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,19 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.shaded.com.google.common.base.Preconditions;
 import org.testcontainers.utility.DockerImageName;
 
-import java.net.UnknownHostException;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @SpringBootTest
-public class DnsServiceTest {
+public class CoreDnsTest {
 
-  private static final int DNS_PORT = 53;
   private static GenericContainer<?> corednsContainer;
   private DnsService dnsService;
 
@@ -38,16 +32,9 @@ public class DnsServiceTest {
     corednsContainer = new GenericContainer<>(DockerImageName.parse("coredns/coredns:1.11.1"))
         .withClasspathResourceMapping("Corefile", "/Corefile", BindMode.READ_ONLY)
         .withClasspathResourceMapping("db.example.test", "/db.example.test", BindMode.READ_ONLY)
-        .withCommand("-conf", "/Corefile")
-    //    .withExposedPorts(DNS_PORT)
-//        .waitingFor(Wait.forListeningPort())
-        .withCreateContainerCmdModifier(cmd -> {
-          ExposedPort exposedPort = ExposedPort.udp(DNS_PORT);
-          cmd.withExposedPorts(exposedPort);
+        .withExposedPorts(53)
+        .withCommand("-conf", "/Corefile");
 
-          PortBinding portBinding = new PortBinding(Ports.Binding.empty(), exposedPort);
-          cmd.getHostConfig().withPortBindings(portBinding);
-        });
 
 
     corednsContainer.start();
@@ -56,7 +43,7 @@ public class DnsServiceTest {
   @BeforeEach
   public void init() throws UnknownHostException {
     String dnsServerIp = corednsContainer.getHost();
-    int dnsServerPort = getMappedPort(corednsContainer, ExposedPort.udp(DNS_PORT),0);
+    int dnsServerPort = getMappedPort(corednsContainer, ExposedPort.tcp(53),0);
     dnsService = new DnsService(dnsServerIp, dnsServerPort);
   }
 
@@ -68,6 +55,7 @@ public class DnsServiceTest {
   @Test
   public void testResolveARecord() throws UnknownHostException {
     List<String> ips = dnsService.resolveARecord("example.test");
+   // System.out.println(corednsContainer.getL);
     assertEquals(1, ips.size());
     assertEquals("192.168.1.1", ips.get(0));
   }

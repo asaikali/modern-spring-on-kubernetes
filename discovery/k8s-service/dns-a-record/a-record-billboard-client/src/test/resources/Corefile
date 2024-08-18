@@ -1,5 +1,5 @@
-.:2553 {
+.:53 {
     log
     errors
-    file db.example.test example.test
+    file /db.example.test example.test
 }
