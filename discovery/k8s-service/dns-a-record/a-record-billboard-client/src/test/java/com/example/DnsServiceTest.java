@@ -3,9 +3,13 @@ package com.example;
 import com.example.discovery.DnsService;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.InternetProtocol;
+import com.github.dockerjava.api.model.NetworkSettings;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
+import java.util.Map;
+import javax.sound.sampled.Port;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.shaded.com.google.common.base.Preconditions;
 import org.testcontainers.utility.DockerImageName;
 
@@ -24,16 +29,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class DnsServiceTest {
 
-  private static final int DNS_PORT = 2554;
+  private static final int DNS_PORT = 2553;
   private static GenericContainer<?> corednsContainer;
   private DnsService dnsService;
 
   @BeforeAll
   public static void setUp() {
-    corednsContainer = new GenericContainer<>(DockerImageName.parse("coredns/coredns:1.10.1"))
+    corednsContainer = new GenericContainer<>(DockerImageName.parse("coredns/coredns:1.11.1"))
         .withClasspathResourceMapping("Corefile", "/Corefile", BindMode.READ_ONLY)
         .withClasspathResourceMapping("db.example.test", "/db.example.test", BindMode.READ_ONLY)
         .withCommand("-conf", "/Corefile")
+        .waitingFor(Wait.forListeningPort())
         .withCreateContainerCmdModifier(cmd -> {
           ExposedPort exposedPort = ExposedPort.udp(DNS_PORT);
           cmd.withExposedPorts(exposedPort);
@@ -49,7 +55,7 @@ public class DnsServiceTest {
   @BeforeEach
   public void init() throws UnknownHostException {
     String dnsServerIp = corednsContainer.getHost();
-    int dnsServerPort = getMappedPort(corednsContainer, DNS_PORT, InternetProtocol.UDP);
+    int dnsServerPort = getMappedPort(corednsContainer, ExposedPort.udp(DNS_PORT));
     dnsService = new DnsService(dnsServerIp, dnsServerPort);
   }
 
@@ -71,18 +77,25 @@ public class DnsServiceTest {
     assertEquals(0, ips.size());
   }
 
-  private Integer getMappedPort(GenericContainer<?> container, int originalPort, InternetProtocol protocol) {
+  private Integer getMappedPort(GenericContainer<?> container, ExposedPort exposedPort) {
     Preconditions.checkState(container.getContainerId() != null, "Mapped port can only be obtained after the container is started");
-    Ports.Binding[] binding = new Ports.Binding[0];
     InspectContainerResponse containerInfo = container.getContainerInfo();
-    if (containerInfo != null) {
-      binding = (Ports.Binding[])containerInfo.getNetworkSettings().getPorts().getBindings().get(new ExposedPort(originalPort, protocol));
+    if (containerInfo == null) {
+      throw new RuntimeException(String.format("Container with id '%s' not found ", container.getContainerId()));
     }
+
+
+    NetworkSettings networkSettings = containerInfo.getNetworkSettings();
+    Ports ports = networkSettings.getPorts();
+    Map<ExposedPort, Ports.Binding[]> bindings =  ports.getBindings();
+    Ports.Binding[] binding = bindings.get(exposedPort);
 
     if (binding != null && binding.length > 0 && binding[0] != null) {
       return Integer.valueOf(binding[0].getHostPortSpec());
     } else {
-      throw new IllegalArgumentException("Requested port (" + originalPort + ") is not mapped");
+      throw new IllegalArgumentException("Requested port (" + exposedPort.getPort() + ") is not mapped");
     }
+
+    //binding = (Ports.Binding[])containerInfo.getNetworkSettings().getPorts().getBindings().get(new ExposedPort(originalPort, protocol));
   }
 }
