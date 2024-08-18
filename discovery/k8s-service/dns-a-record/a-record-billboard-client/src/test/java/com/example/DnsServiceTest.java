@@ -9,7 +9,6 @@ import com.github.dockerjava.api.model.NetworkSettings;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import java.util.Map;
-import javax.sound.sampled.Port;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
