@@ -15,7 +15,7 @@
   <description>Demo Project showing various ways of doing service discovery on k8s</description>
 
   <modules>
-    <module>dns</module>
+    <module>service-name</module>
     <module>dns-a-record</module>
     <module>endpoint-slices</module>
   </modules>

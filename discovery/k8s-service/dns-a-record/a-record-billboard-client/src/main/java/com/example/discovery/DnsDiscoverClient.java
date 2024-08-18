@@ -1,6 +1,5 @@
 package com.example.discovery;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
@@ -26,7 +25,8 @@ public class DnsDiscoverClient implements DiscoveryClient {
     var ips = this.dnsService.resolveARecord(serviceId);
 
     return ips.stream()
-        .map( ip ->  (ServiceInstance) new DefaultServiceInstance( ip, serviceId, ip, 8080,false )).toList();
+        .map(ip -> (ServiceInstance) new DefaultServiceInstance(ip, serviceId, ip, 8080, false))
+        .toList();
   }
 
   @Override

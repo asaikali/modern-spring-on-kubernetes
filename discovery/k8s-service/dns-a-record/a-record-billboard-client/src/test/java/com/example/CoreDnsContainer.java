@@ -22,10 +22,13 @@ class CoreDnsContainer extends GenericContainer<CoreDnsContainer> {
   }
 
   public Integer getMappedPort(ExposedPort exposedPort) {
-    Preconditions.checkState(this.getContainerId() != null, "Mapped port can only be obtained after the container is started");
+    Preconditions.checkState(
+        this.getContainerId() != null,
+        "Mapped port can only be obtained after the container is started");
     InspectContainerResponse containerInfo = this.getContainerInfo();
     if (containerInfo == null) {
-      throw new RuntimeException(String.format("Container with id '%s' not found ", this.getContainerId()));
+      throw new RuntimeException(
+          String.format("Container with id '%s' not found ", this.getContainerId()));
     }
 
     NetworkSettings networkSettings = containerInfo.getNetworkSettings();
@@ -36,7 +39,8 @@ class CoreDnsContainer extends GenericContainer<CoreDnsContainer> {
     if (binding != null && binding.length > 0 && binding[0] != null) {
       return Integer.valueOf(binding[0].getHostPortSpec());
     } else {
-      throw new IllegalArgumentException("Requested port (" + exposedPort.getPort() + ") is not mapped");
+      throw new IllegalArgumentException(
+          "Requested port (" + exposedPort.getPort() + ") is not mapped");
     }
   }
 }
