@@ -17,5 +17,6 @@
 	<modules>
 		<module>k8s-service</module>
 		<module>eureka</module>
+		<module>dns</module>
 	</modules>
 </project>

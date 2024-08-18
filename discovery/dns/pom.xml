@@ -5,18 +5,17 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.example</groupId>
-    <artifactId>k8s-service</artifactId>
+    <artifactId>discovery</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>dns-a-record</artifactId>
+  <artifactId>dns</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <description>Demo Project showing Spring cloud Integration with Kubernetes</description>
+  <description>Demo of how to use dns based client side load balancing</description>
 
   <modules>
-   <module>a-record-message-service</module>
-    <module>a-record-billboard-client</module>
+    <module>a-record</module>
   </modules>
 
 </project>
