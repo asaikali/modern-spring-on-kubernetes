@@ -12,11 +12,11 @@ import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.TextParseException;
 import org.xbill.DNS.Type;
 
-public class DnsClient {
+class DnsTestClient {
 
   private final Resolver resolver;
 
-  public DnsClient(String dnsServerIp, int dnsServerPort) throws UnknownHostException {
+  public DnsTestClient(String dnsServerIp, int dnsServerPort) throws UnknownHostException {
     try {
       resolver = new SimpleResolver(dnsServerIp);
       resolver.setPort(dnsServerPort);

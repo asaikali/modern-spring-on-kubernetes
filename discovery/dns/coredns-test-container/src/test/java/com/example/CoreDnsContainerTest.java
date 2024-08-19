@@ -12,11 +12,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.ClassOrderer.OrderAnnotation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.xbill.DNS.ARecord;
 import org.xbill.DNS.TextParseException;
 
@@ -69,7 +67,7 @@ public class CoreDnsContainerTest {
   }
   ;
 
-  private DnsClient dnsClient;
+  private DnsTestClient dnsTestClient;
 
   @BeforeAll
   public static void setUp() throws UnknownHostException, TextParseException {
@@ -83,7 +81,7 @@ public class CoreDnsContainerTest {
   public void init() throws UnknownHostException {
     String dnsServerIp = corednsContainer.getHost();
     int dnsServerPort = corednsContainer.getDnsTcpPort();
-    dnsClient = new DnsClient(dnsServerIp, dnsServerPort);
+    dnsTestClient = new DnsTestClient(dnsServerIp, dnsServerPort);
   }
 
   @AfterAll
@@ -94,7 +92,7 @@ public class CoreDnsContainerTest {
   @Test
   @DisplayName("Valid domains resolve")
   public void testResolveARecord() throws UnknownHostException {
-    List<String> ips = dnsClient.resolveArecords("worker.east.example.test");
+    List<String> ips = dnsTestClient.resolveArecords("worker.east.example.test");
 
     Assertions.assertThat(ips).hasSize(2);
     Assertions.assertThat(ips).contains(ip(EAST_WORKER_1), ip(EAST_WORKER_2));
@@ -105,7 +103,7 @@ public class CoreDnsContainerTest {
   @Order(2)
   public void zoneFileReloads()
       throws UnknownHostException, TextParseException, InterruptedException {
-    List<String> ips = dnsClient.resolveArecords("worker.east.example.test");
+    List<String> ips = dnsTestClient.resolveArecords("worker.east.example.test");
     Assertions.assertThat(ips).hasSize(2);
     Assertions.assertThat(ips).contains(ip(EAST_WORKER_1), ip(EAST_WORKER_2));
 
@@ -116,7 +114,7 @@ public class CoreDnsContainerTest {
 
     // check that the change is visible in 1 second
     Thread.sleep(Duration.ofSeconds(1).toMillis());
-    ips = dnsClient.resolveArecords("worker.east.example.test");
+    ips = dnsTestClient.resolveArecords("worker.east.example.test");
     Assertions.assertThat(ips).hasSize(1);
     Assertions.assertThat(ips).contains(ip(EAST_WORKER_2));
 
@@ -128,7 +126,7 @@ public class CoreDnsContainerTest {
 
     // check that the change is visible in 1 second
     Thread.sleep(Duration.ofSeconds(1).toMillis());
-    ips = dnsClient.resolveArecords("worker.east.example.test");
+    ips = dnsTestClient.resolveArecords("worker.east.example.test");
     Assertions.assertThat(ips).hasSize(2);
     Assertions.assertThat(ips).contains(ip(EAST_WORKER_2),ip(EAST_WORKER_3));
   }
@@ -138,7 +136,7 @@ public class CoreDnsContainerTest {
   @DisplayName("Invalid domains don't resolve")
   @Order(1)
   public void testResolveARecordInvalidDomain() {
-    var ips = dnsClient.resolveArecords("invalid-domain.test");
+    var ips = dnsTestClient.resolveArecords("invalid-domain.test");
     assertEquals(0, ips.size());
   }
 
