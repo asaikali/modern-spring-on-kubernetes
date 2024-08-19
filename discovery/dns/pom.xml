@@ -15,6 +15,7 @@
   <description>Demo of how to use dns based client side load balancing</description>
 
   <modules>
+    <module>coredns-test-container</module>
     <module>a-record</module>
   </modules>
 

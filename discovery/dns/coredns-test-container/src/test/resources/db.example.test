@@ -1,0 +1,26 @@
+$TTL 3600
+@   IN  SOA ns.example.test. admin.example.test. (
+        1   ; Serial
+        3600    ; Refresh
+        1800    ; Retry
+        604800  ; Expire
+        86400   ; Minimum TTL
+    )
+
+@   IN  NS  ns.example.test.
+@   IN  A   192.168.1.1
+ns  IN  A   192.168.1.1
+
+; A records for east worker
+worker.east IN  A   127.0.0.1
+worker.east IN  A   127.0.0.2
+worker.east IN  A   127.0.0.3
+
+; A records for west worker
+worker.west IN  A   127.0.0.6
+worker.west IN  A   127.0.0.7
+worker.west IN  A   127.0.0.8
+
+; SRV records for api HTTP service running on worker.east and worker.west
+_api._tcp.worker IN SRV 10 50 8080 worker.east.example.test.
+_api._tcp.worker IN SRV 20 50 8080 worker.west.example.test.
