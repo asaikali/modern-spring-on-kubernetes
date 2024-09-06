@@ -59,7 +59,11 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>coredns-test-container</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

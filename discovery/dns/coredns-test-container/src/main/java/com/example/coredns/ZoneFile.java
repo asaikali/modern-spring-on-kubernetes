@@ -1,6 +1,5 @@
 package com.example.coredns;
 
-import java.lang.Record;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class ZoneFile {
 
   public ZoneFile(String domain, List<ARecord> aRecords)
       throws UnknownHostException, TextParseException {
-    this(domain,"192.168.1.1");
+    this(domain, "192.168.1.1");
     this.addRecord(aRecords.toArray(new ARecord[aRecords.size()]));
   }
 

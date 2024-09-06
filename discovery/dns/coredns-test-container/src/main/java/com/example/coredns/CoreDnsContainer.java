@@ -8,7 +8,6 @@ import com.github.dockerjava.api.model.Ports.Binding;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.util.Map;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
@@ -52,7 +51,7 @@ public class CoreDnsContainer extends GenericContainer<CoreDnsContainer> {
     return zoneFile;
   }
 
-  public  void updateZoneFile(){
+  public void updateZoneFile() {
     try {
       Files.writeString(this.zoneFilePath, zoneFile.generate());
     } catch (IOException e) {

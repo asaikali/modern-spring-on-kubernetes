@@ -7,11 +7,11 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DnsDiscoverClient implements DiscoveryClient {
+public class DnsDiscoveryClient implements DiscoveryClient {
 
   private final DnsService dnsService;
 
-  public DnsDiscoverClient(DnsService dnsService) {
+  public DnsDiscoveryClient(DnsService dnsService) {
     this.dnsService = dnsService;
   }
 

@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.xbill.DNS.ARecord;
 import org.xbill.DNS.TextParseException;
 
-
 public class CoreDnsContainerTest {
 
   private static CoreDnsContainer corednsContainer;
@@ -65,14 +64,15 @@ public class CoreDnsContainerTest {
       throw new RuntimeException(e);
     }
   }
-  ;
 
   private DnsTestClient dnsTestClient;
 
   @BeforeAll
   public static void setUp() throws UnknownHostException, TextParseException {
     CoreFile coreFile = new CoreFile();
-    ZoneFile zoneFile = new ZoneFile("example.test", List.of(EAST_WORKER_1, EAST_WORKER_2, WEST_WORKER_1, WEST_WORKER_2));
+    ZoneFile zoneFile =
+        new ZoneFile(
+            "example.test", List.of(EAST_WORKER_1, EAST_WORKER_2, WEST_WORKER_1, WEST_WORKER_2));
     corednsContainer = new CoreDnsContainer(coreFile, zoneFile);
     corednsContainer.start();
   }
@@ -118,7 +118,6 @@ public class CoreDnsContainerTest {
     Assertions.assertThat(ips).hasSize(1);
     Assertions.assertThat(ips).contains(ip(EAST_WORKER_2));
 
-
     // add an A Record
     corednsContainer.getZoneFile().addRecord(EAST_WORKER_3);
     corednsContainer.getZoneFile().incrementSOASerial();
@@ -128,9 +127,8 @@ public class CoreDnsContainerTest {
     Thread.sleep(Duration.ofSeconds(1).toMillis());
     ips = dnsTestClient.resolveArecords("worker.east.example.test");
     Assertions.assertThat(ips).hasSize(2);
-    Assertions.assertThat(ips).contains(ip(EAST_WORKER_2),ip(EAST_WORKER_3));
+    Assertions.assertThat(ips).contains(ip(EAST_WORKER_2), ip(EAST_WORKER_3));
   }
-
 
   @Test
   @DisplayName("Invalid domains don't resolve")
@@ -143,5 +141,4 @@ public class CoreDnsContainerTest {
   private String ip(ARecord aRecord) {
     return aRecord.getAddress().getHostAddress();
   }
-
 }
