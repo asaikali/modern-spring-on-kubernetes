@@ -63,7 +63,7 @@ spec:
       serviceAccountName: greeting-server-sa
       containers:
         - name: greeting-server
-          image: custom-resource
+          image: custom-resource:0.0.1-SNAPSHOT
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

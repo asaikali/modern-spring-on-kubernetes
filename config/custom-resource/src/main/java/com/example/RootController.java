@@ -21,7 +21,7 @@ public class RootController {
 
   @GetMapping("/")
   public Map<String, Object> get(
-      @RequestParam(value = "language", required = false, defaultValue = "en") String language) {
+      @RequestParam(value = "lang", required = false, defaultValue = "en") String language) {
     String message = greetingService.getGreetingMessage(language);
     return Map.of("date", LocalDateTime.now(), "message", message);
   }

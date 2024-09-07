@@ -22,6 +22,6 @@ metadata:
   name: hello-world-french
   namespace: greeter
 spec:
-  message: "Bonjour, le monde!"
+  message: "Bonjour, le monde! 2"
   language: "fr"
 
