@@ -11,6 +11,9 @@
     <artifactId>custom-resource</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <description>Demo project showing how to use a custom resource</description>
+    <properties>
+        <kubernetes.client.version>21.0.1</kubernetes.client.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -21,19 +24,14 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-kubernetes-client-config</artifactId>
+            <groupId>io.kubernetes</groupId>
+            <artifactId>client-java</artifactId>
+            <version>${kubernetes.client.version}</version>
         </dependency>
         <dependency>
             <groupId>io.kubernetes</groupId>
-            <artifactId>client-java</artifactId>
-            <version>21.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
+            <artifactId>client-java-extended</artifactId>
+            <version>${kubernetes.client.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

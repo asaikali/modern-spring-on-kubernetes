@@ -1,29 +1,3 @@
-#logging:
-#  level:
-#    org:
-#      springframework:
-#        cloud:
-#          kubernetes: DEBUG
-
-spring:
-  application:
-    name: message-service
-  config:
-    import: "optional:configtree:/myconfigs/" #app pulls properties form files in this folder, files put there based
-   # on k8s config map values
-
-  cloud:
-    kubernetes:
-      reload:
-        enabled: true
-        strategy: restart_context
-      config:
-        name: message-service
-        namespace: config-examples
-        sources:
-          # Spring Cloud Kubernetes looks up a ConfigMap named message-service in namespace config-examples
-          - name: message-service
-
 # expose all the spring boot actuators good for demos.
 # NEVER DO THIS in production
 management:
@@ -32,7 +6,6 @@ management:
       exposure:
         include: "*"
   endpoint:
-    restart:
-      enabled: true
     health:
       show-details: always
+

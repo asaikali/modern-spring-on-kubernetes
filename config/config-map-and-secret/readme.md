@@ -46,7 +46,7 @@ data:
 * Hit actuator refresh endpoint: `curl localhost:49670/actuator/refresh -d {} -H "Content-Type: application/json"`
 * reload the page `http://localhost:30165/` and you see that the message element of the json response matches the 
   value from the config map. Spring Cloud for k8s was able to detect the change and reload the value when it was 
-  changed because the `com.example.ConfigDetailsController` was marked with `@RefreshScope` which cause spring cloud
+  changed because the `com.example.RootController` was marked with `@RefreshScope` which cause spring cloud
   to reload the bean when an injected value changes.
 ```json
 {
