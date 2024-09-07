@@ -9,6 +9,7 @@ import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.util.generic.GenericKubernetesApi;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,7 +29,7 @@ class GreetingInformer {
 
   private final ApiClient client;
   private final SharedIndexInformer<GreetingResource> greetingInformer;
-
+  private final String namespace;
 
   /**
    * Retrieves all GreetingResource objects from the local cache. This method uses the Lister to
@@ -62,9 +63,10 @@ class GreetingInformer {
    */
   public Optional<GreetingResource> getGreeting(String language) {
     // Filter the cached resources to find the first one that matches the specified language
-    Optional<GreetingResource> greetingResource = this.getGreetings().stream()
-        .filter(object -> language.equals(object.getSpec().getLanguage()))
-        .findFirst();
+    Optional<GreetingResource> greetingResource =
+        this.getGreetings().stream()
+            .filter(object -> language.equals(object.getSpec().getLanguage()))
+            .findFirst();
 
     return greetingResource;
   }
@@ -76,8 +78,11 @@ class GreetingInformer {
    * additions, updates, and deletions.
    *
    * @param clientProvider the provider for the Kubernetes API client
+   * @param namespace the namespace to watch for Greeting objects in
    */
-  GreetingInformer(KubernetesClientProvider clientProvider) {
+  GreetingInformer(
+      KubernetesClientProvider clientProvider, @Value("${namespace:greeter}") String namespace) {
+    this.namespace = namespace;
     this.client = clientProvider.getDefaultClient().orElseThrow();
 
     // Set up a generic Kubernetes API for the Greeting custom resource
@@ -94,9 +99,13 @@ class GreetingInformer {
     SharedInformerFactory informerFactory = new SharedInformerFactory();
 
     // Create an informer for GreetingResource with a resync period of 10 seconds (10_000 ms)
+    // for the specified namespace
     greetingInformer =
         informerFactory.sharedIndexInformerFor(
-            greetingApi, GreetingResource.class, 10_000); // Resync period in milliseconds
+            greetingApi,
+            GreetingResource.class,
+            10_000,
+            namespace); // Resync period in milliseconds
 
     // Add event handlers to the informer to handle resource events like add, update, and delete
     greetingInformer.addEventHandler(new EventHandler());
