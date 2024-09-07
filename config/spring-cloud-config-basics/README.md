@@ -1,4 +1,4 @@
-# Spring Cloud Config Basics
+# spring-cloud-config-basics 
 
 ### Overview
 
