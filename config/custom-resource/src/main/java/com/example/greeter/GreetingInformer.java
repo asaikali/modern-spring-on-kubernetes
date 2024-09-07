@@ -7,6 +7,7 @@ import io.kubernetes.client.informer.SharedInformerFactory;
 import io.kubernetes.client.informer.cache.Lister;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.util.generic.GenericKubernetesApi;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,11 @@ class GreetingInformer {
   private final ApiClient client;
   private final SharedIndexInformer<GreetingResource> greetingInformer;
 
+
   /**
-   * Retrieves a GreetingResource from the local cache, filtering by the specified language. This
-   * method demonstrates how to use a Lister to access the cached resources maintained by the
-   * Informer.
+   * Retrieves all GreetingResource objects from the local cache. This method uses the Lister to
+   * access the cache maintained by the Informer, ensuring fast and efficient access to the current
+   * state of resources.
    *
    * <p>A **Lister** is a utility class that simplifies access to the local cache of resources
    * maintained by an Informer. Instead of making API calls to the Kubernetes server, the Lister
@@ -44,18 +46,25 @@ class GreetingInformer {
    * interact with the API server. This improves the performance of your application by avoiding
    * unnecessary API requests and providing real-time access to resources.
    *
+   * @return a list of all cached GreetingResource objects
+   */
+  public List<GreetingResource> getGreetings() {
+    // Use the Lister to read objects from the cache maintained by the informer
+    Lister<GreetingResource> greetingLister = new Lister<>(greetingInformer.getIndexer());
+    return greetingLister.list();
+  }
+
+  /**
+   * Retrieves a GreetingResource from the local cache, filtering by the specified language.
+   *
    * @param language the language to filter the Greeting resources by
    * @return an Optional containing the matching GreetingResource, if found
    */
   public Optional<GreetingResource> getGreeting(String language) {
-    // Use the Lister to read objects from the cache maintained by the informer
-    Lister<GreetingResource> greetingLister = new Lister<>(greetingInformer.getIndexer());
-
     // Filter the cached resources to find the first one that matches the specified language
-    Optional<GreetingResource> greetingResource =
-        greetingLister.list().stream()
-            .filter(object -> language.equals(object.getSpec().getLanguage()))
-            .findFirst();
+    Optional<GreetingResource> greetingResource = this.getGreetings().stream()
+        .filter(object -> language.equals(object.getSpec().getLanguage()))
+        .findFirst();
 
     return greetingResource;
   }
