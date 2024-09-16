@@ -5,6 +5,7 @@ import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.KubeConfig;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,17 @@ class DefaultKubernetesClientProvider implements KubernetesClientProvider {
     KubeConfig config = loadKubeConfig();
     config.setContext(contextName);
     return ClientBuilder.kubeconfig(config).build();
+  }
+
+  @Override
+  public Optional<ApiClient> getClientFromKubeConfig(String kubeConfigYaml) {
+    try {
+      KubeConfig config = KubeConfig.loadKubeConfig(  new StringReader(kubeConfigYaml));
+      ApiClient client = ClientBuilder.kubeconfig(config).build();
+      return Optional.of(client);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override

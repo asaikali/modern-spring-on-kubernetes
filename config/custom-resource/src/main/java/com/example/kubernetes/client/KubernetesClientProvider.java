@@ -18,6 +18,7 @@ import java.util.Optional;
  */
 public interface KubernetesClientProvider {
 
+  Optional<ApiClient> getClientFromKubeConfig(String kubeConfigYaml);
   /**
    * Returns the default {@link ApiClient} to interact with the Kubernetes API.
    *
@@ -42,4 +43,5 @@ public interface KubernetesClientProvider {
    * @return a {@link List} of context names available in the kubeconfig file.
    */
   List<String> getContexts();
+
 }
