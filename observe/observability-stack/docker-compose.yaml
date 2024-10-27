@@ -1,0 +1,106 @@
+# Docker Compose File Overview:
+# -----------------------------
+# This Docker Compose file defines a multi-service stack focused on local on
+# laptop development with observability and email testing using Prometheus,
+# Grafana, Tempo, Loki, and MailDev. These services work together to provide
+# an environment to explore Micrometer and Spring observability capabilities.
+#
+# Key Concepts and Advanced Docker Compose Features Used:
+#
+# 1. **Container Name**: We explicitly set container names to make it easier to
+#    reference and identify each container. This also avoids Docker's default
+#    behavior of adding auto-generated suffixes, making it clearer which
+#    services are running.
+#
+# 2. **Extra Hosts**: We use the 'extra_hosts' key to add custom entries to the
+#    container's /etc/hosts file. In this case, we map 'host.docker.internal'
+#    to 'host-gateway', which allows containers to access the Docker host's
+#    network interfaces. This is particularly useful in development
+#    environments where services running on the host need to be accessed from
+#    within the containers.
+#
+# 4. **Volumes**: This configuration uses both bind mounts and named volumes:
+#    - Bind mounts (e.g.,
+#      './docker/grafana/grafana.ini:/etc/grafana/grafana.ini:ro') are used to
+#      provide custom configurations to each container from the host machine.
+#    - Named volumes (e.g., 'prometheus:/prometheus') are used for persisting
+#      container data. This ensures that data remains even if the container is
+#      removed and recreated.
+#
+# This setup is designed for a developer-friendly observability stack where
+# services can be easily accessed and customized for development and testing
+# scenarios.
+
+services:
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.55.0
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    command:
+      - --enable-feature=exemplar-storage
+      - --web.enable-remote-write-receiver
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - prometheus:/prometheus
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090" # Prometheus Web UI
+
+  tempo:
+    container_name: tempo
+    image: grafana/tempo:2.6.1
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    command:
+      - -config.file=/etc/tempo.yml
+    volumes:
+    #  - tempo:/tmp/tempo
+      - ./docker/tempo/tempo.yml:/etc/tempo.yml:ro
+    ports:
+      - "3200:3200"  # Tempo push endpoint
+      - "9411:9411"  # Zipkin-compatible endpoint
+
+  loki:
+    container_name: loki
+    image: grafana/loki:3.2.1
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    command:
+      - -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"  # Loki Web UI and API
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:11.3.0
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    volumes:
+      - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./docker/grafana/provisioning/alerting:/etc/grafana/provisioning/alerting:ro
+    ports:
+      - "3000:3000"  # Grafana Web UI
+
+  maildev:
+    container_name: maildev
+    image: maildev/maildev:2.1.0
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    environment:
+      - MAILDEV_SMTP_PORT=1025
+      - MAILDEV_WEB_PORT=1080
+    ports:
+      - "1080:1080"    # MailDev Web UI
+      - "1025:1025"      # SMTP port
+
+
+volumes:
+  prometheus:
+  tempo:
