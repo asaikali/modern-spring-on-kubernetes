@@ -17,7 +17,7 @@
 	<modules>
 		<module>health</module>
 		<module>logs</module>
-		<module>metrics</module>
-		<module>tracing</module>
+		<module>micrometer-metrics</module>
+		<module>micrometer-tracing</module>
 	</modules>
 </project>

@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>metrics</artifactId>
+	<artifactId>micrometer-metrics</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>metrics</name>
 	<description>Multi Dimensional Metrics Example</description>

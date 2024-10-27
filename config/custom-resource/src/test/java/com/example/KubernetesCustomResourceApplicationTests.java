@@ -9,7 +9,6 @@ import io.kubernetes.client.util.Yaml;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,8 +28,7 @@ class KubernetesCustomResourceApplicationTests {
   @Autowired KubernetesClientProvider kubernetesClientProvider;
 
   @Test
-  void testCrdCreation()
-      throws IOException {
+  void testCrdCreation() throws IOException {
     String kubeConfigYaml = k3s.getKubeConfigYaml();
     ApiClient client = kubernetesClientProvider.getClientFromKubeConfig(kubeConfigYaml).get();
     ApiextensionsV1Api apiInstance = new ApiextensionsV1Api(client);
@@ -48,8 +46,8 @@ class KubernetesCustomResourceApplicationTests {
     CustomObjectsApi customObjectsApi = new CustomObjectsApi(client);
     List<Object> greetings = Yaml.loadAll(new File("k8s/greetings.yaml"));
     for (Object greetigObject : greetings) {
-     customObjectsApi.createNamespacedCustomObject("example.com", "v1", "greeter", "greetings", greetigObject);
+      customObjectsApi.createNamespacedCustomObject(
+          "example.com", "v1", "greeter", "greetings", greetigObject);
     }
-
   }
 }

@@ -38,7 +38,7 @@ class DefaultKubernetesClientProvider implements KubernetesClientProvider {
   @Override
   public Optional<ApiClient> getClientFromKubeConfig(String kubeConfigYaml) {
     try {
-      KubeConfig config = KubeConfig.loadKubeConfig(  new StringReader(kubeConfigYaml));
+      KubeConfig config = KubeConfig.loadKubeConfig(new StringReader(kubeConfigYaml));
       ApiClient client = ClientBuilder.kubeconfig(config).build();
       return Optional.of(client);
     } catch (IOException e) {
