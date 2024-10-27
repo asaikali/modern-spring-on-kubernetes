@@ -4,20 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.example</groupId>
-		<artifactId>modern-spring-on-kubernetes</artifactId>
+		<artifactId>observe</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>observe</artifactId>
+	<artifactId>micrometer-observation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>Projects demonstrating best practices for observing spring applications in production</description>
+	<description>Projects Showing the Micrometer Tracing API from the bottom up</description>
 	<packaging>pom</packaging>
-	
 	<modules>
-		<module>health</module>
-		<module>logs</module>
-		<module>micrometer-metrics</module>
-		<module>micrometer-tracing</module>
-		<module>micrometer-observation</module>
+		<module>observation-basics</module>
 	</modules>
 </project>
