@@ -18,14 +18,22 @@ public class RootController {
     this.checkoutService = checkoutService;
   }
 
-  @Timed(value = "generate_metrics_time")
   @GetMapping("/")
   public String generate() {
-    int amount = random.nextInt(20);
+
+      Order order = new Order(1);
+      var creditCard = new PaymentRequest("4012888888881881",random.nextInt(199));
+      this.checkoutService.checkout(order, creditCard);
+
+    return "generated 1 order";
+  }
+
+  @GetMapping("/random")
+  public String generlateRandom() {
+    int amount = random.nextInt(20)+1;
     for (int i = 0; i < amount; i++) {
       Order order = new Order(i);
-      PaymentRequest creditCard = new PaymentRequest();
-      creditCard.setAmount(random.nextInt(199));
+      var creditCard = new PaymentRequest("4012888888881881",random.nextInt(199));
       this.checkoutService.checkout(order, creditCard);
     }
 

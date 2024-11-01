@@ -1,4 +1,13 @@
+spring:
+  application:
+    name: observation-basics
+
 management:
+  observations:
+    key-values:
+      "service.name" : ${spring.application.name}
+      region: "us-east-1"
+      stack: "prod"
   endpoints:
     web:
       exposure:
