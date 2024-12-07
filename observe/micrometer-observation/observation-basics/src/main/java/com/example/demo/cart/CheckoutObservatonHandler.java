@@ -7,8 +7,6 @@ import io.micrometer.observation.Observation;
 import io.micrometer.observation.Observation.Context;
 import io.micrometer.observation.Observation.Event;
 import io.micrometer.observation.ObservationHandler;
-import org.apache.tomcat.util.bcel.classfile.ConstantUtf8;
-import org.springframework.stereotype.Component;
 
 public class CheckoutObservatonHandler implements ObservationHandler<Observation.Context> {
 
@@ -23,34 +21,22 @@ public class CheckoutObservatonHandler implements ObservationHandler<Observation
   }
 
   @Override
-  public void onStart(Context context) {
-
-  }
+  public void onStart(Context context) {}
 
   @Override
-  public void onError(Context context) {
-
-  }
+  public void onError(Context context) {}
 
   @Override
-  public void onEvent(Event event, Context context) {
-
-  }
+  public void onEvent(Event event, Context context) {}
 
   @Override
-  public void onScopeOpened(Context context) {
-
-  }
+  public void onScopeOpened(Context context) {}
 
   @Override
-  public void onScopeClosed(Context context) {
-
-  }
+  public void onScopeClosed(Context context) {}
 
   @Override
-  public void onScopeReset(Context context) {
-
-  }
+  public void onScopeReset(Context context) {}
 
   @Override
   public void onStop(Context context) {

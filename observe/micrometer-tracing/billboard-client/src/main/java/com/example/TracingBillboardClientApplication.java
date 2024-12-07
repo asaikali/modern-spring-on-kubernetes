@@ -13,8 +13,9 @@ public class TracingBillboardClientApplication {
   @Bean
   QuoteService quoteService() {
     WebClient client = WebClient.builder().baseUrl("http://localhost:8081").build();
+    WebClientAdapter webClientAdapter = WebClientAdapter.create(client);
     HttpServiceProxyFactory factory =
-        HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client)).build();
+        HttpServiceProxyFactory.builder().exchangeAdapter(webClientAdapter).build();
 
     QuoteService service = factory.createClient(QuoteService.class);
 

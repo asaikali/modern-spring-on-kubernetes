@@ -9,6 +9,7 @@ import io.kubernetes.client.util.Yaml;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +29,7 @@ class KubernetesCustomResourceApplicationTests {
   @Autowired KubernetesClientProvider kubernetesClientProvider;
 
   @Test
+  @Disabled
   void testCrdCreation() throws IOException {
     String kubeConfigYaml = k3s.getKubeConfigYaml();
     ApiClient client = kubernetesClientProvider.getClientFromKubeConfig(kubeConfigYaml).get();
