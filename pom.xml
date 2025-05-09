@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
@@ -16,10 +16,10 @@
     <description>Modern Spring Based Microservices on Kubernetes</description>
     <properties>
         <java.version>21</java.version>
-        <spring-cloud.version>2024.0.0</spring-cloud.version>
-        <testcontainers.version>1.20.3</testcontainers.version>
-        <dnsjava.version>3.6.1</dnsjava.version>
-        <spotless.version>2.43.0</spotless.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
+<!--        <testcontainers.version>1.20.3</testcontainers.version>-->
+        <dnsjava.version>3.6.3</dnsjava.version>
+        <spotless.version>2.44.3</spotless.version>
     </properties>
     <modules>
         <module>template</module>
