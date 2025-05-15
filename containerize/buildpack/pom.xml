@@ -87,6 +87,14 @@
              -->
             <builder>paketobuildpacks/builder-jammy-buildpackless-tiny</builder>
           </image>
+          <docker>
+            <builderRegistry>
+<!--              <username>user</username>-->
+              <password>secret</password>
+<!--              <url>https://docker.example.com/v1/</url>-->
+              <username>dcaron714</username>
+            </builderRegistry>
+          </docker>
         </configuration>
       </plugin>
     </plugins>
