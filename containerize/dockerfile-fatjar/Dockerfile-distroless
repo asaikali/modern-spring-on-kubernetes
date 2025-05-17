@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/java17-debian11
+FROM gcr.io/distroless/java21-debian12
 WORKDIR application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar

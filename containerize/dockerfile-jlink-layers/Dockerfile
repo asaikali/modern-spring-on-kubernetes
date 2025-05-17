@@ -1,5 +1,4 @@
-FROM eclipse-temurin:21 as builder
-
+FROM eclipse-temurin:24 as builder
 # create a custom JRE for the boot application
 RUN $JAVA_HOME/bin/jlink \
          --add-modules java.base,java.desktop,java.logging,java.management,java.naming,java.security.jgss,java.instrument,java.sql \
@@ -8,15 +7,15 @@ RUN $JAVA_HOME/bin/jlink \
          --no-header-files \
          --compress=2 \
          --output /javaruntime
-
 # extract the layers of the boot application
 WORKDIR application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination /out --application-filename app.jar
 
-# Create an run image for the application
-FROM ubuntu:22.04
+
+# Create a run image for the application from Ubuntu latest (LTS)
+FROM ubuntu:24.04
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
 COPY --from=builder /javaruntime $JAVA_HOME
@@ -26,4 +25,3 @@ COPY --from=builder /out/snapshot-dependencies/ ./
 # COPY --from=builder /out/spring-boot-loader/ ./ not needed anymore always empty
 COPY --from=builder /out/application/ ./
 ENTRYPOINT ["java","-jar","/application/app.jar"]
-

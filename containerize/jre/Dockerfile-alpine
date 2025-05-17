@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-alpine AS builder
+FROM eclipse-temurin:24-alpine AS builder
 
 RUN apk add --no-cache binutils
 
@@ -13,7 +13,7 @@ RUN $JAVA_HOME/bin/jlink \
 
 
 # Create an run image for the application
-FROM alpine:3
+FROM alpine:3.21.2
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
 COPY --from=builder /javaruntime $JAVA_HOME
