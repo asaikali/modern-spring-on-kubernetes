@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21 as builder
+FROM eclipse-temurin:24 as builder
 
 # create a custom JRE for the boot application
 RUN $JAVA_HOME/bin/jlink \
@@ -17,7 +17,7 @@ COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination /out --application-filename app.jar
 
 # Create an run image for the application
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
 COPY --from=builder /javaruntime $JAVA_HOME
