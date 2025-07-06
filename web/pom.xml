@@ -16,7 +16,7 @@
   <modules>
     <module>graphql</module>
     <module>mvc-annotations</module>
-    <module>mvc-sse</module>
+    <module>sse</module>
     <module>mvc-functional</module>
     <module>reactive</module>
   </modules>
