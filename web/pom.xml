@@ -17,6 +17,6 @@
     <module>graphql</module>
     <module>mvc</module>
     <module>sse</module>
-    <module>reactive</module>
+    <module>webflux</module>
   </modules>
 </project>

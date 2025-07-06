@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ReactiveWebApplication {
+public class WebFluxApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(ReactiveWebApplication.class, args);
+    SpringApplication.run(WebFluxApplication.class, args);
   }
 }
