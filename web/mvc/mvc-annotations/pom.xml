@@ -4,19 +4,22 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.example</groupId>
-		<artifactId>web</artifactId>
+		<artifactId>mvc</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>mvc-functional</artifactId>
+	<artifactId>mvc-annotations</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>template</name>
-	<description>Demo project showing Spring MVC functional endpoints</description>
+	<description>Demo project showing Spring MVC features</description>
 	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

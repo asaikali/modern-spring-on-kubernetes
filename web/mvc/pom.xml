@@ -8,13 +8,13 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>sse</artifactId>
+	<artifactId>mvc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<description>Explore SSE support in spring</description>
+	<description>Explore MVC features of spring</description>
 	
 	<modules>
-		<module>mvc-sse</module>
-		<module>sse-client</module>
+		<module>mvc-annotations</module>
+		<module>mvc-functional</module>
 	</modules>
 </project>
