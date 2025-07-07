@@ -14,7 +14,7 @@
 	<description>Explore SSE support in spring</description>
 	
 	<modules>
-		<module>mvc-sse</module>
+		<module>sse-server</module>
 		<module>sse-client</module>
 	</modules>
 </project>

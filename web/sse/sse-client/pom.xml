@@ -10,7 +10,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>sse-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>Demo project showing Reactive Spring Application</description>
+	<description>Demo project showing How to build SSE clients in Spring</description>
 	
 	<dependencies>
 		<dependency>

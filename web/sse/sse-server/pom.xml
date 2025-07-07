@@ -8,9 +8,9 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>mvc-sse</artifactId>
+	<artifactId>sse-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>Demo project showing Spring MVC features</description>
+	<description>Demo project showing various ways of building SSE servers</description>
 	
 	<dependencies>
 		<dependency>
