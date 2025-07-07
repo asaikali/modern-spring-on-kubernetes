@@ -8,13 +8,14 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>mvc</artifactId>
+	<artifactId>rest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<description>Explore MVC features of spring</description>
+	<description>Explore various ways for building rest apis</description>
 	
 	<modules>
 		<module>mvc-annotations</module>
 		<module>mvc-functional</module>
+		<module>webflux</module>
 	</modules>
 </project>

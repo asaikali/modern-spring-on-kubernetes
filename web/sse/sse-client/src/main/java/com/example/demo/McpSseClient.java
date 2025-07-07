@@ -1,29 +1,31 @@
 package com.example.demo;
 
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import org.springframework.core.ParameterizedTypeReference;
 
 public class McpSseClient {
 
-    private final WebClient client = WebClient.create("http://localhost:3001");
+  private final WebClient client = WebClient.create("http://localhost:3001");
 
-    public Flux<ServerSentEvent<String>> callMcpWithSse(String requestJson) {
-        return client.post()
-            .uri("/mcp")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.TEXT_EVENT_STREAM, MediaType.APPLICATION_JSON)
-            .bodyValue(requestJson)
-            .retrieve()
-            .bodyToFlux(new ParameterizedTypeReference<ServerSentEvent<String>>() {});
-    }
+  public Flux<ServerSentEvent<String>> callMcpWithSse(String requestJson) {
+    return client
+        .post()
+        .uri("/mcp")
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.TEXT_EVENT_STREAM, MediaType.APPLICATION_JSON)
+        .bodyValue(requestJson)
+        .retrieve()
+        .bodyToFlux(new ParameterizedTypeReference<ServerSentEvent<String>>() {});
+  }
 
-    public static void main(String[] args) {
-        McpSseClient mcpClient = new McpSseClient();
+  public static void main(String[] args) {
+    McpSseClient mcpClient = new McpSseClient();
 
-        String initMessage = """
+    String initMessage =
+        """
             {
               "jsonrpc": "2.0",
               "id": 1,
@@ -46,26 +48,29 @@ public class McpSseClient {
             }
             """;
 
-        mcpClient.callMcpWithSse(initMessage)
-            .subscribe(
-                event -> {
-                    System.out.println("=== Server Sent Event ===");
-                    System.out.println("ID: " + event.id());
-                    System.out.println("Event: " + event.event());
-                    System.out.println("Retry: " + event.retry());
-                    System.out.println("Data: " + event.data());
+    mcpClient
+        .callMcpWithSse(initMessage)
+        .subscribe(
+            event -> {
+              System.out.println("=== Server Sent Event ===");
+              System.out.println("ID: " + event.id());
+              System.out.println("Event: " + event.event());
+              System.out.println("Retry: " + event.retry());
+              System.out.println("Data: " + event.data());
 
-                    // Example: interact with fields
-                    if ("special-event".equals(event.event())) {
-                        System.out.println("Special event received, handling accordingly...");
-                        // your custom logic here
-                    }
-                },
-                error -> System.err.println("Error: " + error),
-                () -> System.out.println("Stream completed")
-            );
+              // Example: interact with fields
+              if ("special-event".equals(event.event())) {
+                System.out.println("Special event received, handling accordingly...");
+                // your custom logic here
+              }
+            },
+            error -> System.err.println("Error: " + error),
+            () -> System.out.println("Stream completed"));
 
-        // Keep JVM alive to process events (demo only)
-        try { Thread.sleep(30000); } catch (InterruptedException e) {}
+    // Keep JVM alive to process events (demo only)
+    try {
+      Thread.sleep(30000);
+    } catch (InterruptedException e) {
     }
+  }
 }

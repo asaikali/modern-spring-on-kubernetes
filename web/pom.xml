@@ -15,8 +15,7 @@
   <description>Demo Project Showing Web Endpoints and Clients</description>
   <modules>
     <module>graphql</module>
-    <module>mvc</module>
+    <module>rest</module>
     <module>sse</module>
-    <module>webflux</module>
   </modules>
 </project>
