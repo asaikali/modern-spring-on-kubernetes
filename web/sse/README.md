@@ -20,6 +20,111 @@ SSE uses a special MIME type `text/event-stream` and follows a simple text-based
 
 ---
 
+## Implementing SSE Backends in JVM
+
+JVM developers have several approaches for implementing SSE server endpoints: use framework-specific SSE support (Spring, Quarkus, JAX-RS), build custom solutions with servlet APIs, or leverage reactive frameworks. Each approach involves different trade-offs between ease of implementation, feature richness, and framework integration.
+
+### Server-Side Implementation Challenges
+
+When implementing SSE endpoints in server applications, you must handle several critical aspects that HTTP request-response patterns don't require:
+
+**Connection Lifecycle Management:**
+- **Long-lived connections** - maintain persistent connections for potentially hours or days
+- **Resource management** - prevent memory leaks from abandoned connections
+- **Graceful connection termination** - handle client disconnections and server shutdowns
+
+**Event Broadcasting:**
+- **Connection registry** - track active client connections for event distribution
+- **Selective broadcasting** - send events to specific clients based on user context or subscriptions
+- **Event queuing** - handle scenarios where event generation outpaces client consumption
+
+**Reliability Features:**
+- **Event ID generation** - create unique, sequential identifiers for event replay
+- **Event persistence** - store events for replay when clients reconnect with `Last-Event-ID`
+- **Client resumption** - detect and handle reconnection requests with appropriate event replay
+
+### Option 1: Spring Framework (WebFlux & MVC)
+
+Spring provides comprehensive SSE support through both its reactive (WebFlux) and traditional (MVC) stacks. Spring's `SseEmitter` (MVC) and `ServerSentEvent` (WebFlux) handle the SSE protocol details while integrating seamlessly with Spring's security, configuration, and monitoring ecosystem.
+
+**Spring MVC SseEmitter:**
+```java
+@GetMapping(path = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+public SseEmitter streamEvents() {
+    SseEmitter emitter = new SseEmitter();
+    // Framework handles SSE formatting, connection management
+    return emitter;
+}
+```
+
+**Spring WebFlux:**
+```java
+@GetMapping(path = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+public Flux<ServerSentEvent<String>> streamEvents() {
+    return eventPublisher.asFlux()
+        .map(data -> ServerSentEvent.builder(data).build());
+}
+```
+
+**Pros**: Complete SSE protocol handling, excellent Spring ecosystem integration, built-in security and configuration support, reactive and traditional options
+**Cons**: Spring-specific approach, requires understanding of Spring's threading models, complex reactive programming patterns
+
+**Recommended for**: Spring applications requiring robust SSE implementations with enterprise features like security, metrics, and configuration management.
+
+### Option 2: JAX-RS (Jersey, RESTEasy, Quarkus)
+
+JAX-RS provides standardized SSE support through the `SseEventSink` API, offering a portable approach across different JAX-RS implementations. This approach provides good integration with enterprise Java patterns and existing JAX-RS applications.
+
+**JAX-RS SSE:**
+```java
+@GET
+@Path("/events")
+@Produces(MediaType.SERVER_SENT_EVENTS)
+public void streamEvents(@Context SseEventSink eventSink) {
+    // JAX-RS handles SSE protocol, connection lifecycle
+}
+```
+
+**Pros**: Standardized API across JAX-RS implementations, good enterprise integration, works with CDI and security frameworks
+**Cons**: Less feature-rich than Spring, limited reactive programming support, requires JAX-RS expertise
+
+**Recommended for**: Enterprise applications using JAX-RS, teams requiring vendor-neutral implementations, or microservices architectures using Quarkus/MicroProfile.
+
+### Option 3: Servlet API & Custom Implementation
+
+For maximum control or integration with legacy systems, you can implement SSE directly using servlet APIs. This approach requires manual handling of the SSE protocol but provides complete flexibility over implementation details.
+
+**Custom Servlet Implementation:**
+```java
+@WebServlet("/events")
+public class SseServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("text/event-stream");
+        response.setCharacterEncoding("UTF-8");
+        // Manual SSE protocol implementation required
+    }
+}
+```
+
+**Pros**: Maximum flexibility, works with any servlet container, no framework dependencies, fine-grained control
+**Cons**: Substantial implementation effort, requires deep SSE protocol knowledge, manual connection and resource management
+
+**Recommended for**: Legacy applications, specialized requirements that frameworks can't accommodate, or teams with specific performance constraints.
+
+### Key Differences: SSE Server Implementation Options
+
+| Aspect | Spring Framework | JAX-RS | Custom Servlet |
+|--------|-----------------|---------|----------------|
+| **SSE Protocol** | Automatic handling | Automatic handling | Manual implementation |
+| **Connection Management** | Framework-managed | Framework-managed | Manual implementation |
+| **Event Broadcasting** | Custom implementation | Custom implementation | Custom implementation |
+| **Security Integration** | Spring Security | JAX-RS Security | Manual implementation |
+| **Configuration** | Spring Boot config | CDI/MicroProfile | Manual configuration |
+| **Reactive Support** | Excellent (WebFlux) | Limited | Custom implementation |
+| **Learning Curve** | Moderate to high | Moderate | High |
+
+---
+
 ## Progressive Build-Up: HTTP Request Examples
 
 Let's explore SSE by building up complexity step by step. Each example introduces one new field, showing how SSE events become more powerful.
@@ -56,7 +161,7 @@ data: Hello, SSE World!
 const eventSource = new EventSource('/mvc/stream/minimal');
 
 eventSource.onmessage = function(event) {
-  console.log('Received:', event.data); // "Hello, SSE World!"
+    console.log('Received:', event.data); // "Hello, SSE World!"
 };
 ```
 
