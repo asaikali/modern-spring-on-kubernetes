@@ -514,61 +514,15 @@ data:     at AuthController.login(AuthController.java:65)
 
 ---
 
-## Complete Example: All Fields Together
-
-Here's how our Spring Boot sample creates an event with all SSE fields:
-
-**Spring Boot Controller:**
-```java
-@GetMapping(path = "/mvc/stream/one", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-public SseEmitter streamOneFullSpecEvent() {
-    SseEmitter emitter = new SseEmitter();
-    
-    taskExecutor.execute(() -> {
-        try {
-            SseEmitter.SseEventBuilder event = SseEmitter.event()
-                .comment("SSE standard fields: https://developer.mozilla.org/...")
-                .id("event-1")
-                .name("event-type")
-                .data("This is the event data")
-                .reconnectTime(5000L);
-                
-            emitter.send(event);
-            emitter.complete();
-        } catch (IOException ex) {
-            emitter.completeWithError(ex);
-        }
-    });
-    
-    return emitter;
-}
-```
-
-**Resulting HTTP Response:**
-```http
-HTTP/1.1 200 OK
-Content-Type: text/event-stream
-Cache-Control: no-cache
-
-: SSE standard fields: https://developer.mozilla.org/...
-retry: 5000
-id: event-1
-event: event-type
-data: This is the event data
-
-```
-
----
-
 ## Field Summary
 
-| Field | Purpose | Example |
-|-------|---------|---------|
-| `data:` | Event payload (can repeat for multi-line) | `data: Hello World` |
-| `event:` | Custom event type name | `event: user-login` |
-| `id:` | Event ID for stateful reconnection (client sends `Last-Event-ID` header) | `id: msg-123` |
-| `retry:` | Client reconnection interval (milliseconds) | `retry: 5000` |
-| `:` | Comment line (ignored by client) | `: keepalive ping` |
+| Field | Purpose | Example | When to Use |
+|-------|---------|---------|-------------|
+| `data:` | Event payload (can repeat for multi-line) | `data: Hello World` | Every event - contains the actual message content |
+| `event:` | Custom event type name | `event: user-login` | When you need different client handlers (notifications vs alerts) |
+| `id:` | Event ID for stateful reconnection (client sends `Last-Event-ID` header) | `id: msg-123` | Critical systems where no events can be lost (trading, orders) |
+| `retry:` | Client reconnection interval (milliseconds) | `retry: 5000` | Mobile apps, server maintenance, high-load periods |
+| `:` | Comment line (ignored by client) | `: keepalive ping` | Long quiet periods, proxy timeouts, debugging info |
 
 ---
 
