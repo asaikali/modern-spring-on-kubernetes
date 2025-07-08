@@ -599,7 +599,17 @@ Most enterprise JVM frameworks provide HTTP streaming capabilities that can be u
 
 **Recommended for**: Existing Spring applications where you need deep integration with Spring's configuration, metrics, and reactive ecosystem, and have the development capacity to implement SSE parsing correctly.
 
-**Key insight**: The complexity of reliable SSE client implementation means most teams benefit from using a dedicated library rather than building custom solutions, unless they have specific integration requirements that demand it.
+### Key Differences: Browser vs Server Consumption
+
+| Aspect | Browser EventSource | Server-Side: OkHttp EventSource | Server-Side: WebFlux WebClient |
+|--------|-------------------|--------------------------------|--------------------------------|
+| **Connection** | Automatic HTTP management | Automatic HTTP management | Manual HTTP streaming |
+| **Parsing** | Built-in SSE parsing | Built-in SSE parsing | Custom parser required |
+| **Reconnection** | Automatic with backoff | Automatic with backoff | Manual implementation |
+| **Event ID Storage** | Automatic in memory | Automatic in memory | Persistent storage needed |
+| **Error Handling** | Basic `onerror` callback | Comprehensive error handling | Custom error strategies |
+| **Resource Management** | Browser-managed | Library-managed | Manual cleanup required |
+| **Authentication** | Cookie/session based | Token/header management | Token/header management |
 
 ---
 
