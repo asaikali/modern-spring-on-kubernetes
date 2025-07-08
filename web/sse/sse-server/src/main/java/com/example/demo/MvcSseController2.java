@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
 
 @RestController
-public class MvcSseController {
+public class MvcSseController2 {
 
   @GetMapping("/sse")
   SseEmitter sse() {
