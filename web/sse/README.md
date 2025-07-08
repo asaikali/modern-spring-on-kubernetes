@@ -570,43 +570,36 @@ Unlike browser EventSource which handles these automatically, server-side client
 
 ### JVM SSE Client Libraries
 
-#### Built-in JDK Support (Java 21)
+JVM developers have three primary approaches for consuming SSE streams: use dedicated SSE libraries, leverage your existing framework's HTTP streaming capabilities (Spring, Quarkus, Micronaut, etc.), or build custom clients using JDK HTTP primitives. Each approach involves different trade-offs between development effort, feature completeness, and ecosystem integration.
 
-**Java HttpClient (java.net.http)**
-- **Protocol Support**: HTTP streaming responses, manual SSE parsing required
-- **What's Included**: Connection management, HTTP/2 support, reactive streams integration
-- **What's Missing**: SSE protocol parsing, event reconstruction, automatic reconnection
-- **Implementation Required**: Complete SSE parsing logic, event ID tracking, retry mechanisms
+#### Option 1: JDK Built-in HTTP Client (Java 21)
 
-The JDK provides excellent HTTP streaming capabilities but requires significant custom implementation for full SSE compliance.
+The JDK's `HttpClient` provides excellent HTTP streaming primitives but requires significant custom implementation for full SSE compliance. You get robust HTTP/2 support and reactive streams integration out of the box, but must implement all SSE-specific logic yourself - from parsing `data:` fields and reconstructing multi-line events to managing reconnection strategies and event ID persistence.
 
-#### Most Developer-Friendly Option
+**Pros**: No external dependencies, full control over implementation, excellent performance
+**Cons**: Substantial development effort, requires deep SSE protocol knowledge, higher maintenance burden
 
-**OkHttp EventSource**
-- **Protocol Support**: Complete SSE specification compliance
-- **Developer Experience**: Simple API, automatic reconnection, built-in event parsing
-- **Key Features**:
-  - Handles all SSE field parsing (`data:`, `event:`, `id:`, `retry:`)
-  - Automatic reconnection with exponential backoff
-  - Event ID tracking and `Last-Event-ID` header management
-  - Configurable connection timeouts and retry policies
-- **What's Missing**: Event ID persistence across application restarts (requires custom storage)
-- **Best For**: Most production SSE client implementations
+#### Option 2: Dedicated SSE Library (OkHttp EventSource)
 
-OkHttp EventSource provides the most complete, out-of-the-box SSE client experience with minimal boilerplate code.
+OkHttp's EventSource provides the most complete SSE implementation available on the JVM. It handles the entire SSE specification automatically - parsing all field types, managing automatic reconnection with exponential backoff, and tracking event IDs for reliable resumption. The API is intuitive and requires minimal boilerplate code.
 
-#### Spring Framework Support
+**Pros**: Complete SSE compliance, minimal development effort, battle-tested reliability
+**Cons**: External dependency, less flexibility for custom requirements, still requires persistence implementation for event IDs
 
-**WebFlux WebClient**
-- **Protocol Support**: HTTP streaming, manual SSE parsing required
-- **Spring Integration**: Reactive streams, configuration management, metrics integration
-- **What's Included**: Streaming response handling, backpressure support, Spring Boot auto-configuration
-- **What's Missing**: SSE protocol parsing, event reconstruction, automatic reconnection
-- **Implementation Required**: Custom SSE parsing logic, reconnection strategy, event ID management
+**Recommended for**: Most enterprise applications. Provides the best balance of functionality and simplicity, handling SSE complexity so you can focus on business logic.
 
-**Spring's Approach**: Spring focuses on providing excellent HTTP streaming primitives within the reactive ecosystem, expecting developers to implement SSE-specific logic as needed.
+#### Option 3: Framework HTTP Streaming
 
-**Key Takeaway**: For complete SSE client functionality, most JVM applications benefit from dedicated SSE libraries like OkHttp EventSource rather than building custom implementations on top of general-purpose HTTP clients.
+Most enterprise JVM frameworks provide HTTP streaming capabilities that can be used for SSE consumption. If your application is already built on a framework like Spring, Quarkus, or Micronaut, leveraging the framework's existing HTTP client can provide better ecosystem integration.
+
+**Spring WebFlux WebClient** is the reactive HTTP client in the Spring ecosystem. It provides excellent HTTP streaming support with deep integration into Spring Boot's configuration management, metrics collection (Micrometer), and reactive programming model. WebClient handles the HTTP streaming aspects but requires custom implementation of SSE protocol parsing and reconnection logic.
+
+**Pros**: Seamless Spring ecosystem integration, configuration externalization, metrics and monitoring integration, reactive backpressure handling
+**Cons**: Requires custom SSE parsing implementation, reactive programming complexity, framework lock-in
+
+**Recommended for**: Existing Spring applications where you need deep integration with Spring's configuration, metrics, and reactive ecosystem, and have the development capacity to implement SSE parsing correctly.
+
+**Key insight**: The complexity of reliable SSE client implementation means most teams benefit from using a dedicated library rather than building custom solutions, unless they have specific integration requirements that demand it.
 
 ---
 
