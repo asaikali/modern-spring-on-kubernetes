@@ -46,7 +46,7 @@ data: Hello, SSE World!
 
 **Browser consumption:**
 ```javascript
-const eventSource = new EventSource('/mvc/stream/minimal');
+const eventSource = new EventSource('/stream/minimal');
 
 eventSource.onmessage = function(event) {
     console.log('Received:', event.data); // "Hello, SSE World!"
@@ -98,7 +98,7 @@ data: Server will restart in 5 minutes for maintenance
 
 **Browser consumption:**
 ```javascript
-const eventSource = new EventSource('/mvc/stream/notifications');
+const eventSource = new EventSource('/stream/notifications');
 
 // Handle user notifications - show subtle badge
 eventSource.addEventListener('user-notification', function(event) {
@@ -169,7 +169,7 @@ data: Order #12345 has been shipped - tracking: 1Z999AA1234567890
 
 **Step 1: Initial connection and events received**
 ```javascript
-const eventSource = new EventSource('/mvc/stream/critical-events');
+const eventSource = new EventSource('/stream/critical-events');
 
 eventSource.addEventListener('trading-alert', function(event) {
     console.log('Trading alert:', event.data); // "AAPL stock hit $150..."
@@ -298,7 +298,7 @@ data: Server restart in 30 seconds - will reconnect automatically
 
 **Browser consumption:**
 ```javascript
-const eventSource = new EventSource('/mvc/stream/mobile-friendly');
+const eventSource = new EventSource('/stream/mobile-friendly');
 
 eventSource.addEventListener('location-update', function(event) {
     console.log('Location:', event.data); // "Train approaching tunnel..."
@@ -405,7 +405,7 @@ data: Database connection timeout detected
 
 **Browser consumption:**
 ```javascript
-const eventSource = new EventSource('/mvc/stream/with-keepalive');
+const eventSource = new EventSource('/stream/with-keepalive');
 
 eventSource.addEventListener('system-status', function(event) {
     console.log('System status:', event.data); // "System online - monitoring started"
