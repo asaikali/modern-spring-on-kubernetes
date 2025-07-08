@@ -8,8 +8,6 @@ SSE was standardized as part of **HTML5 around 2010**, addressing the need for r
 
 ## Progressive Build-Up: HTTP Request Examples
 
-### The SSE Protocol
-
 SSE uses a special MIME type `text/event-stream` and follows a simple text-based format. The server keeps an HTTP connection open and sends events as formatted text blocks.
 
 ### Basic Format Rules
