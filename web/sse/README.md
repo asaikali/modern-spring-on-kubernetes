@@ -109,21 +109,21 @@ const eventSource = new EventSource('/mvc/stream/notifications');
 
 // Handle user notifications - show subtle badge
 eventSource.addEventListener('user-notification', function(event) {
-  console.log('User notification:', event.data); // "You have 3 new messages"
-  console.log('Event type:', event.type); // "user-notification"
-  showNotificationBadge(event.data);
+    console.log('User notification:', event.data); // "You have 3 new messages"
+    console.log('Event type:', event.type); // "user-notification"
+    showNotificationBadge(event.data);
 });
 
 // Handle system alerts - show urgent popup
 eventSource.addEventListener('system-alert', function(event) {
-  console.log('System alert:', event.data); // "Server will restart in 5 minutes..."
-  console.log('Event type:', event.type); // "system-alert"
-  showUrgentPopup(event.data);
+    console.log('System alert:', event.data); // "Server will restart in 5 minutes..."
+    console.log('Event type:', event.type); // "system-alert"
+    showUrgentPopup(event.data);
 });
 
 // This won't be called anymore since we're using custom event types
 eventSource.onmessage = function(event) {
-  console.log('Default message:', event.data);
+    console.log('Default message:', event.data);
 };
 ```
 
@@ -179,14 +179,14 @@ data: Order #12345 has been shipped - tracking: 1Z999AA1234567890
 const eventSource = new EventSource('/mvc/stream/critical-events');
 
 eventSource.addEventListener('trading-alert', function(event) {
-  console.log('Trading alert:', event.data); // "AAPL stock hit $150..."
-  console.log('Event ID:', event.lastEventId); // "trade-001"
+    console.log('Trading alert:', event.data); // "AAPL stock hit $150..."
+    console.log('Event ID:', event.lastEventId); // "trade-001"
 });
 
 eventSource.addEventListener('order-update', function(event) {
-  console.log('Order update:', event.data); // "Order #12345 has been shipped..."
-  console.log('Event ID:', event.lastEventId); // "order-002"
-  // Browser automatically stores "order-002" as last received ID
+    console.log('Order update:', event.data); // "Order #12345 has been shipped..."
+    console.log('Event ID:', event.lastEventId); // "order-002"
+    // Browser automatically stores "order-002" as last received ID
 });
 ```
 
@@ -217,8 +217,8 @@ data: Order #12345 has been shipped - tracking: 1Z999AA1234567890
 **Step 2: Connection drops (network issue, server restart, etc.)**
 ```javascript
 eventSource.onerror = function(error) {
-  console.log('Connection lost, browser will auto-reconnect...');
-  // Browser has stored "order-002" as the last received ID
+    console.log('Connection lost, browser will auto-reconnect...');
+    // Browser has stored "order-002" as the last received ID
 };
 ```
 
@@ -308,19 +308,19 @@ data: Server restart in 30 seconds - will reconnect automatically
 const eventSource = new EventSource('/mvc/stream/mobile-friendly');
 
 eventSource.addEventListener('location-update', function(event) {
-  console.log('Location:', event.data); // "Train approaching tunnel..."
-  // Browser now waits 10 seconds before reconnecting on connection loss
+    console.log('Location:', event.data); // "Train approaching tunnel..."
+    // Browser now waits 10 seconds before reconnecting on connection loss
 });
 
 eventSource.addEventListener('maintenance-alert', function(event) {
-  console.log('Maintenance:', event.data); // "Server restart in 30 seconds..."
-  // Browser now waits 30 seconds before reconnecting on connection loss
+    console.log('Maintenance:', event.data); // "Server restart in 30 seconds..."
+    // Browser now waits 30 seconds before reconnecting on connection loss
 });
 
 eventSource.onerror = function(error) {
-  console.log('Connection lost');
-  // Browser will wait the last specified retry interval before reconnecting
-  // First event set it to 10s, second event updated it to 30s
+    console.log('Connection lost');
+    // Browser will wait the last specified retry interval before reconnecting
+    // First event set it to 10s, second event updated it to 30s
 };
 ```
 
@@ -415,13 +415,13 @@ data: Database connection timeout detected
 const eventSource = new EventSource('/mvc/stream/with-keepalive');
 
 eventSource.addEventListener('system-status', function(event) {
-  console.log('System status:', event.data); // "System online - monitoring started"
-  // Comments are completely invisible to client code
+    console.log('System status:', event.data); // "System online - monitoring started"
+    // Comments are completely invisible to client code
 });
 
 eventSource.addEventListener('error-alert', function(event) {
-  console.log('Error alert:', event.data); // "Database connection timeout detected"
-  // Client never saw the keepalive comments in between
+    console.log('Error alert:', event.data); // "Database connection timeout detected"
+    // Client never saw the keepalive comments in between
 });
 
 // No event is triggered by comment lines - they're invisible to JavaScript
@@ -549,67 +549,24 @@ eventSource.onerror = function(error) {
 
 ### Server-Side SSE Consumption
 
-When consuming SSE streams from server applications (microservices, backend integrations, monitoring systems), you need to implement the SSE client logic yourself. This requires addressing several key challenges:
+When consuming SSE streams from server applications (microservices, backend integrations, monitoring systems), you must implement SSE client logic that browsers handle automatically. Key challenges include:
 
-#### 1. HTTP Streaming and Parsing
+**Protocol Implementation:**
+- **HTTP streaming** - maintain persistent connections and parse responses line-by-line
+- **Event reconstruction** - accumulate multiple `data:` lines and detect event boundaries
+- **Field parsing** - handle `data:`, `event:`, `id:`, `retry:`, and comment lines
 
-Server-side clients must handle HTTP streaming responses and parse the SSE format manually. Unlike traditional HTTP responses that are read completely, SSE requires processing the response as it streams in. The client must:
+**Reliability Requirements:**
+- **Reconnection logic** - automatic reconnection with exponential backoff
+- **Event ID persistence** - track and persist last processed event across restarts
+- **Error handling** - distinguish retryable vs permanent failures
 
-- **Maintain persistent HTTP connections** for potentially hours or days
-- **Parse line-by-line** as data arrives (not wait for complete response)
-- **Handle field parsing** - distinguish between `data:`, `event:`, `id:`, `retry:`, and comment lines
-- **Manage connection timeouts** - keep connections alive during quiet periods
-- **Handle partial data** - lines may arrive fragmented across network packets
+**Production Concerns:**
+- **Authentication** - token management and renewal
+- **Resource management** - prevent connection and memory leaks
+- **Monitoring** - integration with metrics and alerting systems
 
-#### 2. Event Reconstruction and Buffering
-
-SSE events can span multiple lines and require careful reconstruction:
-
-- **Multi-line data handling** - accumulate multiple `data:` lines into single events
-- **Event boundary detection** - recognize when double newlines signal event completion
-- **Field state management** - track current event ID, type, and retry values across lines
-- **Memory management** - avoid unbounded buffering of incomplete events
-- **Event dispatch timing** - only deliver complete, well-formed events to handlers
-
-#### 3. Connection State Management and Reconnection
-
-Robust server-side clients must implement sophisticated connection management:
-
-- **Automatic reconnection** with exponential backoff to avoid overwhelming servers
-- **Retry interval compliance** - respect server-sent retry values
-- **Backoff strategy implementation** - progressive delays for repeated failures
-- **Connection health monitoring** - detect silent connection failures
-- **Graceful shutdown** - clean connection termination when application stops
-
-#### 4. Event ID Tracking and Persistence
-
-For reliable event processing, clients must implement event ID management:
-
-- **Event ID storage** - track the last successfully processed event ID
-- **Persistence across restarts** - survive application restarts without losing position
-- **Last-Event-ID header management** - send appropriate headers on reconnection
-- **Duplicate event handling** - handle cases where servers replay events
-- **Processing confirmation** - only update last event ID after successful event processing
-
-#### 5. Error Handling and Recovery
-
-Production server-side clients need comprehensive error handling:
-
-- **Network error classification** - distinguish between retryable and permanent failures
-- **HTTP error code handling** - appropriate responses to 404, 500, 503, etc.
-- **Malformed data handling** - gracefully handle corrupted SSE streams
-- **Resource cleanup** - prevent connection and memory leaks
-- **Circuit breaker patterns** - avoid cascading failures in microservice architectures
-
-#### 6. Authentication and Security
-
-Server-to-server SSE consumption requires security considerations:
-
-- **Token management** - handle API keys, JWT tokens, and token refresh
-- **TLS/SSL handling** - ensure secure connections and certificate validation
-- **Authorization context** - maintain user context for filtered event streams
-- **Rate limit compliance** - respect server-side rate limiting
-- **Audit logging** - track event consumption for compliance requirements
+Unlike browser EventSource which handles these automatically, server-side clients require careful implementation or specialized libraries.
 
 ### JVM SSE Client Libraries
 
@@ -629,10 +586,10 @@ The JDK provides excellent HTTP streaming capabilities but requires significant 
 - **Protocol Support**: Complete SSE specification compliance
 - **Developer Experience**: Simple API, automatic reconnection, built-in event parsing
 - **Key Features**:
-    - Handles all SSE field parsing (`data:`, `event:`, `id:`, `retry:`)
-    - Automatic reconnection with exponential backoff
-    - Event ID tracking and `Last-Event-ID` header management
-    - Configurable connection timeouts and retry policies
+  - Handles all SSE field parsing (`data:`, `event:`, `id:`, `retry:`)
+  - Automatic reconnection with exponential backoff
+  - Event ID tracking and `Last-Event-ID` header management
+  - Configurable connection timeouts and retry policies
 - **What's Missing**: Event ID persistence across application restarts (requires custom storage)
 - **Best For**: Most production SSE client implementations
 
