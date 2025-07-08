@@ -547,8 +547,6 @@ eventSource.onerror = function(error) {
 - **Event dispatching** - Routes events to appropriate handlers based on event type
 - **Reconnection logic** - Automatically reconnects with exponential backoff
 - **Last-Event-ID handling** - Stores and sends `Last-Event-ID` header on reconnection
-- **Cross-origin support** - Handles CORS automatically when configured
-
 
 ## Server-Side SSE Consumption
 
@@ -623,7 +621,9 @@ public class SSEClientExample {
 ```
 
 **Pros**: Native SSE support, reactive backpressure handling, Spring ecosystem integration
+
 **Cons**: Requires reactive programming knowledge
+
 **Best for**: Any application needing SSE consumption
 
 ---
