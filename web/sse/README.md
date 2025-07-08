@@ -30,8 +30,8 @@ The simplest possible SSE response contains just data.
 
 **HTTP Request:**
 ```http
-GET /mvc/stream/minimal HTTP/1.1
-Host: localhost:8080
+GET /api/events HTTP/1.1
+Host: example.com
 Accept: text/event-stream
 ```
 
@@ -192,8 +192,8 @@ eventSource.addEventListener('order-update', function(event) {
 
 **Initial HTTP Request:**
 ```http
-GET /mvc/stream/critical-events HTTP/1.1
-Host: localhost:8080
+GET /api/critical-events HTTP/1.1
+Host: example.com
 Accept: text/event-stream
 ```
 
@@ -226,8 +226,8 @@ eventSource.onerror = function(error) {
 
 **Automatic Reconnection HTTP Request:**
 ```http
-GET /mvc/stream/critical-events HTTP/1.1
-Host: localhost:8080
+GET /api/critical-events HTTP/1.1
+Host: example.com
 Accept: text/event-stream
 Last-Event-ID: order-002
 ```
@@ -514,6 +514,60 @@ data:     at AuthController.login(AuthController.java:65)
 
 ---
 
+## SSE Best Practices
+
+### Event ID Strategy
+**Always use meaningful, sequential IDs for reliable event streams:**
+- **Sequential format**: `user-001`, `order-002`, `trade-003` (easier debugging)
+- **Include entity type**: Helps with event routing and replay logic
+- **Avoid UUIDs**: Harder to determine sequence and debug missing events
+- **Persist server-side**: Maintain event logs indexed by ID for replay functionality
+
+### Event Type Design
+**Design event types for client-side routing and processing:**
+- **Use hierarchical naming**: `user.login`, `order.created`, `system.alert`
+- **Be specific**: `payment-failed` vs generic `error`
+- **Consider client handlers**: Each type should map to a distinct UI action
+- **Avoid frequent changes**: Client code needs to handle all event types
+
+### Retry Interval Guidelines
+**Set retry intervals based on application context:**
+- **Normal operations**: 5-10 seconds (balanced responsiveness)
+- **High load periods**: 15-30 seconds (server protection)
+- **Maintenance windows**: 30-60 seconds (restart tolerance)
+- **Mobile applications**: 10-15 seconds (battery conservation)
+- **Update dynamically**: Change retry based on server conditions
+
+### Connection Management
+**Design for long-lived, reliable connections:**
+- **Implement keepalive**: Send comments every 30-60 seconds
+- **Handle reconnection**: Always include `Last-Event-ID` support
+- **Graceful degradation**: Provide fallback for SSE-unsupported environments
+- **Resource limits**: Set reasonable connection timeouts and limits
+
+### Data Format Consistency
+**Maintain consistent event data structures:**
+- **Standardize JSON**: Use consistent field names across event types
+- **Include metadata**: Timestamp, version, source system in event data
+- **Keep payloads focused**: One logical unit per event (don't batch unrelated data)
+- **Handle multiline**: Use multiple `data:` lines for formatted content (JSON, logs)
+
+### Security Considerations
+**Protect SSE endpoints like any API:**
+- **Authentication**: Validate user tokens on connection and during stream
+- **Authorization**: Filter events based on user permissions
+- **Rate limiting**: Prevent abuse of SSE endpoints
+- **HTTPS only**: Never send sensitive data over unencrypted connections
+
+### Error Handling
+**Plan for various failure scenarios:**
+- **Client disconnection**: Clean up server resources promptly
+- **Server restart**: Implement event replay from Last-Event-ID
+- **Network issues**: Use appropriate retry intervals
+- **Data corruption**: Include event checksums for critical systems
+
+---
+
 ## Field Summary
 
 | Field | Purpose | Example | When to Use |
@@ -523,70 +577,6 @@ data:     at AuthController.login(AuthController.java:65)
 | `id:` | Event ID for stateful reconnection (client sends `Last-Event-ID` header) | `id: msg-123` | Critical systems where no events can be lost (trading, orders) |
 | `retry:` | Client reconnection interval (milliseconds) | `retry: 5000` | Mobile apps, server maintenance, high-load periods |
 | `:` | Comment line (ignored by client) | `: keepalive ping` | Long quiet periods, proxy timeouts, debugging info |
-
----
-
-## Client-Side Implementation
-
-### Browser JavaScript (EventSource)
-```javascript
-const eventSource = new EventSource('/mvc/stream/one');
-
-// Listen for default 'message' events
-eventSource.onmessage = function(event) {
-    console.log('Received:', event.data);
-    console.log('Event ID:', event.lastEventId); // Browser automatically tracks this
-};
-
-// Listen for custom event types
-eventSource.addEventListener('notification', function(event) {
-    console.log('Notification:', event.data);
-});
-
-// Handle errors and reconnection
-eventSource.onerror = function(error) {
-    console.error('SSE Error:', error);
-    // Browser automatically reconnects with Last-Event-ID header
-};
-```
-
-### Custom SSE Client (Backend Integration)
-If you're building a server-to-server SSE client or using a custom HTTP client:
-
-```java
-// Example: Custom SSE client responsibilities
-public class CustomSseClient {
-    private String lastEventId = null;
-    
-    public void connect(String url) {
-        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-            .uri(URI.create(url))
-            .header("Accept", "text/event-stream")
-            .header("Cache-Control", "no-cache");
-            
-        // Include Last-Event-ID if we have one from previous connection
-        if (lastEventId != null) {
-            requestBuilder.header("Last-Event-ID", lastEventId);
-        }
-        
-        // Handle response stream, parse SSE format, store event IDs...
-    }
-    
-    private void handleSseEvent(String id, String event, String data) {
-        if (id != null) {
-            this.lastEventId = id; // Store for reconnection
-        }
-        // Process the event...
-    }
-}
-```
-
-**Key responsibilities for custom clients:**
-- Parse SSE format: field names, colons, newlines
-- Store `id` values for reconnection via `Last-Event-ID` header
-- Handle `retry` field to respect server's reconnection timing
-- Implement automatic reconnection logic
-- Buffer/queue events during brief disconnections
 
 ---
 
