@@ -51,7 +51,405 @@ data: Hello, SSE World!
 - Double newline (`\n\n`) signals the end of the event
 - Client's `onmessage` handler receives: `"Hello, SSE World!"`
 
-### Example 2: Multiple Data Lines
+**Browser consumption:**
+```javascript
+const eventSource = new EventSource('/mvc/stream/minimal');
+
+eventSource.onmessage = function(event) {
+    console.log('Received:', event.data); // "Hello, SSE World!"
+};
+```
+
+**What the browser does:**
+1. **Establishes connection** - Opens HTTP connection with `Accept: text/event-stream`
+2. **Parses SSE format** - Reads `data:` lines until double newline
+3. **Creates MessageEvent** - Wraps the data in a JavaScript event object
+4. **Triggers handler** - Calls `onmessage` since no custom event type specified
+5. **Stays connected** - Keeps connection open for future events
+
+### Example 2: Adding Event Type
+
+**What if you need to send different types of events?** Consider these scenarios:
+
+**User notifications:**
+```
+You have 3 new messages
+```
+
+**System alerts:**
+```
+Server will restart in 5 minutes for maintenance
+```
+
+**How do you handle these differently on the client?** One might show a subtle notification badge, while the other needs an urgent popup. Using `onmessage` for everything means you'd have to parse the content to figure out what type of event it is. **Event types** solve this elegantly.
+
+**HTTP Response:**
+```http
+HTTP/1.1 200 OK
+Content-Type: text/event-stream
+Cache-Control: no-cache
+
+event: user-notification
+data: You have 3 new messages
+
+
+event: system-alert
+data: Server will restart in 5 minutes for maintenance
+
+```
+
+**✅ What's new:**
+- **`event:` field** sets a custom event type
+- Each event type can be handled by a different client-side handler
+- Event data is still available in `event.data`
+
+**Browser consumption:**
+```javascript
+const eventSource = new EventSource('/mvc/stream/notifications');
+
+// Handle user notifications - show subtle badge
+eventSource.addEventListener('user-notification', function(event) {
+    console.log('User notification:', event.data); // "You have 3 new messages"
+    console.log('Event type:', event.type); // "user-notification"
+    showNotificationBadge(event.data);
+});
+
+// Handle system alerts - show urgent popup
+eventSource.addEventListener('system-alert', function(event) {
+    console.log('System alert:', event.data); // "Server will restart in 5 minutes..."
+    console.log('Event type:', event.type); // "system-alert"
+    showUrgentPopup(event.data);
+});
+
+// This won't be called anymore since we're using custom event types
+eventSource.onmessage = function(event) {
+    console.log('Default message:', event.data);
+};
+```
+
+**What's different:**
+- **Different event types** get routed to **different handlers**
+- No need to parse message content to determine how to handle it
+- `onmessage` is only called for events without an `event:` field
+- Each event type can have its own processing logic and UI behavior
+
+### Example 3: Adding Event ID
+
+**What if the connection drops and you miss critical events?** Consider these scenarios:
+
+**Financial trading alerts:**
+```
+AAPL stock hit $150 - trigger sell order
+```
+
+**Order processing updates:**
+```
+Order #12345 has been shipped - tracking: 1Z999AA1234567890
+```
+
+**How do you ensure no critical events are lost during network hiccups or server restarts?** Without event IDs, a dropped connection means lost events - potentially missing a trade execution or shipment notification. **Event IDs** enable reliable resumption.
+
+**HTTP Response:**
+```http
+HTTP/1.1 200 OK
+Content-Type: text/event-stream
+Cache-Control: no-cache
+
+id: trade-001
+event: trading-alert
+data: AAPL stock hit $150 - trigger sell order
+
+
+id: order-002
+event: order-update
+data: Order #12345 has been shipped - tracking: 1Z999AA1234567890
+
+```
+
+**✅ What's new - The `id:` field:**
+- **Assigns a unique identifier** to this specific event
+- Client **automatically stores** this ID internally as the "last received event ID"
+- On reconnection (automatic or manual), client sends: `Last-Event-ID: order-002` header
+- **Server responsibility**: Check this header and resume streaming from after `order-002`
+
+**Reconnection Scenario - HTTP Request/Response Flow:**
+
+**Step 1: Initial connection and events received**
+```javascript
+const eventSource = new EventSource('/mvc/stream/critical-events');
+
+eventSource.addEventListener('trading-alert', function(event) {
+    console.log('Trading alert:', event.data); // "AAPL stock hit $150..."
+    console.log('Event ID:', event.lastEventId); // "trade-001"
+});
+
+eventSource.addEventListener('order-update', function(event) {
+    console.log('Order update:', event.data); // "Order #12345 has been shipped..."
+    console.log('Event ID:', event.lastEventId); // "order-002"
+    // Browser automatically stores "order-002" as last received ID
+});
+```
+
+**Initial HTTP Request:**
+```http
+GET /mvc/stream/critical-events HTTP/1.1
+Host: localhost:8080
+Accept: text/event-stream
+```
+
+**Server Response:**
+```http
+HTTP/1.1 200 OK
+Content-Type: text/event-stream
+Cache-Control: no-cache
+
+id: trade-001
+event: trading-alert
+data: AAPL stock hit $150 - trigger sell order
+
+
+id: order-002
+event: order-update
+data: Order #12345 has been shipped - tracking: 1Z999AA1234567890
+
+```
+
+**Step 2: Connection drops (network issue, server restart, etc.)**
+```javascript
+eventSource.onerror = function(error) {
+    console.log('Connection lost, browser will auto-reconnect...');
+    // Browser has stored "order-002" as the last received ID
+};
+```
+
+**Step 3: Browser automatically reconnects with Last-Event-ID header**
+
+**Automatic Reconnection HTTP Request:**
+```http
+GET /mvc/stream/critical-events HTTP/1.1
+Host: localhost:8080
+Accept: text/event-stream
+Last-Event-ID: order-002
+```
+
+**Server Response (resumes from after order-002):**
+```http
+HTTP/1.1 200 OK
+Content-Type: text/event-stream
+Cache-Control: no-cache
+
+id: payment-003
+event: payment-alert
+data: Payment of $1,250 processed for Order #12345
+
+
+id: trade-004
+event: trading-alert
+data: TSLA stock dropped to $200 - consider buy opportunity
+
+```
+
+**✅ What happened:**
+1. **Client received** events `trade-001` and `order-002`
+2. **Connection dropped** after `order-002`
+3. **Browser automatically reconnected** with `Last-Event-ID: order-002`
+4. **Server resumed** from `payment-003` onwards
+5. **No critical events lost** - client continues seamlessly
+
+**Why this matters for backend developers:**
+- Enables **exactly-once delivery semantics** when implemented correctly
+- Server can maintain **event logs/queues** indexed by ID for replay
+- Critical for **financial, audit, or mission-critical** event streams
+- Your SSE client code needs to persist the last ID across application restarts
+
+### Example 4: Adding Retry Interval
+
+**What if the connection keeps dropping repeatedly?** Consider these scenarios:
+
+**Mobile user on a train:**
+- Connection drops every time the train goes through a tunnel
+- If browser reconnects immediately, it fails again
+- Creates a retry storm that drains battery and wastes bandwidth
+
+**Server restart scenario:**
+- Your application server crashed and is restarting
+- Takes 30 seconds to come back online
+- Browser shouldn't hammer the dead server every few seconds
+
+**How do you control reconnection timing to avoid overwhelming the server or draining mobile batteries?** The `retry:` field lets the server tell clients how long to wait before attempting reconnection.
+
+**HTTP Response:**
+```http
+HTTP/1.1 200 OK
+Content-Type: text/event-stream
+Cache-Control: no-cache
+
+retry: 10000
+id: train-001
+event: location-update
+data: Train approaching tunnel - signal may drop
+
+
+retry: 30000
+id: maint-002
+event: maintenance-alert
+data: Server restart in 30 seconds - will reconnect automatically
+
+```
+
+**✅ What's new:**
+- **`retry:` field** sets reconnection delay in milliseconds
+- Client updates its internal retry interval
+- Affects **all future reconnection attempts** until a new retry value is sent
+- Helps control server load during network issues
+
+**Browser consumption:**
+```javascript
+const eventSource = new EventSource('/mvc/stream/mobile-friendly');
+
+eventSource.addEventListener('location-update', function(event) {
+    console.log('Location:', event.data); // "Train approaching tunnel..."
+    // Browser now waits 10 seconds before reconnecting on connection loss
+});
+
+eventSource.addEventListener('maintenance-alert', function(event) {
+    console.log('Maintenance:', event.data); // "Server restart in 30 seconds..."
+    // Browser now waits 30 seconds before reconnecting on connection loss
+});
+
+eventSource.onerror = function(error) {
+    console.log('Connection lost');
+    // Browser will wait the last specified retry interval before reconnecting
+    // First event set it to 10s, second event updated it to 30s
+};
+```
+
+**What happens during reconnection:**
+1. **Connection drops** (tunnel, server restart, etc.)
+2. **Browser waits** 30 seconds (last retry value received)
+3. **Reconnects after delay** with `Last-Event-ID: maint-002`
+4. **Avoids retry storms** that waste resources
+5. **Server has time to recover** from restarts or high load
+
+**Best Practices:**
+
+**When to include retry:**
+- **Always include on the first event** - Sets a reasonable default (e.g., 5-10 seconds)
+- **Include when conditions change** - Longer delays during maintenance, shorter for normal operations
+- **Don't include on every event** - Only when you need to change the interval
+
+**Recommended intervals:**
+- **Normal operations**: 5-10 seconds (balances responsiveness with server load)
+- **High load periods**: 15-30 seconds (gives server breathing room)
+- **Maintenance windows**: 30-60 seconds (avoids hammering during restarts)
+- **Mobile/poor connectivity**: 10-15 seconds (conserves battery, accounts for signal issues)
+
+**Implementation pattern:**
+```http
+# First event - establish baseline
+retry: 5000
+id: init-001
+data: Connection established
+
+# Change only when needed
+retry: 30000
+id: maint-100
+event: maintenance-start
+data: Entering maintenance mode
+
+# Return to normal
+retry: 5000
+id: maint-101
+event: maintenance-end
+data: Maintenance complete - normal operations resumed
+```
+
+### Example 5: Adding Comments
+
+**What if proxies or load balancers drop your SSE connection due to inactivity?** Consider these scenarios:
+
+**Long periods without real events:**
+- Stock market closed overnight - no trading alerts for 12 hours
+- Monitoring system during quiet periods - no errors to report
+- Chat application when users aren't actively messaging
+
+**Corporate network infrastructure:**
+- Proxy servers timeout "idle" connections after 60 seconds
+- Load balancers drop connections with no traffic
+- Firewalls close connections that appear inactive
+
+**How do you keep the connection alive without sending fake events that trigger client-side processing?** Comments (`: lines`) are ignored by the client but keep the HTTP connection active, preventing infrastructure timeouts.
+
+**HTTP Response:**
+```http
+HTTP/1.1 200 OK
+Content-Type: text/event-stream
+Cache-Control: no-cache
+
+: Connection established at 2023-12-07T10:30:00Z
+retry: 5000
+id: init-001
+event: system-status
+data: System online - monitoring started
+
+
+: keepalive ping - 10:31:00
+: keepalive ping - 10:32:00
+: keepalive ping - 10:33:00
+
+
+id: alert-002
+event: error-alert
+data: Database connection timeout detected
+
+```
+
+**✅ What's new:**
+- **`: comment`** lines are completely ignored by the client
+- Useful for **keepalive** - prevents proxy/load balancer timeouts
+- Can include documentation, debugging info, or timestamps
+- Many servers send periodic comments (every 30-60 seconds) to maintain connections
+
+**Browser consumption:**
+```javascript
+const eventSource = new EventSource('/mvc/stream/with-keepalive');
+
+eventSource.addEventListener('system-status', function(event) {
+    console.log('System status:', event.data); // "System online - monitoring started"
+    // Comments are completely invisible to client code
+});
+
+eventSource.addEventListener('error-alert', function(event) {
+    console.log('Error alert:', event.data); // "Database connection timeout detected"
+    // Client never saw the keepalive comments in between
+});
+
+// No event is triggered by comment lines - they're invisible to JavaScript
+```
+
+**What happens with comments:**
+1. **Server sends comments** periodically (e.g., every 60 seconds)
+2. **Proxies see HTTP traffic** - connection appears active
+3. **Client ignores comments** - no JavaScript events triggered
+4. **Connection stays alive** through quiet periods
+5. **Real events work normally** when they occur
+
+**Common keepalive patterns:**
+```http
+# Timestamp-based keepalive
+: keepalive 2023-12-07T10:30:00Z
+
+# Simple heartbeat
+: ping
+
+# Debugging information
+: clients_connected=42 memory_usage=85%
+
+# Documentation/spec reference
+: SSE standard: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events
+```
+
+### Example 6: Multiple Data Lines
 
 **What if the event data is multiline?** Consider these common scenarios:
 
@@ -84,6 +482,8 @@ HTTP/1.1 200 OK
 Content-Type: text/event-stream
 Cache-Control: no-cache
 
+id: success-001
+event: operation-complete
 data: {
 data:   "user": "john",
 data:   "message": "Database operation completed",
@@ -95,6 +495,7 @@ data:   }
 data: }
 
 
+id: error-001
 event: error
 data: ERROR: Database connection failed
 data:     at DatabaseService.connect(DatabaseService.java:42)
@@ -106,108 +507,10 @@ data:     at AuthController.login(AuthController.java:65)
 **✅ What happens:**
 - **Single newlines** between `data:` lines = same event (lines get concatenated)
 - **Double newlines** (`\n\n`) = event boundary (marks end of event)
+- **Event IDs and types** clearly show where each event begins and ends
 - Client receives two separate events with properly formatted multiline content
 
 **Implementation note**: The SSE specification removes **trailing newlines** from the final result, so `data: hello\n` becomes just `"hello"`.
-
-### Example 3: Adding Event Type
-
-By default, all events trigger the client's `message` event. The `event:` field lets you specify custom event types.
-
-**HTTP Response:**
-```http
-HTTP/1.1 200 OK
-Content-Type: text/event-stream
-Cache-Control: no-cache
-
-event: notification
-data: You have a new message
-
-```
-
-**✅ What's new:**
-- **`event:` field** sets a custom event type
-- Instead of `onmessage`, this triggers the client's `notification` event listener
-- JavaScript: `eventSource.addEventListener('notification', handler)`
-
-### Example 4: Adding Event ID
-
-Event IDs enable **stateful reconnection resumption** - a critical feature for reliable event streaming. When a connection drops, the client can tell the server which was the last event it successfully received.
-
-**HTTP Response:**
-```http
-HTTP/1.1 200 OK
-Content-Type: text/event-stream
-Cache-Control: no-cache
-
-id: msg-001
-event: notification
-data: You have a new message
-
-```
-
-**✅ What's new - The `id:` field:**
-- **Assigns a unique identifier** to this specific event
-- Client **automatically stores** this ID internally as the "last received event ID"
-- On reconnection (automatic or manual), client sends: `Last-Event-ID: msg-001` header
-- **Server responsibility**: Check this header and resume streaming from after `msg-001`
-- **Client implementation note**: If you're building a custom SSE client, you must:
-  - Store the last received `id` value
-  - Include it in the `Last-Event-ID` header on reconnection
-  - Handle the server's response appropriately (server may send historical events you missed)
-
-**Why this matters for backend developers:**
-- Enables **exactly-once delivery semantics** when implemented correctly
-- Server can maintain **event logs/queues** indexed by ID for replay
-- Critical for **financial, audit, or mission-critical** event streams
-- Your SSE client code needs to persist the last ID across application restarts
-
-### Example 5: Adding Retry Interval
-
-The `retry:` field tells the client how long to wait before attempting to reconnect after a connection failure.
-
-**HTTP Response:**
-```http
-HTTP/1.1 200 OK
-Content-Type: text/event-stream
-Cache-Control: no-cache
-
-retry: 3000
-id: msg-001
-event: notification
-data: You have a new message
-
-```
-
-**✅ What's new:**
-- **`retry:` field** sets reconnection delay to 3000 milliseconds (3 seconds)
-- Client updates its internal retry interval
-- Affects **all future reconnection attempts** until a new retry value is sent
-- Helps control server load during network issues
-
-### Example 6: Adding Comments
-
-Comments are lines starting with `:` that the client ignores. They're useful for keeping connections alive and adding documentation.
-
-**HTTP Response:**
-```http
-HTTP/1.1 200 OK
-Content-Type: text/event-stream
-Cache-Control: no-cache
-
-: SSE standard fields: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events
-retry: 3000
-id: msg-001
-event: notification
-data: You have a new message
-
-```
-
-**✅ What's new:**
-- **`: comment`** lines are ignored by the client
-- Useful for **keepalive** - prevents proxy timeouts
-- Can include documentation or debugging information
-- Many servers send periodic comments to keep connections active
 
 ---
 
