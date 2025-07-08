@@ -4,11 +4,11 @@
 
 Server-Sent Events (SSE) enables a server to push real-time updates to clients over a single HTTP connection. Unlike WebSockets, SSE provides **unidirectional communication** from server to client, making it ideal for live notifications, dashboards, or monitoring feeds.
 
-## Background
-
 SSE was standardized as part of **HTML5 around 2010**, addressing the need for real-time web communication without complex polling or WebSocket overhead. It leverages existing HTTP infrastructure while providing native browser support via the EventSource API.
 
-## The SSE Protocol
+## Progressive Build-Up: HTTP Request Examples
+
+### The SSE Protocol
 
 SSE uses a special MIME type `text/event-stream` and follows a simple text-based format. The server keeps an HTTP connection open and sends events as formatted text blocks.
 
@@ -17,11 +17,6 @@ SSE uses a special MIME type `text/event-stream` and follows a simple text-based
 - Field lines start with a field name, followed by a colon and the value
 - Lines starting with `:` are comments (ignored by client)
 - UTF-8 encoding is required
-
----
-
-## Progressive Build-Up: HTTP Request Examples
-
 Let's explore SSE by building up complexity step by step. Each example introduces one new field, showing how SSE events become more powerful.
 
 ### Example 1: Minimal SSE Event
