@@ -6,7 +6,7 @@ Server-Sent Events (SSE) enables a server to push real-time updates to clients o
 
 SSE was standardized as part of **HTML5 around 2010**, addressing the need for real-time web communication without complex polling or WebSocket overhead. It leverages existing HTTP infrastructure while providing native browser support via the EventSource API.
 
-## Progressive Build-Up: HTTP Request Examples
+##  SSE By Example: HTTP Request Examples
 
 SSE uses a special MIME type `text/event-stream` and follows a simple text-based format. The server keeps an HTTP connection open and sends events as formatted text blocks.
 
@@ -15,6 +15,7 @@ SSE uses a special MIME type `text/event-stream` and follows a simple text-based
 - Field lines start with a field name, followed by a colon and the value
 - Lines starting with `:` are comments (ignored by client)
 - UTF-8 encoding is required
+
 Let's explore SSE by building up complexity step by step. Each example introduces one new field, showing how SSE events become more powerful.
 
 ### Example 1: Minimal SSE Event
@@ -46,7 +47,7 @@ data: Hello, SSE World!
 
 **Browser consumption:**
 ```javascript
-const eventSource = new EventSource('/stream/minimal');
+const eventSource = new EventSource('/api/events');
 
 eventSource.onmessage = function(event) {
     console.log('Received:', event.data); // "Hello, SSE World!"
@@ -98,7 +99,7 @@ data: Server will restart in 5 minutes for maintenance
 
 **Browser consumption:**
 ```javascript
-const eventSource = new EventSource('/stream/notifications');
+const eventSource = new EventSource('/api/events');
 
 // Handle user notifications - show subtle badge
 eventSource.addEventListener('user-notification', function(event) {
@@ -505,8 +506,7 @@ data:     at AuthController.login(AuthController.java:65)
 
 **Implementation note**: The SSE specification removes **trailing newlines** from the final result, so `data: hello\n` becomes just `"hello"`.
 
-
-## Field Summary
+### Field Summary
 
 | Field | Purpose | Example | When to Use |
 |-------|---------|---------|-------------|
@@ -515,8 +515,6 @@ data:     at AuthController.login(AuthController.java:65)
 | `id:` | Event ID for stateful reconnection (client sends `Last-Event-ID` header) | `id: msg-123` | Critical systems where no events can be lost (trading, orders) |
 | `retry:` | Client reconnection interval (milliseconds) | `retry: 5000` | Mobile apps, server maintenance, high-load periods |
 | `:` | Comment line (ignored by client) | `: keepalive ping` | Long quiet periods, proxy timeouts, debugging info |
-
----
 
 ## Consuming SSE Streams
 
