@@ -10,9 +10,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
 
 @RestController
-public class HelloController {
+public class MvcSseController {
 
-  @GetMapping("/")
+  @GetMapping("/sse")
   SseEmitter sse() {
     SseEmitter emitter = new SseEmitter(60_000l);
     AtomicInteger count = new AtomicInteger();
@@ -26,6 +26,7 @@ public class HelloController {
                         .data(LocalDateTime.now())
                         .id(String.valueOf(count.getAndIncrement()))
                         .comment("example comment")
+                        .reconnectTime(1000)
                         .name("time");
 
                 emitter.send(builder);

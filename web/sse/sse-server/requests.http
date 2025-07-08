@@ -1,0 +1,10 @@
+### List tools (only echo and longRunningOperation shown in expected response)
+POST http://localhost:3001/mcp
+Accept: application/json, text/event-stream
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/list"
+}

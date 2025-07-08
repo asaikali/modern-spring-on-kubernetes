@@ -1,0 +1,40 @@
+[
+  {
+    "request": {
+      "method": "tools/list",
+      "params": {}
+    },
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "tools": [
+          {
+            "name": "echo",
+            "description": "Echoes back the input",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string", "description": "Message to echo" }
+              },
+              "required": ["message"],
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "longRunningOperation",
+            "description": "Demonstrates a long running operation with progress updates",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "duration": { "type": "number", "default": 10, "description": "Duration of the operation in seconds" },
+                "steps": { "type": "number", "default": 5, "description": "Number of steps in the operation" }
+              },
+              "additionalProperties": false
+            }
+          }
+        ]
+      }
+    }
+  }
+]
