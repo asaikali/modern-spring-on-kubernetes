@@ -13,3 +13,7 @@ Accept: text/event-stream
 ### MVC infinite events
 GET http://localhost:8080/webflux/stream/infinite
 Accept: text/event-stream
+
+### Asyc Servlet
+GET http://localhost:8080/servlet/async?count=10
+Accept: text/event-stream

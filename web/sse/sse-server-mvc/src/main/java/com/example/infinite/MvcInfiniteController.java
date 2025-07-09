@@ -48,7 +48,7 @@ public class MvcInfiniteController {
   public SseEmitter infinite(@RequestParam(defaultValue = "AAPL") String symbol) {
     // Set timeout to 0 for infinite stream (no timeout)
     // TODO: the docs are light I guessed that 0 means infinite
-    final SseEmitter emitter = new SseEmitter(0L);
+    final SseEmitter emitter = new SseEmitter(-1l);
 
     // Set up lifecycle event handlers
     emitter.onCompletion(() -> logger.info("Stock price stream completed"));

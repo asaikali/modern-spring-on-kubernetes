@@ -41,7 +41,7 @@ public class WebFluxOneEventSseController {
 
     return Flux.just(event)
         .doOnSubscribe(sub -> logger.info("SSE stream subscribed"))
-        .doOnNext(e -> logger.info("Emitting SSE event"))
+        .doOnNext(e -> logger.info("Emitting SSE event " + Thread.currentThread().getName()))
         .doOnError(e -> logger.error("Error in the SSE stream", e))
         .doOnComplete(() -> logger.info("SSE stream completed"));
   }
