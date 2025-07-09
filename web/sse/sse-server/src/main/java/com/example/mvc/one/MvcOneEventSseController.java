@@ -35,8 +35,8 @@ public class MvcOneEventSseController {
   /**
    * Creates a single SSE event demonstrating all available SSE fields using a background thread.
    *
-   * <p>This version uses a background thread to emit the event and then keeps the connection open
-   * for a few seconds before completing, demonstrating proper SSE connection lifecycle.
+   * <p>This version uses a background thread to emit the event with a 1-second delay to
+   * demonstrate proper SSE field usage.
    *
    * @return SseEmitter configured to send one complete SSE event from a background thread
    */
@@ -61,11 +61,12 @@ public class MvcOneEventSseController {
     emitter.onError((e) -> logger.error("SSE connection error occurred", e));
 
     // ==================================================================================
-    // Schedule background thread execution
+    // Schedule background thread execution with 1-second delay
     // ==================================================================================
 
     // Use the configured TaskScheduler to execute SSE emission in background thread
     // This is the proper way to handle SSE in production - avoid blocking the request thread
+    // The 1-second delay demonstrates scheduled execution and prevents connection issues
     taskScheduler.schedule(
         () -> {
           try {
@@ -112,12 +113,12 @@ public class MvcOneEventSseController {
                     .data("Line 1 of data")
                     .data("   Line 2 of data indentation is preserved")
                     .data("   all lines in this event are treated as part of the payload")
+                    .data("") // Empty lines are valid and preserved in SSE
+                    .data(userMap) // SpringMVC picks Jackson converter for Map objects
                     .data("")
-                    .data(userMap) // SpringMVC guesses what media type to serialize to
+                    .data(userMap, APPLICATION_JSON) // Explicitly specify APPLICATION_JSON MediaType
                     .data("")
-                    .data(userMap, APPLICATION_JSON) // Help Spring MVC pick the right converter
-                    .data("")
-                    .data(userJson)
+                    .data(userJson) // Pre-formatted JSON string
                     .data("if you see this the whole event made it");
 
             // ==================================================================================
@@ -129,14 +130,10 @@ public class MvcOneEventSseController {
             logger.info("SSE event sent successfully");
 
             // ==================================================================================
-            // STEP 4: Keep connection alive briefly, then complete gracefully
+            // STEP 4: Complete the connection
             // ==================================================================================
 
-            // In a real application, you might:
-            // - Keep the connection open indefinitely
-            // - Send periodic heartbeat events
-            // - Send multiple events over time
-            // - Wait for external triggers to send events
+            // Complete immediately after sending the event
             emitter.complete();
             logger.info("SSE connection completed gracefully from background thread");
 
@@ -151,8 +148,8 @@ public class MvcOneEventSseController {
         Instant.now().plus(Duration.ofSeconds(1)));
 
     // Return the emitter immediately to Spring MVC
-    // The background thread will handle the actual event emission
-    logger.info("Returning SseEmitter to client, background thread will handle events");
+    // The background thread will handle the actual event emission after 1 second
+    logger.info("Returning SseEmitter to client, background thread will handle events in 1 second");
     return emitter;
   }
 }
