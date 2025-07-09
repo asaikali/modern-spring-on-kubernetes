@@ -47,8 +47,10 @@ public class MvcInfiniteController {
   @GetMapping(path = "/mvc/stream/infinite", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public SseEmitter infinite(@RequestParam(defaultValue = "AAPL") String symbol) {
     // Set timeout to 0 for infinite stream (no timeout)
-    // TODO: the docs are light I guessed that 0 means infinite
-    final SseEmitter emitter = new SseEmitter(-1l);
+    // per the spec https://jakarta.ee/specifications/servlet/6.1/jakarta-servlet-spec-6.1
+    //  If the timeout is not specified via the call to setTimeout, 30000 is used as the default. A
+    // value of 0 or less indicates that the asynchronous operation will never time out.
+    final SseEmitter emitter = new SseEmitter(0l);
 
     // Set up lifecycle event handlers
     emitter.onCompletion(() -> logger.info("Stock price stream completed"));

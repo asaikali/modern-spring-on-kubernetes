@@ -19,29 +19,25 @@ import org.slf4j.LoggerFactory;
 /**
  * Asynchronous Servlet Processing Demo
  *
- * This servlet demonstrates asynchronous request processing using the Servlet 3.0+ API.
- * The async processing pattern allows servlets to handle long-running operations without
- * blocking precious servlet container threads.
+ * <p>This servlet demonstrates asynchronous request processing using the Servlet 3.0+ API. The
+ * async processing pattern allows servlets to handle long-running operations without blocking
+ * precious servlet container threads.
  *
- * Key concepts demonstrated:
- * - Async servlet processing (frees up servlet threads)
- * - Background task delegation to separate thread pools
- * - Proper async lifecycle management and cleanup
- * - Error handling and timeout management in async context
+ * <p>Key concepts demonstrated: - Async servlet processing (frees up servlet threads) - Background
+ * task delegation to separate thread pools - Proper async lifecycle management and cleanup - Error
+ * handling and timeout management in async context
  *
- * Async Processing Lifecycle:
- * 1. Client sends HTTP request → Container assigns servlet thread
- * 2. startAsync() marks request as async → Servlet thread becomes available for other requests
- * 3. doGet() method returns immediately → Original servlet thread is released back to pool
- * 4. Background processing continues on scheduler threads → Long-running work doesn't block servlet threads
- * 5. asyncContext.complete() signals completion → Response is finalized and sent to client
+ * <p>Async Processing Lifecycle: 1. Client sends HTTP request → Container assigns servlet thread 2.
+ * startAsync() marks request as async → Servlet thread becomes available for other requests 3.
+ * doGet() method returns immediately → Original servlet thread is released back to pool 4.
+ * Background processing continues on scheduler threads → Long-running work doesn't block servlet
+ * threads 5. asyncContext.complete() signals completion → Response is finalized and sent to client
  * 6. Connection is closed and resources are cleaned up
  *
- * Benefits of async processing:
- * - Scalability: Servlet threads aren't blocked during long-running operations
- * - Better resource utilization: Thread pool efficiency is maximized
- * - Improved throughput: Container can handle more concurrent requests
- * - Non-blocking I/O: Background tasks can perform time-consuming operations
+ * <p>Benefits of async processing: - Scalability: Servlet threads aren't blocked during
+ * long-running operations - Better resource utilization: Thread pool efficiency is maximized -
+ * Improved throughput: Container can handle more concurrent requests - Non-blocking I/O: Background
+ * tasks can perform time-consuming operations
  */
 // @WebServlet(urlPatterns = "/servlet/async", asyncSupported = true)
 // Note: asyncSupported = true is REQUIRED for async processing to work
@@ -79,48 +75,51 @@ public class SseServlet extends HttpServlet {
     // If processing takes longer than this, onTimeout() will be called
     // if the app does not call asyncContext.complete() in less than 10 seconds it will
     // per the spec https://jakarta.ee/specifications/servlet/6.1/jakarta-servlet-spec-6.1
-    //  If the time out is not specified via the call to setTimeout, 30000 is used as the default. A value of 0 or less indicates that the asynchronous operation will never time out.
+    //  If the time out is not specified via the call to setTimeout, 30000 is used as the default. A
+    // value of 0 or less indicates that the asynchronous operation will never time out.
     asyncContext.setTimeout(10000);
 
     // ========== ASYNC LIFECYCLE LISTENERS ==========
     // Register listeners to handle various async processing events
-    asyncContext.addListener(new AsyncListener() {
+    asyncContext.addListener(
+        new AsyncListener() {
 
-      @Override
-      public void onComplete(AsyncEvent event) throws IOException {
-        // Called when async processing completes successfully
-        // This is where you'd typically clean up resources
-        logger.info("Async processing complete.");
-      }
+          @Override
+          public void onComplete(AsyncEvent event) throws IOException {
+            // Called when async processing completes successfully
+            // This is where you'd typically clean up resources
+            logger.info("Async processing complete.");
+          }
 
-      @Override
-      public void onTimeout(AsyncEvent event) throws IOException {
-        // Called when async processing exceeds the timeout period
-        // Important: We must handle this gracefully and close the connection
-        logger.info("Async processing timed out.");
+          @Override
+          public void onTimeout(AsyncEvent event) throws IOException {
+            // Called when async processing exceeds the timeout period
+            // Important: We must handle this gracefully and close the connection
+            logger.info("Async processing timed out.");
 
-        // Send error message to client before closing
-        HttpServletResponse response = (HttpServletResponse) event.getAsyncContext().getResponse();
-        response.getWriter().write("event: error\ndata: Timeout occurred\n\n");
-        response.getWriter().flush();
+            // Send error message to client before closing
+            HttpServletResponse response =
+                (HttpServletResponse) event.getAsyncContext().getResponse();
+            response.getWriter().write("event: error\ndata: Timeout occurred\n\n");
+            response.getWriter().flush();
 
-        // Complete the async context to close the connection
-        event.getAsyncContext().complete();
-      }
+            // Complete the async context to close the connection
+            event.getAsyncContext().complete();
+          }
 
-      @Override
-      public void onError(AsyncEvent event) throws IOException {
-        // Called when an error occurs during async processing
-        // Log the error for debugging purposes
-        logger.info("Async processing error: " + event.getThrowable());
-      }
+          @Override
+          public void onError(AsyncEvent event) throws IOException {
+            // Called when an error occurs during async processing
+            // Log the error for debugging purposes
+            logger.info("Async processing error: " + event.getThrowable());
+          }
 
-      @Override
-      public void onStartAsync(AsyncEvent event) throws IOException {
-        // Called when async processing is restarted (rare in typical usage)
-        logger.info("Async cycle restarted.");
-      }
-    });
+          @Override
+          public void onStartAsync(AsyncEvent event) throws IOException {
+            // Called when async processing is restarted (rare in typical usage)
+            logger.info("Async cycle restarted.");
+          }
+        });
 
     // ========== BACKGROUND TASK SCHEDULER ==========
     // Create a thread pool for background processing - this is the key to async servlets
@@ -166,10 +165,10 @@ public class SseServlet extends HttpServlet {
             scheduler.shutdown();
           }
         },
-        1,        // Initial delay: wait 1 second before first iteration
-        1,        // Period: process every 1 second
-        TimeUnit.SECONDS  // Time unit for delays
-    );
+        1, // Initial delay: wait 1 second before first iteration
+        1, // Period: process every 1 second
+        TimeUnit.SECONDS // Time unit for delays
+        );
 
     // ========== METHOD COMPLETION ==========
     // Important: doGet() returns immediately after starting async processing
