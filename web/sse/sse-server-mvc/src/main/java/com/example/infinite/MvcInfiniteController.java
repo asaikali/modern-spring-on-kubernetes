@@ -1,9 +1,11 @@
 package com.example.infinite;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +27,11 @@ public class MvcInfiniteController {
 
   private final Logger logger = LoggerFactory.getLogger(MvcInfiniteController.class);
   private final TaskScheduler scheduler;
+  private final StockPriceService stockPriceService;
 
-  public MvcInfiniteController(TaskScheduler scheduler) {
+  public MvcInfiniteController(TaskScheduler scheduler, StockPriceService stockPriceService) {
     this.scheduler = scheduler;
+    this.stockPriceService = stockPriceService;
   }
 
   /**
@@ -56,7 +60,7 @@ public class MvcInfiniteController {
         () -> {
           try {
             // Generate random stock price update
-            StockPrice stockPrice = StockPrice.generateRandomStockPrice();
+            StockPrice stockPrice = stockPriceService.getCurrentPrice("AAPL");
 
             // Build SSE event with strongly typed object
             SseEventBuilder event =
