@@ -9,3 +9,7 @@ Accept: text/event-stream
 ### MVC infinite events
 GET http://localhost:8080/mvc/stream/infinite
 Accept: text/event-stream
+
+### MVC infinite events
+GET http://localhost:8080/webflux/stream/infinite
+Accept: text/event-stream
