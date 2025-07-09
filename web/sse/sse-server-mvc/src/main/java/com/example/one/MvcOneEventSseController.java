@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +29,11 @@ public class MvcOneEventSseController {
 
   private final Logger logger = LoggerFactory.getLogger(MvcOneEventSseController.class);
 
-  @Autowired private TaskScheduler taskScheduler;
+  private final TaskScheduler taskScheduler;
+
+  public MvcOneEventSseController(TaskScheduler taskScheduler) {
+    this.taskScheduler = taskScheduler;
+  }
 
   /**
    * Creates a single SSE event demonstrating all available SSE fields using a background thread.
@@ -45,6 +48,7 @@ public class MvcOneEventSseController {
 
     // Create the SseEmitter instance with custom timeout (30 seconds)
     // This gives us time to demonstrate the background thread execution
+    // TODO: find out what this timeout really is the docs are very lightweight on details
     final SseEmitter emitter = new SseEmitter(30_000L);
 
     // ==================================================================================
@@ -52,13 +56,13 @@ public class MvcOneEventSseController {
     // ==================================================================================
 
     // onCompletion: Called when the emitter is properly closed/completed
-    emitter.onCompletion(() -> logger.info("SSE connection completed successfully"));
+    emitter.onCompletion(() -> logger.info("SSE stream completed successfully"));
 
     // onTimeout: Called when the emitter times out after 30 seconds
-    emitter.onTimeout(() -> logger.info("SSE connection timed out"));
+    emitter.onTimeout(() -> logger.info("SSE stream timed out"));
 
     // onError: Called when an exception occurs during event emission
-    emitter.onError((e) -> logger.error("SSE connection error occurred", e));
+    emitter.onError((e) -> logger.error("SSE stream error occurred", e));
 
     // ==================================================================================
     // Schedule background thread execution with 1-second delay
@@ -66,14 +70,9 @@ public class MvcOneEventSseController {
 
     // Use the configured TaskScheduler to execute SSE emission in background thread
     // This is the proper way to handle SSE in production - avoid blocking the request thread
-    // The 1-second delay demonstrates scheduled execution and prevents connection issues
     taskScheduler.schedule(
         () -> {
           try {
-            logger.info(
-                "Starting SSE event emission from background thread: {}",
-                Thread.currentThread().getName());
-
             // ==================================================================================
             // STEP 1: Create sample data for demonstration
             // ==================================================================================
@@ -128,7 +127,7 @@ public class MvcOneEventSseController {
 
             // Send the event - this happens from the background thread
             emitter.send(event);
-            logger.info("SSE event sent successfully");
+            logger.info("SSE event sent with the SseEmitter");
 
             // ==================================================================================
             // STEP 4: Complete the connection
@@ -136,11 +135,7 @@ public class MvcOneEventSseController {
 
             // Complete immediately after sending the event
             emitter.complete();
-            logger.info("SSE connection completed gracefully from background thread");
-
-          } catch (IOException e) {
-            logger.error("Error sending SSE event", e);
-            emitter.completeWithError(e);
+            logger.info("SSE stream completed gracefully from background thread");
           } catch (Exception e) {
             logger.error("Unexpected error in SSE background thread", e);
             emitter.completeWithError(e);
