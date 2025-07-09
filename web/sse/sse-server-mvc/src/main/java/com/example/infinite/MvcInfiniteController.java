@@ -18,8 +18,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEvent
  * <p>Streams real-time stock price updates using Jackson for JSON serialization. Focuses on the
  * core SSE fields: event name, id, and data.
  *
+ * <p>/**
+ *
  * <p>Test with: {@code curl -N -H "Accept: text/event-stream"
- * http://localhost:8080/mvc/stream/infinite}
+ * http://localhost:8080/mvc/stream/infinite} or {@code curl -N -H "Accept: text/event-stream"
+ * http://localhost:8080/mvc/stream/infinite?symbol=GOOGL}
  */
 @RestController
 public class MvcInfiniteController {
