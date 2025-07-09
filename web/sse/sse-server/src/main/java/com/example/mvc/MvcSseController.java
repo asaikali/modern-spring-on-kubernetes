@@ -1,9 +1,10 @@
 package com.example.mvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,46 +31,46 @@ public class MvcSseController {
    * with the MDN spec link.
    */
   @GetMapping(path = "/mvc/stream/one", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public SseEmitter streamOneFullSpecEvent() {
-    final String path = "/mvc/stream/one";
+  public SseEmitter streamOneFullSpecEvent() throws IOException {
+
+    //
+    // create a single event that uses all the fields allowed by SSE specification
+    //
+    var userMap = Map.of("firstName", "John", "lastName", "Doe");
+    var userJson = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(userMap);
+
+    SseEmitter.SseEventBuilder event =
+        SseEmitter.event()
+            .comment("This event demonstrates all the fields allowed by SSE events")
+            .comment("payload is multi line notice how an SSE event can preserve formatting")
+            .comment("Check the README.md file in the see folder for an explanation of SSE events")
+            .comment("Event generated from a spring MVC controller /mvc/stream/one")
+            .comment("Emitted from '" + Thread.currentThread().getName() + "' thread")
+            .reconnectTime(5000L)
+            .id("event-1")
+            .name("custom-event-type")
+            .data("Line 1 of data")
+            .data("   Line 2 of data indentation is preserved")
+            .data("   all lines in this event are treated as part of the paylod")
+            .data("")
+            .data(userMap)
+            .data("")
+            .data(userJson);
+
+    //
+    // Typically, an SSE stream emits multiple events from a background thread.
+    // However, for educational purposes, this example focuses on the structure of a single event.
+    // Therefore, we emit just one event directly from the Tomcat thread handling the request,
+    // using Spring MVC's imperative SseEmitter.
+    //
     final SseEmitter emitter = new SseEmitter();
 
     emitter.onCompletion(() -> logger.info("Emitter has been closed"));
     emitter.onTimeout(() -> logger.info("Emitter has timed out"));
     emitter.onError((e) -> logger.error("Emitter has errored out with exception", e));
 
-    logger.info("GET " + path + " executing request");
-    // Question: What exactly does spring do when the emitter is returend, how does it know to keep
-    // the connection open,
-    // whats the lifecycle contract between Spring MVC and the emitter
-
-    this.scheduler.schedule(
-        () -> {
-          try {
-            logger.info(
-                "SseEmitter started on thread "
-                    + Thread.currentThread().getName()
-                    + " for path "
-                    + path);
-            SseEmitter.SseEventBuilder event =
-                SseEmitter.event()
-                    .comment(
-                        "SSE standard fields: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format")
-                    .comment("Emitted from '" + Thread.currentThread().getName() + "' thread")
-                    .reconnectTime(5000L)
-                    .id("event-1")
-                    .name("demo-event-type")
-                    .data("Line 1 of data")
-                    .data("   Line 2 of data indentation is preserved")
-                    .data("   all lines in this event are treated as part of the paylod");
-
-            emitter.send(event);
-            emitter.complete();
-          } catch (IOException ex) {
-            emitter.completeWithError(ex);
-          }
-        },
-        Instant.now());
+    emitter.send(event);
+    emitter.complete();
 
     return emitter;
   }
