@@ -55,10 +55,13 @@ public class MvcSseController {
                 SseEmitter.event()
                     .comment(
                         "SSE standard fields: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format")
+                    .comment("Emitted from '" + Thread.currentThread().getName() + "' thread")
                     .reconnectTime(5000L)
                     .id("event-1")
                     .name("demo-event-type")
-                    .data("This is the event data");
+                    .data("Line 1 of data")
+                    .data("   Line 2 of data indentation is preserved")
+                    .data("   all lines in this event are treated as part of the paylod");
 
             emitter.send(event);
             emitter.complete();
