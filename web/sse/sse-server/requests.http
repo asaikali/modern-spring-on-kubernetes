@@ -13,7 +13,7 @@ Content-Type: application/json
 GET http://localhost:8080/mvc/stream/one
 Accept: text/event-stream
 
-### MVC one event
+### WebFlux one event
 GET http://localhost:8080/webflux/stream/one
 Accept: text/event-stream
 

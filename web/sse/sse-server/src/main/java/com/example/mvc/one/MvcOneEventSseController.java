@@ -35,8 +35,8 @@ public class MvcOneEventSseController {
   /**
    * Creates a single SSE event demonstrating all available SSE fields using a background thread.
    *
-   * <p>This version uses a background thread to emit the event with a 1-second delay to
-   * demonstrate proper SSE field usage.
+   * <p>This version uses a background thread to emit the event with a 1-second delay to demonstrate
+   * proper SSE field usage.
    *
    * @return SseEmitter configured to send one complete SSE event from a background thread
    */
@@ -116,7 +116,8 @@ public class MvcOneEventSseController {
                     .data("") // Empty lines are valid and preserved in SSE
                     .data(userMap) // SpringMVC picks Jackson converter for Map objects
                     .data("")
-                    .data(userMap, APPLICATION_JSON) // Explicitly specify APPLICATION_JSON MediaType
+                    .data(
+                        userMap, APPLICATION_JSON) // Explicitly specify APPLICATION_JSON MediaType
                     .data("")
                     .data(userJson) // Pre-formatted JSON string
                     .data("if you see this the whole event made it");
