@@ -1,4 +1,4 @@
-package com.example.mvc;
+package com.example.infinite;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,13 +13,13 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
 
 @RestController
-public class MvcSseController {
+public class MvcInfiniteController {
 
-  private final Logger logger = LoggerFactory.getLogger(MvcSseController.class);
+  private final Logger logger = LoggerFactory.getLogger(MvcInfiniteController.class);
 
   private final TaskScheduler scheduler;
 
-  public MvcSseController(TaskScheduler scheduler) {
+  public MvcInfiniteController(TaskScheduler scheduler) {
     this.scheduler = scheduler;
   }
 

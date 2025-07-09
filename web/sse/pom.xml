@@ -14,7 +14,8 @@
 	<description>Explore SSE support in spring</description>
 	
 	<modules>
-		<module>sse-server</module>
+		<module>sse-server-mvc</module>
+		<module>sse-server-webflux</module>
 		<module>sse-client</module>
 	</modules>
 </project>

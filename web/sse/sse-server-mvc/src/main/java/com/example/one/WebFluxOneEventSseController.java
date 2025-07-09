@@ -1,4 +1,4 @@
-package com.example.mvc.one;
+package com.example.one;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
