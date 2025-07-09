@@ -120,7 +120,7 @@ public class MvcOneEventSseController {
                         userMap, APPLICATION_JSON) // Explicitly specify APPLICATION_JSON MediaType
                     .data("")
                     .data(userJson) // Pre-formatted JSON string
-                    .data("if you see this the whole event made it");
+                    .data("last data line");
 
             // ==================================================================================
             // STEP 3: Send the event from background thread

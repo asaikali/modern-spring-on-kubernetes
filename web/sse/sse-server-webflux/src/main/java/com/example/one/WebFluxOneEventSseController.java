@@ -86,34 +86,36 @@ public class WebFluxOneEventSseController {
       // COMMENTS: Lines starting with ':' in SSE stream
       // Spring's auto-formatting isn't working, so we'll bypass it entirely
       // and build the raw SSE string manually
-      String comments = """
+      String comments =
+          """
               This event demonstrates all the fields allowed by SSE events
               payload is multi line notice how an SSE event can preserve formatting
               Check the README.md file in the see folder for an explanation of SSE events
               Event generated from a WebFlux controller /webflux/stream/one
-              Emitted from '%s' thread""".formatted(Thread.currentThread().getName());
-
+              Emitted from '%s' thread"""
+              .formatted(Thread.currentThread().getName());
 
       // Don't use .comment() since it's not working properly
       // We'll need to include comments in the raw response or find another approach
 
-      var event = ServerSentEvent.<String>builder()
-          // Skip comments for now - they're not working as expected
+      var event =
+          ServerSentEvent.<String>builder()
+              // Skip comments for now - they're not working as expected
 
-          // EVENT ID: 'id: event-1' in SSE stream
-          .id("event-1")
+              // EVENT ID: 'id: event-1' in SSE stream
+              .id("event-1")
 
-          // EVENT NAME/TYPE: 'event: custom-event-type' in SSE stream
-          .event("custom-event-type")
+              // EVENT NAME/TYPE: 'event: custom-event-type' in SSE stream
+              .event("custom-event-type")
 
-          // RETRY/RECONNECT TIME: 'retry: 5000' in SSE stream
-          .retry(Duration.ofSeconds(5))
-          .comment(comments)
+              // RETRY/RECONNECT TIME: 'retry: 5000' in SSE stream
+              .retry(Duration.ofSeconds(5))
+              .comment(comments)
 
-          // DATA: The actual payload sent to the client
-          // Multi-line data is automatically split into multiple 'data:' lines
-          .data(eventData)
-          .build();
+              // DATA: The actual payload sent to the client
+              // Multi-line data is automatically split into multiple 'data:' lines
+              .data(eventData)
+              .build();
 
       System.out.println(event.format());
       return event;

@@ -1,5 +1,6 @@
 package com.example.one;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
 import java.util.Map;
@@ -27,25 +28,22 @@ public class WebFluxOneEventSseController {
 
   /**
    * Creates a single SSE event demonstrating all available SSE fields using WebFlux reactive
-   * streams.
-   *
-   * <p>This version creates the event directly and uses reactive operators for timing and logging.
-   * Demonstrates all SSE specification fields including comments, id, event type, retry, and data.
+   * streams. However, this is still a SpringMVC servlet-based controller, even though it is using
+   * reactive types.
    *
    * @return Flux of ServerSentEvent containing one complete SSE event
    */
   @GetMapping(path = "/webflux/stream/one", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public Flux<ServerSentEvent<String>> streamOneFullSpecEvent() {
-
-    logger.info("Creating WebFlux SSE event on thread: {}", Thread.currentThread().getName());
+  public Flux<ServerSentEvent<String>> streamOneFullSpecEvent() throws JsonProcessingException {
 
     // Create the event directly - happens immediately when method is called
     ServerSentEvent<String> event = createSseEvent();
 
     return Flux.just(event)
-        .doOnNext(e -> logger.info("WebFlux SSE event created successfully"))
-        .delayElements(Duration.ofSeconds(1))
-        .doOnNext(e -> logger.info("Emitting WebFlux SSE event"));
+        .doOnSubscribe(sub -> logger.info("SSE stream subscribed"))
+        .doOnNext(e -> logger.info("Emitting SSE event"))
+        .doOnError(e -> logger.error("Error in the SSE stream", e))
+        .doOnComplete(() -> logger.info("SSE stream completed"));
   }
 
   /**
@@ -53,22 +51,20 @@ public class WebFluxOneEventSseController {
    *
    * @return ServerSentEvent with all SSE fields populated
    */
-  private ServerSentEvent<String> createSseEvent() {
-    try {
-      // ==================================================================================
-      // STEP 1: Create sample data for demonstration
-      // ==================================================================================
+  private ServerSentEvent<String> createSseEvent() throws JsonProcessingException {
+    // ==================================================================================
+    // STEP 1: Create sample data for demonstration
+    // ==================================================================================
 
-      var userMap = Map.of("firstName", "John", "lastName", "Doe");
-      var userJson =
-          new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(userMap);
+    var userMap = Map.of("firstName", "John", "lastName", "Doe");
+    var userJson = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(userMap);
 
-      // ==================================================================================
-      // STEP 2: Build comprehensive SSE event data with multi-line content
-      // ==================================================================================
+    // ==================================================================================
+    // STEP 2: Build comprehensive SSE event data with multi-line content
+    // ==================================================================================
 
-      String eventData =
-          """
+    String eventData =
+        """
           Line 1 of data
              Line 2 of data indentation is preserved
              all lines in this event are treated as part of the payload
@@ -76,50 +72,27 @@ public class WebFluxOneEventSseController {
           %s
 
           %s
-          if you see this the whole event made it"""
-              .formatted(userMap.toString(), userJson);
+          last data line"""
+            .formatted(userMap.toString(), userJson);
 
-      // ==================================================================================
-      // STEP 3: Build ServerSentEvent with ALL SSE fields including comments
-      // ==================================================================================
-
-      // COMMENTS: Lines starting with ':' in SSE stream
-      // Spring's auto-formatting isn't working, so we'll bypass it entirely
-      // and build the raw SSE string manually
-      String comments = """
+    // ==================================================================================
+    // STEP 3: Build ServerSentEvent with ALL SSE fields including comments
+    // ==================================================================================
+    String comments =
+        """
               This event demonstrates all the fields allowed by SSE events
               payload is multi line notice how an SSE event can preserve formatting
               Check the README.md file in the see folder for an explanation of SSE events
               Event generated from a WebFlux controller /webflux/stream/one
-              Emitted from '%s' thread""".formatted(Thread.currentThread().getName());
+              Emitted from '%s' thread"""
+            .formatted(Thread.currentThread().getName());
 
-
-      // Don't use .comment() since it's not working properly
-      // We'll need to include comments in the raw response or find another approach
-
-      var event = ServerSentEvent.<String>builder()
-          // Skip comments for now - they're not working as expected
-
-          // EVENT ID: 'id: event-1' in SSE stream
-          .id("event-1")
-
-          // EVENT NAME/TYPE: 'event: custom-event-type' in SSE stream
-          .event("custom-event-type")
-
-          // RETRY/RECONNECT TIME: 'retry: 5000' in SSE stream
-          .retry(Duration.ofSeconds(5))
-          .comment(comments)
-
-          // DATA: The actual payload sent to the client
-          // Multi-line data is automatically split into multiple 'data:' lines
-          .data(eventData)
-          .build();
-
-      System.out.println(event.format());
-      return event;
-    } catch (Exception e) {
-      logger.error("Error creating WebFlux SSE event", e);
-      throw new RuntimeException("Failed to create SSE event", e);
-    }
+    return ServerSentEvent.<String>builder()
+        .comment(comments)
+        .id("event-1")
+        .event("custom-event-type")
+        .retry(Duration.ofSeconds(5))
+        .data(eventData)
+        .build();
   }
 }
