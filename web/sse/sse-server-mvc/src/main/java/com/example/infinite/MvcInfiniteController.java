@@ -40,10 +40,8 @@ public class MvcInfiniteController {
    */
   @GetMapping(path = "/mvc/stream/infinite", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public SseEmitter infinite() {
-    final String path = "/mvc/stream/infinite";
-    logger.info("GET {} - Starting infinite stock price stream", path);
-
     // Set timeout to 0 for infinite stream (no timeout)
+    // TODO: the docs are light I guessed that 0 means infinite
     final SseEmitter emitter = new SseEmitter(0L);
 
     // Set up lifecycle event handlers
@@ -68,9 +66,6 @@ public class MvcInfiniteController {
                     .data(stockPrice); // Jackson will serialize StockPrice to JSON
 
             emitter.send(event);
-            logger.debug(
-                "Sent stock price update: {} at ${}", stockPrice.symbol(), stockPrice.price());
-
           } catch (Exception e) {
             logger.error("Error sending stock price update", e);
             emitter.completeWithError(e);
