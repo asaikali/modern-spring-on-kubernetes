@@ -1,14 +1,13 @@
 package com.example.infinite;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
@@ -43,7 +42,7 @@ public class MvcInfiniteController {
    * @return SseEmitter that streams stock price updates indefinitely
    */
   @GetMapping(path = "/mvc/stream/infinite", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public SseEmitter infinite() {
+  public SseEmitter infinite(@RequestParam(defaultValue = "AAPL") String symbol) {
     // Set timeout to 0 for infinite stream (no timeout)
     // TODO: the docs are light I guessed that 0 means infinite
     final SseEmitter emitter = new SseEmitter(0L);
@@ -60,7 +59,7 @@ public class MvcInfiniteController {
         () -> {
           try {
             // Generate random stock price update
-            StockPrice stockPrice = stockPriceService.getCurrentPrice("AAPL");
+            StockPrice stockPrice = stockPriceService.getCurrentPrice(symbol);
 
             // Build SSE event with strongly typed object
             SseEventBuilder event =
