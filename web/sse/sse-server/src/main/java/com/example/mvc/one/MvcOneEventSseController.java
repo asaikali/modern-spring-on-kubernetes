@@ -16,36 +16,10 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEvent
 /**
  * Educational Spring MVC controller demonstrating Server-Sent Events (SSE).
  *
- * <p>This controller shows how to create and emit SSE events using Spring's SseEmitter.
- * SSE is a web standard that allows a server to push data to a client over a single
- * HTTP connection in real-time.
+ * <p>Shows how to create and emit SSE events using Spring's SseEmitter with all available SSE
+ * specification fields.
  *
- * <p><strong>To test this endpoint:</strong>
- * <ul>
- *   <li>Start the application and navigate to: GET /mvc/stream/one</li>
- *   <li>Use curl: {@code curl -N -H "Accept: text/event-stream" http://localhost:8080/mvc/stream/one}</li>
- *   <li>Open browser dev tools Network tab to see the SSE response format</li>
- * </ul>
- *
- * <p><strong>Expected SSE output format:</strong>
- * <pre>
- * : This event demonstrates all the fields allowed by SSE events
- * retry: 5000
- * id: event-1
- * event: custom-event-type
- * data: Line 1 of data
- * data:    Line 2 of data indentation is preserved
- * data:
- * data: {firstName=John, lastName=Doe}
- * data:
- * data: {
- * data:   "firstName" : "John",
- * data:   "lastName" : "Doe"
- * data: }
- * </pre>
- *
- * @author Educational Example
- * @see <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events">MDN SSE Documentation</a>
+ * <p>Test with: {@code curl -N -H "Accept: text/event-stream" http://localhost:8080/mvc/stream/one}
  */
 @RestController
 public class MvcOneEventSseController {
@@ -53,32 +27,12 @@ public class MvcOneEventSseController {
   private final Logger logger = LoggerFactory.getLogger(MvcOneEventSseController.class);
 
   /**
-   * Educational example demonstrating Server-Sent Events (SSE) with Spring MVC.
+   * Creates a single SSE event demonstrating all available SSE fields.
    *
-   * <p>This method creates and emits a single comprehensive SSE event that showcases
-   * all available fields in the SSE specification. In production, SSE streams typically
-   * emit multiple events over time from background threads.
-   *
-   * <p><strong>SSE Event Fields Demonstrated:</strong>
-   * <ul>
-   *   <li><strong>Comments:</strong> Lines starting with ':' - not sent to client as data</li>
-   *   <li><strong>Retry:</strong> Reconnection time in milliseconds</li>
-   *   <li><strong>ID:</strong> Unique event identifier for client-side tracking</li>
-   *   <li><strong>Event:</strong> Custom event type name</li>
-   *   <li><strong>Data:</strong> The actual payload (can be multi-line)</li>
-   * </ul>
-   *
-   * <p><strong>Client-side JavaScript example:</strong>
-   * <pre>{@code
-   * const eventSource = new EventSource('/mvc/stream/one');
-   * eventSource.addEventListener('custom-event-type', function(event) {
-   *   console.log('Received event:', event.data);
-   *   console.log('Event ID:', event.lastEventId);
-   * });
-   * }</pre>
+   * <p>In production, SSE streams typically emit multiple events over time from background threads.
+   * This example emits one event for educational purposes.
    *
    * @return SseEmitter configured to send one complete SSE event
-   * @throws IOException if there's an error during JSON serialization
    */
   @GetMapping(path = "/mvc/stream/one", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public SseEmitter streamOneFullSpecEvent() throws IOException {
@@ -137,11 +91,13 @@ public class MvcOneEventSseController {
             .data("   Line 2 of data indentation is preserved") // Whitespace is preserved
             .data("   all lines in this event are treated as part of the paylod")
             .data("") // Empty lines are valid and preserved in SSE (creates blank data: line)
-            .data(userMap) // SpringMVC guesses what media type to serialze too
+            .data(userMap) // SpringMVC guesses what media type to serialize to
             .data("")
-            .data((Object)userMap, TEXT_EVENT_STREAM) // help spring MVC pick the right convertor
+            .data((Object) userMap, TEXT_EVENT_STREAM) // Help Spring MVC pick the right converter
             .data("") // Another empty line for formatting
-            .data(userJson); // Pre-formatted JSON string
+            .data(userJson) // Pre-formatted JSON string
+            .data("if you see this the whole event made it"); // visual market to show end of event
+
 
     // ==================================================================================
     // STEP 3: Create and configure the SseEmitter
@@ -153,7 +109,7 @@ public class MvcOneEventSseController {
     // Therefore, we emit just one event directly from the Tomcat thread handling the request,
     // using Spring MVC's imperative SseEmitter.
 
-    // Create the SseEmitter instance that will handle the SSE connection
+    // Create the SseEmitter instance with custom timeout (10 seconds)
     // SseEmitter manages the HTTP response and connection lifecycle
     final SseEmitter emitter = new SseEmitter(10_000L);
 
@@ -166,8 +122,7 @@ public class MvcOneEventSseController {
     // - Good place for cleanup operations
     emitter.onCompletion(() -> logger.info("SSE connection completed successfully"));
 
-    // onTimeout: Called when the emitter times out
-    // - Default timeout is 30 seconds, can be customized: new SseEmitter(60000L)
+    // onTimeout: Called when the emitter times out after 10 seconds
     // - Automatic cleanup happens after timeout
     emitter.onTimeout(() -> logger.info("SSE connection timed out"));
 
@@ -185,14 +140,15 @@ public class MvcOneEventSseController {
     // The event is immediately flushed to the client
     emitter.send(event);
 
+
     // Mark the emitter as complete, which closes the SSE connection
     // In a real streaming scenario, you wouldn't call complete() immediately
     // Instead, you'd keep the connection open and send events over time
-    emitter.complete();
+    // we are not calling it so we don't generate a network error
+    // emitter.complete();
 
     // Return the emitter to Spring MVC for response handling
     // Spring will manage the HTTP response headers and connection lifecycle
-    // Required headers: Content-Type: text/event-stream, Cache-Control: no-cache
     return emitter;
   }
 }
