@@ -1,13 +1,14 @@
 package com.example.mvc;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -18,6 +19,12 @@ public class MvcSseController {
 
   private final Logger logger = LoggerFactory.getLogger(MvcSseController.class);
 
+  private final TaskScheduler scheduler;
+
+  public MvcSseController(TaskScheduler scheduler) {
+    this.scheduler = scheduler;
+  }
+
   /**
    * Endpoint: /mvc/stream/one Sends a single SSE event including all standard fields and a comment
    * with the MDN spec link.
@@ -25,7 +32,7 @@ public class MvcSseController {
   @GetMapping(path = "/mvc/stream/one", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public SseEmitter streamOneFullSpecEvent() {
     final String path = "/mvc/stream/one";
-    final SseEmitter emitter = new SseEmitter(60_000l);
+    final SseEmitter emitter = new SseEmitter();
 
     emitter.onCompletion(() -> logger.info("Emitter has been closed"));
     emitter.onTimeout(() -> logger.info("Emitter has timed out"));
@@ -36,33 +43,30 @@ public class MvcSseController {
     // the connection open,
     // whats the lifecycle contract between Spring MVC and the emitter
 
-    Executors.newSingleThreadScheduledExecutor()
-        .scheduleAtFixedRate(
-            () -> {
-              try {
-                logger.info(
-                    "SseEmitter started on thread "
-                        + Thread.currentThread().getName()
-                        + " for path "
-                        + path);
-                SseEmitter.SseEventBuilder event =
-                    SseEmitter.event()
-                        .comment(
-                            "SSE standard fields: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format")
-                        .reconnectTime(5000L)
-                        .id("event-1")
-                        .name("demo-event-type")
-                        .data("This is the event data");
+    this.scheduler.schedule(
+        () -> {
+          try {
+            logger.info(
+                "SseEmitter started on thread "
+                    + Thread.currentThread().getName()
+                    + " for path "
+                    + path);
+            SseEmitter.SseEventBuilder event =
+                SseEmitter.event()
+                    .comment(
+                        "SSE standard fields: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format")
+                    .reconnectTime(5000L)
+                    .id("event-1")
+                    .name("demo-event-type")
+                    .data("This is the event data");
 
-                emitter.send(event);
-                emitter.complete();
-              } catch (IOException ex) {
-                emitter.completeWithError(ex);
-              }
-            },
-            0,
-            1,
-            TimeUnit.SECONDS);
+            emitter.send(event);
+            emitter.complete();
+          } catch (IOException ex) {
+            emitter.completeWithError(ex);
+          }
+        },
+        Instant.now());
 
     return emitter;
   }
@@ -80,28 +84,27 @@ public class MvcSseController {
     // Add event handlers for debugging
     emitter.onCompletion(() -> logger.info("Infinite stream emitter has been closed"));
     emitter.onTimeout(() -> logger.info("Infinite stream emitter has timed out"));
-    emitter.onError((e) -> logger.error("Infinite stream emitter has errored out with exception", e));
+    emitter.onError(
+        (e) -> logger.error("Infinite stream emitter has errored out with exception", e));
     AtomicInteger count = new AtomicInteger();
-    Executors.newSingleThreadScheduledExecutor()
-        .scheduleAtFixedRate(
-            () -> {
-              try {
-                SseEventBuilder builder =
-                    SseEmitter.event()
-                        .data(LocalDateTime.now())
-                        .id(String.valueOf(count.getAndIncrement()))
-                        .comment("example comment")
-                        .reconnectTime(1000)
-                        .name("mvc/stream/infinite");
 
-                emitter.send(builder);
-              } catch (Exception e) {
-                emitter.completeWithError(e);
-              }
-            },
-            0,
-            1,
-            TimeUnit.SECONDS);
+    this.scheduler.scheduleAtFixedRate(
+        () -> {
+          try {
+            SseEventBuilder builder =
+                SseEmitter.event()
+                    .data(LocalDateTime.now())
+                    .id(String.valueOf(count.getAndIncrement()))
+                    .comment("Emitted from '" + Thread.currentThread().getName() + "' thread")
+                    .reconnectTime(1000)
+                    .name("mvc/stream/infinite");
+
+            emitter.send(builder);
+          } catch (Exception e) {
+            emitter.completeWithError(e);
+          }
+        },
+        Duration.ofSeconds(1));
 
     return emitter;
   }
