@@ -14,6 +14,10 @@ Accept: text/event-stream
 GET http://localhost:8080/webflux/stream/infinite
 Accept: text/event-stream
 
-### Asyc Servlet
-GET http://localhost:8080/servlet/async?count=10
+### Asyc Servlet success
+GET http://localhost:8080/servlet/async?count=8
+Accept: text/event-stream
+
+### Asyc Servlet failure due to 10 second timetout
+GET http://localhost:8080/servlet/async?count=80
 Accept: text/event-stream
