@@ -5,6 +5,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.scheduler.Schedulers;
 import reactor.util.retry.Retry;
 
 public class ConsumeForever {
@@ -12,19 +13,26 @@ public class ConsumeForever {
   public static void main(String[] args) throws InterruptedException {
     WebClient client = WebClient.create("http://localhost:8080");
 
-    client.get()
+    client
+        .get()
         .uri("/mvc/stream/infinite")
         .accept(MediaType.TEXT_EVENT_STREAM)
         .retrieve()
         .bodyToFlux(new ParameterizedTypeReference<ServerSentEvent<String>>() {})
-        .retryWhen(Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(1))
-            .maxBackoff(Duration.ofSeconds(30)))
+        .retryWhen(
+            Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(1)).maxBackoff(Duration.ofSeconds(30)))
+        .doOnNext(
+            event -> System.out.println("Current Thread: " + Thread.currentThread().getName()))
+        .publishOn(Schedulers.boundedElastic())
+        .doOnNext(
+            event -> System.out.println("Current Thread: " + Thread.currentThread().getName()))
         .subscribe(
             event -> {
               System.out.println("<SSEEvent>");
 
               System.out.println("  <id>" + (event.id() != null ? event.id() : "") + "</id>");
-              System.out.println("  <event>" + (event.event() != null ? event.event() : "") + "</event>");
+              System.out.println(
+                  "  <event>" + (event.event() != null ? event.event() : "") + "</event>");
 
               String data = event.data();
               System.out.println("  <data>");
@@ -33,7 +41,8 @@ public class ConsumeForever {
               }
               System.out.println("  </data>");
 
-              System.out.println("  <retry>" + (event.retry() != null ? event.retry() : "") + "</retry>");
+              System.out.println(
+                  "  <retry>" + (event.retry() != null ? event.retry() : "") + "</retry>");
 
               String comment = event.comment();
               System.out.println("  <comment>");
@@ -43,13 +52,9 @@ public class ConsumeForever {
               System.out.println("  </comment>");
 
               System.out.println("</SSEEvent>\n");
-
-
             },
             error -> System.err.println("Error: " + error),
-            () -> System.out.println("Stream completed")
-        );
-
+            () -> System.out.println("Stream completed"));
 
     // Keep application alive for demo
     Thread.sleep(60_000);

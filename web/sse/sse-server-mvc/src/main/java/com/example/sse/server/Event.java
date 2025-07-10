@@ -1,3 +1,3 @@
-package com.example.sse.stream;
+package com.example.sse.server;
 
 public record Event(EventId id, String value) {}

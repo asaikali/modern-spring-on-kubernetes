@@ -15,22 +15,20 @@ public class ConsumeUntil {
     WebClient client = WebClient.create("http://localhost:8080");
 
     BigDecimal targetPrice = new BigDecimal("109");
-    client.get()
+    client
+        .get()
         .uri("/mvc/stream/infinite")
         .accept(MediaType.TEXT_EVENT_STREAM)
         .retrieve()
         .bodyToFlux(new ParameterizedTypeReference<ServerSentEvent<StockPrice>>() {})
-        .retryWhen(Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(1))
-            .maxBackoff(Duration.ofSeconds(30)))
-        .takeUntil( event -> targetPrice.compareTo(event.data().price()) <= 0)
+        .retryWhen(Retry.backoff(3, Duration.ofSeconds(1)).maxBackoff(Duration.ofSeconds(30)))
+        .takeUntil(event -> targetPrice.compareTo(event.data().price()) <= 0)
         .subscribe(
             event -> {
               System.out.println(event.data());
             },
             error -> System.err.println("Error: " + error),
-            () -> System.out.println("Stream completed")
-        );
-
+            () -> System.out.println("Stream completed"));
 
     // Keep application alive for demo
     Thread.sleep(60_000);

@@ -1,19 +1,18 @@
 package com.example.resumable;
 
-import com.example.sse.stream.*;
-import com.example.sse.stream.simple.InMemoryEventStreamRepository;
+import com.example.sse.server.*;
+import com.example.sse.server.simple.InMemoryEventStreamRepository;
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.util.List;
 
 @Service
 public class WatchListService {
@@ -23,8 +22,7 @@ public class WatchListService {
   private final StockPriceService stockPriceService;
   private final EventStreamRepository repository;
 
-  public WatchListService(TaskScheduler scheduler,
-                          StockPriceService stockPriceService) {
+  public WatchListService(TaskScheduler scheduler, StockPriceService stockPriceService) {
     this.scheduler = scheduler;
     this.stockPriceService = stockPriceService;
     this.repository = new InMemoryEventStreamRepository();
@@ -40,8 +38,10 @@ public class WatchListService {
     EventId startingEventId = EventId.fromString(lastEventIdStr);
     StreamId streamId = startingEventId.streamId();
 
-    EventStream stream = repository.get(streamId)
-        .orElseThrow(() -> new IllegalArgumentException("Stream not found: " + streamId));
+    EventStream stream =
+        repository
+            .get(streamId)
+            .orElseThrow(() -> new IllegalArgumentException("Stream not found: " + streamId));
 
     SseEmitter emitter = createEmitter(stream);
 
@@ -49,10 +49,8 @@ public class WatchListService {
     List<Event> missed = stream.readAfter(startingEventId);
     try {
       for (Event event : missed) {
-        emitter.send(SseEmitter.event()
-            .id(event.id().toString())
-            .name("stock-price")
-            .data(event.value()));
+        emitter.send(
+            SseEmitter.event().id(event.id().toString()).name("stock-price").data(event.value()));
       }
     } catch (IOException e) {
       emitter.completeWithError(e);
@@ -82,43 +80,43 @@ public class WatchListService {
   }
 
   private void scheduleStockPriceUpdates(SseEmitter emitter, EventStream stream, String symbol) {
-    scheduler.scheduleAtFixedRate(() -> {
-      try {
-        StockPrice price = stockPriceService.getCurrentPrice(symbol);
-        String value = price.toString(); // Replace with JSON serialization if needed
+    scheduler.scheduleAtFixedRate(
+        () -> {
+          try {
+            StockPrice price = stockPriceService.getCurrentPrice(symbol);
+            String value = price.toString(); // Replace with JSON serialization if needed
 
-        Event event = stream.append(value);
+            Event event = stream.append(value);
 
-        SseEventBuilder builder = SseEmitter.event()
-            .id(event.id().toString())
-            .name("stock-price")
-            .data(value);
+            SseEventBuilder builder =
+                SseEmitter.event().id(event.id().toString()).name("stock-price").data(value);
 
-        emitter.send(builder);
-      } catch (Exception e) {
-        logger.error("Error sending stock price update", e);
-        emitter.completeWithError(e);
-      }
-    }, Duration.ofSeconds(1));
+            emitter.send(builder);
+          } catch (Exception e) {
+            logger.error("Error sending stock price update", e);
+            emitter.completeWithError(e);
+          }
+        },
+        Duration.ofSeconds(1));
   }
 
   private void scheduleStockPriceUpdates(SseEmitter emitter, EventStream stream) {
-    scheduler.scheduleAtFixedRate(() -> {
-      try {
-        String value = "update at " + System.currentTimeMillis(); // Placeholder
+    scheduler.scheduleAtFixedRate(
+        () -> {
+          try {
+            String value = "update at " + System.currentTimeMillis(); // Placeholder
 
-        Event event = stream.append(value);
+            Event event = stream.append(value);
 
-        SseEventBuilder builder = SseEmitter.event()
-            .id(event.id().toString())
-            .name("stock-price")
-            .data(value);
+            SseEventBuilder builder =
+                SseEmitter.event().id(event.id().toString()).name("stock-price").data(value);
 
-        emitter.send(builder);
-      } catch (Exception e) {
-        logger.error("Error sending stock price update", e);
-        emitter.completeWithError(e);
-      }
-    }, Duration.ofSeconds(1));
+            emitter.send(builder);
+          } catch (Exception e) {
+            logger.error("Error sending stock price update", e);
+            emitter.completeWithError(e);
+          }
+        },
+        Duration.ofSeconds(1));
   }
 }

@@ -14,31 +14,31 @@ import reactor.util.retry.Retry;
 public class ConsumeRedirectedUntil {
 
   public static void main(String[] args) throws InterruptedException {
-    HttpClient httpClient = HttpClient.create()
-        .followRedirect(true); // enables automatic redirect following
+    HttpClient httpClient =
+        HttpClient.create().followRedirect(true); // enables automatic redirect following
 
-    WebClient client = WebClient.builder()
-        .baseUrl("http://localhost:8080")
-        .clientConnector(new ReactorClientHttpConnector(httpClient))
-        .build();
+    WebClient client =
+        WebClient.builder()
+            .baseUrl("http://localhost:8080")
+            .clientConnector(new ReactorClientHttpConnector(httpClient))
+            .build();
 
     BigDecimal targetPrice = new BigDecimal("109");
-    client.get()
+    client
+        .get()
         .uri("/test/redirect")
         .accept(MediaType.TEXT_EVENT_STREAM)
         .retrieve()
         .bodyToFlux(new ParameterizedTypeReference<ServerSentEvent<StockPrice>>() {})
-        .retryWhen(Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(1))
-            .maxBackoff(Duration.ofSeconds(30)))
-        .takeUntil( event -> targetPrice.compareTo(event.data().price()) <= 0)
+        .retryWhen(
+            Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(1)).maxBackoff(Duration.ofSeconds(30)))
+        .takeUntil(event -> targetPrice.compareTo(event.data().price()) <= 0)
         .subscribe(
             event -> {
               System.out.println(event.data());
             },
             error -> System.err.println("Error: " + error),
-            () -> System.out.println("Stream completed")
-        );
-
+            () -> System.out.println("Stream completed"));
 
     // Keep application alive for demo
     Thread.sleep(60_000);

@@ -9,6 +9,4 @@ public class SseClient {
   public SseClient(WebClient webClient) {
     this.webClient = webClient;
   }
-
-
 }
