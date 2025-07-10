@@ -1,4 +1,4 @@
-package com.example.infinite;
+package com.example.test;
 
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,40 +15,30 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
 
-/**
- * Educational Spring MVC controller demonstrating infinite SSE streams with strongly typed objects.
- *
- * <p>Streams real-time stock price updates using Jackson for JSON serialization. Focuses on the
- * core SSE fields: event name, id, and data.
- *
- * <p>/**
- *
- * <p>Test with: {@code curl -N -H "Accept: text/event-stream"
- * http://localhost:8080/mvc/stream/infinite} or {@code curl -N -H "Accept: text/event-stream"
- * http://localhost:8080/mvc/stream/infinite?symbol=GOOGL}
- */
-@RestController
-public class MvcInfiniteController {
 
-  private final Logger logger = LoggerFactory.getLogger(MvcInfiniteController.class);
+@RestController
+public class RedirectStreamController {
+
+  private final Logger logger = LoggerFactory.getLogger(RedirectStreamController.class);
   private final TaskScheduler scheduler;
   private final StockPriceService stockPriceService;
 
-  public MvcInfiniteController(TaskScheduler scheduler, StockPriceService stockPriceService) {
+  public RedirectStreamController(TaskScheduler scheduler, StockPriceService stockPriceService) {
     this.scheduler = scheduler;
     this.stockPriceService = stockPriceService;
   }
 
-  /**
-   * Infinite SSE stream endpoint that emits stock price updates every second.
-   *
-   * <p>Demonstrates real-world usage with strongly typed Java objects serialized to JSON. Uses only
-   * the essential SSE fields: event name, id, and data.
-   *
-   * @return SseEmitter that streams stock price updates indefinitely
-   */
-  @GetMapping(path = "/mvc/stream/infinite", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public SseEmitter infinite(@RequestParam(defaultValue = "AAPL") String symbol) {
+  @GetMapping(path = "/test/redirect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public ResponseEntity<Void> redirect(@RequestParam(defaultValue = "AAPL") String symbol) {
+    String targetUrl = "/test/stream/stocks/stream?symbol=" + symbol;
+    return ResponseEntity
+        .status(302)
+        .header("Location", targetUrl)
+        .build();
+  }
+
+  @GetMapping(path = "/test/stream/stocks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public SseEmitter stockPrices(@RequestParam(defaultValue = "AAPL") String symbol) {
     // Set timeout to 0 for infinite stream (no timeout)
     // per the spec https://jakarta.ee/specifications/servlet/6.1/jakarta-servlet-spec-6.1
     //  If the timeout is not specified via the call to setTimeout, 30000 is used as the default. A

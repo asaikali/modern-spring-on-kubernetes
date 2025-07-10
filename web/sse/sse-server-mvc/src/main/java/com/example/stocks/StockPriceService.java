@@ -1,4 +1,4 @@
-package com.example.infinite;
+package com.example.stocks;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -5,18 +5,26 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 import reactor.util.retry.Retry;
 
-public class ConsumeUntil {
+public class ConsumeRedirectedUntil {
 
   public static void main(String[] args) throws InterruptedException {
-    WebClient client = WebClient.create("http://localhost:8080");
+    HttpClient httpClient = HttpClient.create()
+        .followRedirect(true); // enables automatic redirect following
+
+    WebClient client = WebClient.builder()
+        .baseUrl("http://localhost:8080")
+        .clientConnector(new ReactorClientHttpConnector(httpClient))
+        .build();
 
     BigDecimal targetPrice = new BigDecimal("109");
     client.get()
-        .uri("/mvc/stream/infinite")
+        .uri("/test/redirect")
         .accept(MediaType.TEXT_EVENT_STREAM)
         .retrieve()
         .bodyToFlux(new ParameterizedTypeReference<ServerSentEvent<StockPrice>>() {})

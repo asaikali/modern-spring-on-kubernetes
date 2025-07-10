@@ -21,3 +21,12 @@ Accept: text/event-stream
 ### Asyc Servlet failure due to 10 second timetout
 GET http://localhost:8080/servlet/async?count=80
 Accept: text/event-stream
+
+### Create a new watchlist stream for AAPL
+POST http://localhost:8080/watchlist
+Content-Type: application/json
+Accept: text/event-stream
+
+{
+  "symbol": "AAPL"
+}
