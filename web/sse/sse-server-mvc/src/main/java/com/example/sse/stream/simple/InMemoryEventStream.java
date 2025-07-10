@@ -1,5 +1,9 @@
-package com.example.sse.stream;
+package com.example.sse.stream.simple;
 
+import com.example.sse.stream.Event;
+import com.example.sse.stream.EventId;
+import com.example.sse.stream.EventStream;
+import com.example.sse.stream.StreamId;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;

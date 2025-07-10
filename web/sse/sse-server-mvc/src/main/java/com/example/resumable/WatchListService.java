@@ -1,6 +1,7 @@
 package com.example.resumable;
 
 import com.example.sse.stream.*;
+import com.example.sse.stream.simple.InMemoryEventStreamRepository;
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
 import org.slf4j.Logger;
