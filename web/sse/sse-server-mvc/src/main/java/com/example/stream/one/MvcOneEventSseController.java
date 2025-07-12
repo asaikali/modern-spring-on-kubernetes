@@ -1,4 +1,4 @@
-package com.example.one;
+package com.example.stream.one;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
