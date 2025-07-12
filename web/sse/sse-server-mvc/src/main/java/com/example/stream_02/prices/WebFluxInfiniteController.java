@@ -1,4 +1,4 @@
-package com.example.stream.infinite;
+package com.example.stream_02.prices;
 
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;

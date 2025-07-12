@@ -1,4 +1,4 @@
-package com.example.stream.resumable;
+package com.example.stream_03.watchlist;
 
 import com.example.sse.server.*;
 import com.example.sse.server.InMemoryEventStreamRepository;

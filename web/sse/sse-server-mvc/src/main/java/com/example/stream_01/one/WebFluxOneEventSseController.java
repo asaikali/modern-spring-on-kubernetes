@@ -1,4 +1,4 @@
-package com.example.stream.one;
+package com.example.stream_01.one;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
