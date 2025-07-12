@@ -1,8 +1,5 @@
-package com.example.sse.server.simple;
+package com.example.sse.server;
 
-import com.example.sse.server.EventStream;
-import com.example.sse.server.EventStreamRepository;
-import com.example.sse.server.StreamId;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;

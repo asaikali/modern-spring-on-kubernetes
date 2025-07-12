@@ -1,4 +1,4 @@
-package com.example.resumable;
+package com.example.stream.resumable;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

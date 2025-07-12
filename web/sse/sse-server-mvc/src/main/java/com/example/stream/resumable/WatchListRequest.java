@@ -1,3 +1,3 @@
-package com.example.resumable;
+package com.example.stream.resumable;
 
 public record WatchListRequest(String symbol) {}

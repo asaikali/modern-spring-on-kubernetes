@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.stream.redirect;
 
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;

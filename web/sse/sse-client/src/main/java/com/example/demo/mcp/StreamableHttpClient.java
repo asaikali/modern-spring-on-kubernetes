@@ -1,6 +1,5 @@
 package com.example.demo.mcp;
 
-import org.reactivestreams.Publisher;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;

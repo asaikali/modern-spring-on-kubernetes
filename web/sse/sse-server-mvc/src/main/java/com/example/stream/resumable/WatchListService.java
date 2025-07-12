@@ -1,7 +1,7 @@
-package com.example.resumable;
+package com.example.stream.resumable;
 
 import com.example.sse.server.*;
-import com.example.sse.server.simple.InMemoryEventStreamRepository;
+import com.example.sse.server.InMemoryEventStreamRepository;
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
 import java.io.IOException;
