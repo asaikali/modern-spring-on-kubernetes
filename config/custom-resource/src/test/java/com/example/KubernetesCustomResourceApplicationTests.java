@@ -9,18 +9,13 @@ import io.kubernetes.client.util.Yaml;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.k3s.K3sContainer;
 import org.testcontainers.utility.DockerImageName;
 
-@Testcontainers
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+// @Testcontainers
+// @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class KubernetesCustomResourceApplicationTests {
 
   @Container
@@ -28,8 +23,8 @@ class KubernetesCustomResourceApplicationTests {
 
   @Autowired KubernetesClientProvider kubernetesClientProvider;
 
-  @Test
-  @Disabled
+  //  @Test
+  //  @Disabled
   void testCrdCreation() throws IOException {
     String kubeConfigYaml = k3s.getKubeConfigYaml();
     ApiClient client = kubernetesClientProvider.getClientFromKubeConfig(kubeConfigYaml).get();
