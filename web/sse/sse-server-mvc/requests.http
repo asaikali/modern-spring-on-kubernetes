@@ -51,3 +51,6 @@ Content-Type: application/json
   "quantity": "10",
   "maxPrice": 101.00
 }
+
+### Test Redirect
+GET http://localhost:8080/test/redirect?symbol=APPL
