@@ -1,4 +1,4 @@
-package com.example.stocks;
+package com.example.stream_02.prices;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

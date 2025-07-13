@@ -1,7 +1,7 @@
 package com.example.stream.redirect;
 
-import com.example.stocks.StockPrice;
-import com.example.stocks.StockPriceService;
+import com.example.stream_02.prices.StockPrice;
+import com.example.stream_02.prices.StockPriceService;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;

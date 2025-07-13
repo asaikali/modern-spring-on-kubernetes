@@ -30,3 +30,24 @@ Accept: text/event-stream
 {
   "symbol": "AAPL"
 }
+
+### Place a buy order that should be purchased right away
+POST http://localhost:8080/orders
+Content-Type: application/json
+
+{
+  "symbol": "AAPL",
+  "quantity": "10",
+  "maxPrice": 190.00
+}
+
+
+### Place a buy order that should be purchased right away
+POST http://localhost:8080/orders
+Content-Type: application/json
+
+{
+  "symbol": "AAPL",
+  "quantity": "10",
+  "maxPrice": 101.00
+}
