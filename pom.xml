@@ -33,6 +33,7 @@
         <module>aot</module>
         <module>web</module>
         <module>secure</module>
+        <module>messaging</module>
     </modules>
     <dependencyManagement>
         <dependencies>
