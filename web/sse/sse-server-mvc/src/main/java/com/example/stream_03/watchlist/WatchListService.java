@@ -46,7 +46,7 @@ public class WatchListService {
     SseEmitter emitter = createEmitter(stream);
 
     // Send missed events
-    List<Event> missed = stream.readAfter(startingEventId);
+    List<Event> missed = stream.getEventsAfter(startingEventId);
     try {
       for (Event event : missed) {
         emitter.send(

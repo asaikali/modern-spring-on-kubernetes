@@ -1,8 +1,10 @@
 package com.example.sse.server;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class InMemoryEventStream implements EventStream {
@@ -23,13 +25,18 @@ public class InMemoryEventStream implements EventStream {
   }
 
   @Override
-  public List<Event> readAfter(EventId after) {
+  public List<Event> getEventsAfter(EventId after) {
     if (!after.streamId().equals(this.streamId)) {
       throw new IllegalArgumentException("StreamId mismatch");
     }
     return events.tailMap(after.index() + 1).entrySet().stream()
         .map(entry -> new Event(new EventId(streamId, entry.getKey()), entry.getValue()))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public void consumeAfter(Optional<EventId> after, Consumer<EventId> consumer) {
+    throw new UnsupportedOperationException();
   }
 
   @Override

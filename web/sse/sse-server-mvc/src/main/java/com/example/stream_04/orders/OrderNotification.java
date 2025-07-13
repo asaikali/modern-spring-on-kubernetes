@@ -1,5 +1,3 @@
 package com.example.stream_04.orders;
 
-public record OrderNotification() {
-
-}
+public record OrderNotification() {}

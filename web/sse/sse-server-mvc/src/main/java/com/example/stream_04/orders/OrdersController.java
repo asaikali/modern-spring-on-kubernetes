@@ -1,7 +1,6 @@
 package com.example.stream_04.orders;
 
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties.Application;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +25,9 @@ public class OrdersController {
   @PostMapping(produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_JSON_VALUE})
   public Object subscribe(@RequestBody BuyOrder order, HttpServletResponse response) {
     var result = this.service.placeOrder(order);
-    if (result instanceof  OrderCompleted) {
-      return ResponseEntity.ok()
-          .contentType(MediaType.APPLICATION_JSON)
-          .body(result);
-    } else{
+    if (result instanceof OrderCompleted) {
+      return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(result);
+    } else {
       response.setContentType("text/event-stream");
       return result;
     }
