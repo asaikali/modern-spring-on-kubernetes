@@ -14,7 +14,10 @@ public class HelloController {
   private final Queue helloQueue;
   private final FanoutExchange fanoutExchange;
 
-  public HelloController(RabbitTemplate rabbitTemplate, @Qualifier("hello") Queue hello, FanoutExchange fanoutExchange) {
+  public HelloController(
+      RabbitTemplate rabbitTemplate,
+      @Qualifier("hello") Queue hello,
+      FanoutExchange fanoutExchange) {
     this.rabbitTemplate = rabbitTemplate;
     this.fanoutExchange = fanoutExchange;
     this.helloQueue = hello;
@@ -31,5 +34,4 @@ public class HelloController {
     this.rabbitTemplate.convertAndSend(fanoutExchange.getName(), "hello");
     return "sent message on a fanout exchange";
   }
-
 }
