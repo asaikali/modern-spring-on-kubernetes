@@ -15,5 +15,6 @@
 
 	<modules>
 		<module>spring-amqp</module>
+		<module>rabbit-stream</module>
 	</modules>
 </project>
