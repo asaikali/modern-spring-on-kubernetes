@@ -1,4 +1,4 @@
-package com.example.sse.server;
+package com.example.stream_03.watchlist;
 
 import java.util.UUID;
 

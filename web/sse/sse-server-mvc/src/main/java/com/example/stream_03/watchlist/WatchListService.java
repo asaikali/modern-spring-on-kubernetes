@@ -1,7 +1,5 @@
 package com.example.stream_03.watchlist;
 
-import com.example.sse.server.*;
-import com.example.sse.server.InMemoryEventStreamRepository;
 import com.example.stream_02.prices.StockPrice;
 import com.example.stream_02.prices.StockPriceService;
 import java.io.IOException;
