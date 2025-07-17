@@ -52,5 +52,9 @@ Content-Type: application/json
   "maxPrice": 101.00
 }
 
+### Resume Stream
+GET http://localhost:8080/orders
+Last-Event-Id: AAPL:cd0d4b98-4ae0-4209-ba7b-c5c48fb60b49:0
+
 ### Test Redirect
 GET http://localhost:8080/test/redirect?symbol=APPL

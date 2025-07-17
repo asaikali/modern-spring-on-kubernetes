@@ -15,27 +15,30 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequestMapping("/orders")
 public class OrdersController {
 
-  private final OrderService service;
+  private final OrderService orderService;
 
   public OrdersController(OrderService service) {
-    this.service = service;
+    this.orderService = service;
   }
 
   /** POST /watchlist Creates a new stream for the requested symbol and returns an SSE stream. */
   @PostMapping(produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_JSON_VALUE})
   public Object subscribe(@RequestBody BuyOrder order, HttpServletResponse response) {
-    var result = this.service.placeOrder(order);
-    if (result instanceof OrderCompleted) {
-      return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(result);
-    } else {
-      response.setContentType("text/event-stream");
-      return result;
-    }
+    var result = this.orderService.placeOrder(order);
+    return switch (result) {
+      case ImmediateResponse r ->
+          ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(r.getResult());
+
+      case EventualResponse r -> {
+        response.setContentType("text/event-stream");
+        yield orderService.resume(r.getLastEvenId());
+      }
+    };
   }
 
   /** GET /watchlist/resume Resumes streaming using Last-Event-ID. */
   @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public SseEmitter resume(@RequestHeader("Last-Event-ID") String lastEventId) {
-    return null;
+    return orderService.resume(lastEventId);
   }
 }
