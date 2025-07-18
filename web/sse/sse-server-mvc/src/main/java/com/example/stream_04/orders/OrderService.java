@@ -4,10 +4,8 @@ import com.example.stream_02.prices.StockPrice;
 import com.example.stream_02.prices.StockPriceService;
 import com.example.stream_03.watchlist.EventStreamRepository;
 import com.example.stream_03.watchlist.InMemoryEventStreamRepository;
-import com.example.stream_03.watchlist.StreamId;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.stream.ConfirmationStatus;
-import com.rabbitmq.stream.Consumer;
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.Message;
 import com.rabbitmq.stream.OffsetSpecification;
@@ -67,7 +65,7 @@ public class OrderService {
     }
 
     public String streamName() {
-      return symbol +  ":" + uuid.toString();
+      return symbol + ":" + uuid.toString();
     }
   }
 
@@ -80,42 +78,41 @@ public class OrderService {
     emitter.onTimeout(() -> logger.info("Stream {} timed out", eventId.streamName()));
     emitter.onError(e -> logger.error("Stream {} error", eventId.streamName(), e));
 
-
-     this.environment.consumerBuilder()
+    this.environment
+        .consumerBuilder()
         .name("sse-stream")
-         .offset(OffsetSpecification.first())
+        .offset(OffsetSpecification.first())
         .stream(eventId.streamName())
-        .messageHandler( (context, message) -> {
+        .messageHandler(
+            (context, message) -> {
+              long messageId = message.getProperties().getMessageIdAsLong();
+              if (messageId <= eventId.counter) return;
 
-          long messageId = message.getProperties().getMessageIdAsLong();
-          if( messageId <= eventId.counter) return;
+              final String body = new String(message.getBodyAsBinary(), StandardCharsets.UTF_8);
+              final String type = (String) message.getApplicationProperties().get("type");
+              final long index = message.getProperties().getMessageIdAsLong();
+              final String sseEventId = eventId.streamName() + ":" + index;
 
-           final String body = new String(message.getBodyAsBinary(), StandardCharsets.UTF_8);
-           final String type = (String) message.getApplicationProperties().get("type");
-           final long index = message.getProperties().getMessageIdAsLong();
-           final String sseEventId = eventId.streamName() + ":" + index;
+              final SseEventBuilder eventBuilder =
+                  SseEmitter.event().id(sseEventId).name(type).data(body);
 
-          final SseEventBuilder eventBuilder =
-              SseEmitter.event()
-                  .id(sseEventId)
-                  .name(type)
-                  .data(body);
+              this.executor.execute(
+                  () -> {
+                    try {
+                      emitter.send(eventBuilder);
+                      if ("order-completed".equals(type)) {
+                        context.consumer().close();
+                        emitter.complete();
+                      }
+                    } catch (IOException e) {
+                      emitter.completeWithError(e);
+                      throw new RuntimeException(e);
+                    }
+                  });
+            })
+        .build();
 
-          this.executor.execute(() -> {
-              try {
-                emitter.send(eventBuilder);
-                if("order-completed".equals(type)){
-                  context.consumer().close();
-                  emitter.complete();
-                }
-              } catch (IOException e) {
-                emitter.completeWithError(e);
-                throw new RuntimeException(e);
-              }
-            });
-        }).build();
-
-    return  emitter;
+    return emitter;
   }
 
   public Response placeOrder(BuyOrder order) {

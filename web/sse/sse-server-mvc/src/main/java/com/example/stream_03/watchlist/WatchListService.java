@@ -74,7 +74,6 @@ public class WatchListService {
     emitter.onTimeout(() -> logger.info("Stream {} timed out", streamId));
     emitter.onError(e -> logger.error("Stream {} error", streamId, e));
 
-
     return emitter;
   }
 
