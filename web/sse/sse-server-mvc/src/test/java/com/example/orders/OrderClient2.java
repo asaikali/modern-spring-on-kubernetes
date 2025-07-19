@@ -31,7 +31,8 @@ public class OrderClient2 {
               if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
                 System.out.println("Processing JSON response");
                 // Return JSON directly
-                return response.bodyToMono(String.class)
+                return response
+                    .bodyToMono(String.class)
                     .doOnNext(json -> System.out.println("JSON: " + json));
               }
 
@@ -41,13 +42,14 @@ public class OrderClient2 {
                 return response
                     .bodyToFlux(new ParameterizedTypeReference<ServerSentEvent<String>>() {})
                     .doOnSubscribe(sub -> System.out.println("Subscribed to SSE stream"))
-                    .doOnNext(sse -> {
-                      System.out.println("Received SSE event:");
-                      System.out.println("  Event: " + sse.event());
-                      System.out.println("  Data: " + sse.data());
-                      System.out.println("  ID: " + sse.id());
-                      System.out.println("---");
-                    })
+                    .doOnNext(
+                        sse -> {
+                          System.out.println("Received SSE event:");
+                          System.out.println("  Event: " + sse.event());
+                          System.out.println("  Data: " + sse.data());
+                          System.out.println("  ID: " + sse.id());
+                          System.out.println("---");
+                        })
                     .doOnComplete(() -> System.out.println("SSE stream completed"))
                     .doOnError(error -> System.err.println("SSE stream error: " + error))
                     .takeUntil(sse -> "result".equals(sse.event()))
@@ -68,8 +70,7 @@ public class OrderClient2 {
 
     try {
       // Much simpler - just get the final result
-      String result = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)))
-          .block();
+      String result = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101))).block();
 
       System.out.println("\nFinal result: " + result);
 

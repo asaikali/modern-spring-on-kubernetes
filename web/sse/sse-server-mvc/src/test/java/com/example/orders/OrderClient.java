@@ -6,7 +6,6 @@ import com.example.stream_04.orders.ImmediateResponse;
 import com.example.stream_04.orders.OrderCompleted;
 import com.example.stream_04.orders.Response;
 import java.math.BigDecimal;
-import net.bytebuddy.build.Plugin.Engine.Source.InMemory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 public class OrderClient {
 
