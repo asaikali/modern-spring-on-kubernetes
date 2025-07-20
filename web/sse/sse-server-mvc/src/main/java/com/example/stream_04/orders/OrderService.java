@@ -30,7 +30,6 @@ public class OrderService {
 
   private final Logger logger = LoggerFactory.getLogger(OrderService.class);
   private final StockPriceService stockPriceService;
-  private final EventStreamRepository repository;
   private final ObjectMapper objectMapper;
   private final Environment environment;
   private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
@@ -38,7 +37,6 @@ public class OrderService {
   public OrderService(
       StockPriceService stockPriceService, ObjectMapper objectMapper, Environment environment) {
     this.stockPriceService = stockPriceService;
-    this.repository = new InMemoryEventStreamRepository();
     this.objectMapper = objectMapper;
     this.environment = environment;
   }
