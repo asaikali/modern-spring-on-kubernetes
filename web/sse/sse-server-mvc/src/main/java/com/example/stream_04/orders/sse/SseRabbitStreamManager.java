@@ -7,12 +7,12 @@ import com.rabbitmq.stream.Producer;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SseRabbitStream {
+public class SseRabbitStreamManager {
 
   private final Environment environment;
   private final ObjectMapper objectMapper;
 
-  public SseRabbitStream(Environment environment, ObjectMapper objectMapper) {
+  public SseRabbitStreamManager(Environment environment, ObjectMapper objectMapper) {
     this.environment = environment;
     this.objectMapper = objectMapper;
   }

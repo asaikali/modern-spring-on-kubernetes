@@ -3,7 +3,7 @@ package com.example.stream_04.orders;
 import com.example.stream_02.prices.StockPrice;
 import com.example.stream_02.prices.StockPriceService;
 import com.example.stream_04.orders.sse.EventId;
-import com.example.stream_04.orders.sse.SseRabbitStream;
+import com.example.stream_04.orders.sse.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.StreamId;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.stream.ConfirmationStatus;
@@ -31,17 +31,17 @@ public class OrderService {
   private final Logger logger = LoggerFactory.getLogger(OrderService.class);
   private final StockPriceService stockPriceService;
   private final ObjectMapper objectMapper;
-  private final SseRabbitStream sseRabbitStream;
+  private final SseRabbitStreamManager sseRabbitStreamManager;
   private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
 
   public OrderService(
       StockPriceService stockPriceService,
       ObjectMapper objectMapper,
       Environment environment,
-      SseRabbitStream sseRabbitStream) {
+      SseRabbitStreamManager sseRabbitStreamManager) {
     this.stockPriceService = stockPriceService;
     this.objectMapper = objectMapper;
-    this.sseRabbitStream = sseRabbitStream;
+    this.sseRabbitStreamManager = sseRabbitStreamManager;
   }
 
   public SseEmitter resume(String lastEventId) {
@@ -53,7 +53,7 @@ public class OrderService {
     emitter.onTimeout(() -> logger.info("Stream {} timed out", eventId.streamId()));
     emitter.onError(e -> logger.error("Stream {} error", eventId.streamId(), e));
 
-    this.sseRabbitStream.createConsumer(eventId.streamId())
+    this.sseRabbitStreamManager.createConsumer(eventId.streamId())
         .offset(OffsetSpecification.first())
         .stream(eventId.streamId().fullName())
         .messageHandler(
@@ -98,14 +98,14 @@ public class OrderService {
 
     // create a rabbitmq stream to back the response
     StreamId streamId = StreamId.generate(order.symbol().toLowerCase());
-    this.sseRabbitStream.createStream(streamId);
+    this.sseRabbitStreamManager.createStream(streamId);
 
     logger.info("Created new rabbitmq stream {} ", streamId.fullName());
 
     this.executor.execute(
         () -> {
           try {
-            try (Producer producer = this.sseRabbitStream.createProducer(streamId)) {
+            try (Producer producer = this.sseRabbitStreamManager.createProducer(streamId)) {
               long counter = 0;
               while (true) {
                 // Poll current price
