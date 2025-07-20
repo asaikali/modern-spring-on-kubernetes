@@ -2,8 +2,9 @@ package com.example.stream_04.orders;
 
 import com.example.stream_02.prices.StockPrice;
 import com.example.stream_02.prices.StockPriceService;
-import com.example.stream_03.watchlist.EventStreamRepository;
-import com.example.stream_03.watchlist.InMemoryEventStreamRepository;
+import com.example.stream_04.orders.sse.EventId;
+import com.example.stream_04.orders.sse.SseRabbitStream;
+import com.example.stream_04.orders.sse.StreamId;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.stream.ConfirmationStatus;
 import com.rabbitmq.stream.Environment;
@@ -15,7 +16,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -32,64 +32,42 @@ public class OrderService {
   private final StockPriceService stockPriceService;
   private final ObjectMapper objectMapper;
   private final Environment environment;
+  private final SseRabbitStream sseRabbitStream;
   private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
 
   public OrderService(
-      StockPriceService stockPriceService, ObjectMapper objectMapper, Environment environment) {
+      StockPriceService stockPriceService,
+      ObjectMapper objectMapper,
+      Environment environment,
+      SseRabbitStream sseRabbitStream) {
     this.stockPriceService = stockPriceService;
     this.objectMapper = objectMapper;
     this.environment = environment;
-  }
-
-  record LastEventId(String symbol, UUID uuid, long counter) {
-
-    public static LastEventId parse(String input) {
-      String[] parts = input.split(":");
-      if (parts.length != 3) {
-        throw new IllegalArgumentException("Invalid format: expected <symbol>:<uuid>:<counter>");
-      }
-
-      String symbol = parts[0];
-      UUID uuid = UUID.fromString(parts[1]);
-      long counter;
-
-      try {
-        counter = Long.parseLong(parts[2]);
-      } catch (NumberFormatException e) {
-        throw new IllegalArgumentException("Invalid counter value: must be a long", e);
-      }
-
-      return new LastEventId(symbol, uuid, counter);
-    }
-
-    public String streamName() {
-      return symbol + ":" + uuid.toString();
-    }
+    this.sseRabbitStream = sseRabbitStream;
   }
 
   public SseEmitter resume(String lastEventId) {
 
-    LastEventId eventId = LastEventId.parse(lastEventId);
+    EventId eventId = EventId.fromString(lastEventId);
     final SseEmitter emitter = new SseEmitter(0L);
 
-    emitter.onCompletion(() -> logger.info("Stream {} completed", eventId.streamName()));
-    emitter.onTimeout(() -> logger.info("Stream {} timed out", eventId.streamName()));
-    emitter.onError(e -> logger.error("Stream {} error", eventId.streamName(), e));
+    emitter.onCompletion(() -> logger.info("Stream {} completed", eventId.streamId()));
+    emitter.onTimeout(() -> logger.info("Stream {} timed out", eventId.streamId()));
+    emitter.onError(e -> logger.error("Stream {} error", eventId.streamId(), e));
 
     this.environment
         .consumerBuilder()
-        .name("sse-stream")
         .offset(OffsetSpecification.first())
-        .stream(eventId.streamName())
+        .stream(eventId.streamId().fullName())
         .messageHandler(
             (context, message) -> {
               long messageId = message.getProperties().getMessageIdAsLong();
-              if (messageId <= eventId.counter) return;
+              if (messageId <= eventId.index()) return;
 
               final String body = new String(message.getBodyAsBinary(), StandardCharsets.UTF_8);
               final String type = (String) message.getApplicationProperties().get("type");
               final long index = message.getProperties().getMessageIdAsLong();
-              final String sseEventId = eventId.streamName() + ":" + index;
+              final String sseEventId = eventId.withIndex(index).toString();
 
               final SseEventBuilder eventBuilder =
                   SseEmitter.event().id(sseEventId).name(type).data(body);
@@ -122,16 +100,15 @@ public class OrderService {
     }
 
     // create a rabbitmq stream to back the response
-    final String streamName = order.symbol() + ":" + UUID.randomUUID().toString();
-    this.environment.streamCreator().stream(streamName).create();
+    StreamId streamId = StreamId.generate(order.symbol().toLowerCase());
+    this.sseRabbitStream.createStream(streamId);
 
-    logger.info("Created new rabbitmq stream {} ", streamName);
+    logger.info("Created new rabbitmq stream {} ", streamId.fullName());
 
     this.executor.execute(
         () -> {
           try {
-            try (Producer producer =
-                this.environment.producerBuilder().stream(streamName).build()) {
+            try (Producer producer = this.sseRabbitStream.createProducer(streamId)) {
               long counter = 0;
               while (true) {
                 // Poll current price
@@ -213,11 +190,11 @@ public class OrderService {
               }
             }
           } catch (Exception e) {
-            logger.error("Error in price polling loop for stream {}", streamName, e);
+            logger.error("Error in price polling loop for stream {}", streamId.fullName(), e);
           }
         });
 
-    String lastEventId = streamName + ":0";
-    return new EventualResponse(lastEventId);
+    var lastEventId = EventId.firstEvent(streamId);
+    return new EventualResponse(lastEventId.toString());
   }
 }
