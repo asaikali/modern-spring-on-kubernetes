@@ -6,17 +6,13 @@ import com.example.stream_04.orders.sse.EventId;
 import com.example.stream_04.orders.sse.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.StreamId;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabbitmq.stream.ConfirmationStatus;
 import com.rabbitmq.stream.Environment;
-import com.rabbitmq.stream.Message;
 import com.rabbitmq.stream.OffsetSpecification;
-import com.rabbitmq.stream.Producer;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import org.slf4j.Logger;
@@ -53,7 +49,8 @@ public class OrderService {
     emitter.onTimeout(() -> logger.info("Stream {} timed out", eventId.streamId()));
     emitter.onError(e -> logger.error("Stream {} error", eventId.streamId(), e));
 
-    this.sseRabbitStreamManager.createConsumer(eventId.streamId())
+    this.sseRabbitStreamManager
+        .createConsumer(eventId.streamId())
         .offset(OffsetSpecification.first())
         .stream(eventId.streamId().fullName())
         .messageHandler(
@@ -105,7 +102,9 @@ public class OrderService {
     this.executor.execute(
         () -> {
           try {
-            try (Producer producer = this.sseRabbitStreamManager.createProducer(streamId)) {
+
+            try (var streamPublisher =
+                this.sseRabbitStreamManager.createStreamPublisher(streamId)) {
               long counter = 0;
               while (true) {
                 // Poll current price
@@ -114,69 +113,18 @@ public class OrderService {
                 // Check if we should complete the order
                 if (current.compareTo(order.maxPrice()) <= 0) {
                   logger.info("Order completed for {} at price {}", order.symbol(), current);
-                  var result = new OrderCompleted(order, current, Instant.now());
-                  var data = this.objectMapper.writeValueAsString(result);
-
-                  // create a Message to put on the stream
-                  Message message =
-                      producer
-                          .messageBuilder()
-                          .addData(data.getBytes(StandardCharsets.UTF_8))
-                          .properties()
-                          .messageId(counter++)
-                          .contentType("application/json")
-                          .messageBuilder()
-                          .applicationProperties()
-                          .entry("type", "order-completed")
-                          .messageBuilder()
-                          .build();
-
-                  // send the message to the stream and wait for confirmation
-                  CompletableFuture<ConfirmationStatus> confirmationStatusFuture =
-                      new CompletableFuture<>();
-                  producer.send(
-                      message,
-                      confirmationStatus -> {
-                        confirmationStatusFuture.complete(confirmationStatus);
-                      });
-
-                  ConfirmationStatus status = confirmationStatusFuture.join();
-                  if (status.isConfirmed()) {
+                  var orderCompleted = new OrderCompleted(order, current, Instant.now());
+                  boolean published = streamPublisher.publish(orderCompleted, "order-completed");
+                  if (published) {
                     logger.info("Order completed for {} at price {}", order.symbol(), current);
                   } else {
                     // TODO retry the send to the RabbitMQ
                   }
-
                   break;
                 }
 
-                // emit order pending event
-                var data = this.objectMapper.writeValueAsString(price);
-
-                Message message =
-                    producer
-                        .messageBuilder()
-                        .addData(data.getBytes(StandardCharsets.UTF_8))
-                        .properties()
-                        .messageId(counter++)
-                        .contentType("application/json")
-                        .messageBuilder()
-                        .applicationProperties()
-                        .entry("type", "order-pending")
-                        .messageBuilder()
-                        .build();
-
-                // send the message to the stream and wait for confirmation
-                CompletableFuture<ConfirmationStatus> confirmationStatusFuture =
-                    new CompletableFuture<>();
-                producer.send(
-                    message,
-                    confirmationStatus -> {
-                      confirmationStatusFuture.complete(confirmationStatus);
-                    });
-
-                ConfirmationStatus status = confirmationStatusFuture.join();
-                if (status.isConfirmed()) {
+                boolean published = streamPublisher.publish(price, "order-pending");
+                if (published) {
                   logger.info("Order completed for {} at price {}", order.symbol(), current);
                 } else {
                   // TODO retry the send to the RabbitMQ

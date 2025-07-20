@@ -21,12 +21,12 @@ public class SseRabbitStreamManager {
     this.environment.streamCreator().stream(streamId.fullName()).create();
   }
 
-  public Producer createProducer(StreamId streamId) {
-    return this.environment.producerBuilder().stream(streamId.fullName()).build();
-  }
-
   public ConsumerBuilder createConsumer(StreamId streamId) {
     return this.environment.consumerBuilder().stream(streamId.fullName());
+  }
 
+  public StreamPublisher createStreamPublisher(StreamId streamId) {
+    Producer producer = this.environment.producerBuilder().stream(streamId.fullName()).build();
+    return new StreamPublisher(streamId, producer, objectMapper, 0);
   }
 }
