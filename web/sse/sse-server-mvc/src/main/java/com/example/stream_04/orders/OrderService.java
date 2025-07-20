@@ -31,7 +31,6 @@ public class OrderService {
   private final Logger logger = LoggerFactory.getLogger(OrderService.class);
   private final StockPriceService stockPriceService;
   private final ObjectMapper objectMapper;
-  private final Environment environment;
   private final SseRabbitStream sseRabbitStream;
   private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
 
@@ -42,7 +41,6 @@ public class OrderService {
       SseRabbitStream sseRabbitStream) {
     this.stockPriceService = stockPriceService;
     this.objectMapper = objectMapper;
-    this.environment = environment;
     this.sseRabbitStream = sseRabbitStream;
   }
 
@@ -55,8 +53,7 @@ public class OrderService {
     emitter.onTimeout(() -> logger.info("Stream {} timed out", eventId.streamId()));
     emitter.onError(e -> logger.error("Stream {} error", eventId.streamId(), e));
 
-    this.environment
-        .consumerBuilder()
+    this.sseRabbitStream.createConsumer(eventId.streamId())
         .offset(OffsetSpecification.first())
         .stream(eventId.streamId().fullName())
         .messageHandler(
