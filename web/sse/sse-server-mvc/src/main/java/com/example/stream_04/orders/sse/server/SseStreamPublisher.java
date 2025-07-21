@@ -1,4 +1,4 @@
-package com.example.stream_04.orders.sse;
+package com.example.stream_04.orders.sse.server;
 
 import com.rabbitmq.stream.Message;
 import com.rabbitmq.stream.MessageHandler;

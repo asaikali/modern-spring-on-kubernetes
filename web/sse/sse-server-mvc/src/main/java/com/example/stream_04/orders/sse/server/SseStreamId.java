@@ -1,4 +1,4 @@
-package com.example.stream_04.orders.sse;
+package com.example.stream_04.orders.sse.server;
 
 import java.util.Objects;
 import java.util.UUID;

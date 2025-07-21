@@ -1,4 +1,4 @@
-package com.example.stream_04.orders.sse;
+package com.example.stream_04.orders.sse.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

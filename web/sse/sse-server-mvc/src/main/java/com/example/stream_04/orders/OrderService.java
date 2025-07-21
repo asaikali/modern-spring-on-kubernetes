@@ -2,10 +2,10 @@ package com.example.stream_04.orders;
 
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
-import com.example.stream_04.orders.sse.SseEventId;
-import com.example.stream_04.orders.sse.SseRabbitStreamManager;
-import com.example.stream_04.orders.sse.SseStreamId;
-import com.example.stream_04.orders.sse.SseStreamPublisher;
+import com.example.stream_04.orders.sse.server.SseEventId;
+import com.example.stream_04.orders.sse.server.SseRabbitStreamManager;
+import com.example.stream_04.orders.sse.server.SseStreamId;
+import com.example.stream_04.orders.sse.server.SseStreamPublisher;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
