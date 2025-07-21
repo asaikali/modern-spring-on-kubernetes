@@ -82,7 +82,7 @@ class OrderService {
                   // TODO retry the send to the RabbitMQ
                 }
 
-                // Wait before polling again
+                // Wait before attempting to buy
                 Thread.sleep(Duration.ofSeconds(1));
                 buyAttemptStatus = attemptBuy(order);
               } while (buyAttemptStatus instanceof LimitOrderPending);
