@@ -17,16 +17,14 @@ public class SseRabbitStreamManager {
     this.objectMapper = objectMapper;
   }
 
-  public void createStream(StreamId streamId) {
+  private void createStream(StreamId streamId) {
     this.environment.streamCreator().stream(streamId.fullName()).create();
   }
 
   public SseStreamPublisher createSsePublisher(EventId lastEventId, String finalEventType) {
-
+    this.createStream(lastEventId.streamId());
     SseStreamPublisher sseStreamPublisher = new SseStreamPublisher(lastEventId, finalEventType);
-    this.environment
-        .consumerBuilder()
-        .stream(lastEventId.streamId().fullName())
+    this.environment.consumerBuilder().stream(lastEventId.streamId().fullName())
         .offset(OffsetSpecification.first())
         .messageHandler(sseStreamPublisher)
         .build();
@@ -35,6 +33,7 @@ public class SseRabbitStreamManager {
   }
 
   public RabbitStreamPublisher createStreamPublisher(StreamId streamId) {
+    this.createStream(streamId);
     Producer producer = this.environment.producerBuilder().stream(streamId.fullName()).build();
     return new RabbitStreamPublisher(streamId, producer, objectMapper, 0);
   }

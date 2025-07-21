@@ -45,10 +45,8 @@ public class OrderService {
       return new ImmediateResponse(orderCompleted);
     }
 
-    // create a rabbitmq stream to back the response
+    // generate a new stream id
     StreamId streamId = StreamId.generate(order.symbol().toLowerCase());
-    this.sseRabbitStreamManager.createStream(streamId);
-
     logger.info("Created new rabbitmq stream {} ", streamId.fullName());
 
     this.executor.execute(
