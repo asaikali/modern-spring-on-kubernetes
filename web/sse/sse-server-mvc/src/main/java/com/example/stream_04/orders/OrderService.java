@@ -58,23 +58,24 @@ class OrderService {
                 // Poll current price
                 StockPrice symbol = stockPriceService.getCurrentPrice(order.symbol());
 
-                // Check if we should complete the order
+                // current price matches the limit order we can purchase the stock
                 if (symbol.price().compareTo(order.maxPrice()) <= 0) {
                   var orderCompleted = new LimitOrderExecuted(order, symbol.price(), Instant.now());
                   boolean published = streamPublisher.publish(orderCompleted, "order-executed");
                   if (published) {
                     logger.info(
-                        "Order Executed for {} at price {}", order.symbol(), symbol.price());
+                        "Published order executed for event {} at price {}", order.symbol(), symbol.price());
                   } else {
                     // TODO retry the send to the RabbitMQ
                   }
                   break;
                 }
 
+                // send an order pending message
                 LimitOrderPending orderPending = new LimitOrderPending(order, symbol);
                 boolean published = streamPublisher.publish(orderPending, "order-pending");
                 if (published) {
-                  logger.info("Order completed for {} at price {}", order.symbol(), symbol.price());
+                  logger.info("published order pending event for {} at price {}", order.symbol(), symbol.price());
                 } else {
                   // TODO retry the send to the RabbitMQ
                 }
