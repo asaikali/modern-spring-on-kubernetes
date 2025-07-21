@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -25,8 +26,8 @@ class OrdersController {
 
   /** POST /watchlist Creates a new stream for the requested symbol and returns an SSE stream. */
   @PostMapping(produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_JSON_VALUE})
-  public Object subscribe(@RequestBody LimitOrderRequest order, HttpServletResponse response) {
-    var result = this.orderService.placeOrder(order, true);
+  public Object subscribe(@RequestBody LimitOrderRequest order, HttpServletResponse response, @RequestParam(required = false, defaultValue = "true") boolean allowImmediate) {
+    var result = this.orderService.placeOrder(order, allowImmediate);
     return switch (result) {
       case ApiResponse.Immediate immediate ->
           ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(immediate.payload());

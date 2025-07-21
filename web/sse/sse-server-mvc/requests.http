@@ -34,8 +34,18 @@ Accept: text/event-stream
   "symbol": "AAPL"
 }
 
-### Place a buy order that should be purchased right away
+### Place a buy order that should be purchased right away returning application/json
 POST http://localhost:8080/orders
+Content-Type: application/json
+
+{
+  "symbol": "AAPL",
+  "quantity": "10",
+  "maxPrice": 190.00
+}
+
+### Place a buy order that should be purchased right away returning an event stream with 1 item
+POST http://localhost:8080/orders?allowImmediate=false
 Content-Type: application/json
 
 {
@@ -57,6 +67,6 @@ Content-Type: application/json
 
 ### Resume Stream
 GET http://localhost:8080/orders
-Last-Event-Id: aapl.44d1920a-9a94-47f8-babd-025aa13981b5_0
+Last-Event-Id: aapl.0b196875-2515-4ad3-bd73-d60abb888ab2_0
 
 
