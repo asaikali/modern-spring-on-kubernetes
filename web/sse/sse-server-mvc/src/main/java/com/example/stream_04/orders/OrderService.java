@@ -2,10 +2,13 @@ package com.example.stream_04.orders;
 
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
+import com.example.stream_04.orders.sse.server.ApiOutcome;
+import com.example.stream_04.orders.sse.server.ImmediatePayload;
 import com.example.stream_04.orders.sse.server.SseEventId;
 import com.example.stream_04.orders.sse.server.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.server.SseStreamId;
 import com.example.stream_04.orders.sse.server.SseStreamPublisher;
+import com.example.stream_04.orders.sse.server.StreamReference;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
@@ -41,7 +44,7 @@ class OrderService {
     StockPrice initialPrice = this.stockPriceService.getCurrentPrice(order.symbol());
     if (initialPrice.price().compareTo(order.maxPrice()) <= 0) {
       var orderCompleted = new OrderCompleted(order, initialPrice.price(), Instant.now());
-      return new ImmediateApiOutcome(orderCompleted);
+      return new ImmediatePayload(orderCompleted);
     }
 
     // generate a new stream id
@@ -88,6 +91,6 @@ class OrderService {
         });
 
     var lastEventId = SseEventId.firstEvent(sseStreamId);
-    return new EventualApiOutcome(lastEventId);
+    return new StreamReference(lastEventId);
   }
 }

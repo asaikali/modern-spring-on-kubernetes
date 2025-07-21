@@ -1,6 +1,9 @@
 package com.example.stream_04.orders;
 
+import com.example.stream_04.orders.sse.server.ApiOutcome;
+import com.example.stream_04.orders.sse.server.ImmediatePayload;
 import com.example.stream_04.orders.sse.server.SseEventId;
+import com.example.stream_04.orders.sse.server.StreamReference;
 import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +33,7 @@ public class OrderClient {
               if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
                 return response
                     .bodyToMono(OrderCompleted.class)
-                    .map(o -> new ImmediateApiOutcome(o))
+                    .map(o -> new ImmediatePayload(o))
                     .cast(ApiOutcome.class);
               }
 
@@ -43,7 +46,7 @@ public class OrderClient {
                     .map(
                         sse -> {
                           String lastId = sse.id(); // Can also parse sse.data() if needed
-                          return (ApiOutcome) new EventualApiOutcome(SseEventId.fromString(lastId));
+                          return (ApiOutcome) new StreamReference(SseEventId.fromString(lastId));
                         });
               }
 
@@ -68,12 +71,12 @@ public class OrderClient {
     var client = new OrderClient();
 
     ApiOutcome apiOutcome = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(200)));
-    if (apiOutcome instanceof ImmediateApiOutcome immediateResponse) {
+    if (apiOutcome instanceof ImmediatePayload immediateResponse) {
       log.info(immediateResponse.result().toString());
     }
 
     apiOutcome = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)));
-    if (apiOutcome instanceof EventualApiOutcome eventualResponse) {
+    if (apiOutcome instanceof StreamReference eventualResponse) {
       log.info("Stream last event id {} ", eventualResponse.lastEventId());
     }
   }

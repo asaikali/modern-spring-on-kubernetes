@@ -1,6 +1,8 @@
 package com.example.stream_04.orders;
 
+import com.example.stream_04.orders.sse.server.ImmediatePayload;
 import com.example.stream_04.orders.sse.server.SseEventId;
+import com.example.stream_04.orders.sse.server.StreamReference;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +29,10 @@ class OrdersController {
   public Object subscribe(@RequestBody BuyOrder order, HttpServletResponse response) {
     var result = this.orderService.placeOrder(order);
     return switch (result) {
-      case ImmediateApiOutcome r ->
+      case ImmediatePayload r ->
           ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(r.result());
 
-      case EventualApiOutcome r -> {
+      case StreamReference r -> {
         response.setContentType("text/event-stream");
         yield orderService.resume(r.lastEventId());
       }
