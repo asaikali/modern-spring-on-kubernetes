@@ -1,8 +1,8 @@
 package com.example.stream_04.orders.sse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabbitmq.stream.ConsumerBuilder;
 import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.OffsetSpecification;
 import com.rabbitmq.stream.Producer;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +21,21 @@ public class SseRabbitStreamManager {
     this.environment.streamCreator().stream(streamId.fullName()).create();
   }
 
-  public ConsumerBuilder createConsumer(StreamId streamId) {
-    return this.environment.consumerBuilder().stream(streamId.fullName());
+  public SseStreamPublisher createSsePublisher(EventId lastEventId, String finalEventType) {
+
+    SseStreamPublisher sseStreamPublisher = new SseStreamPublisher(lastEventId, finalEventType);
+    this.environment
+        .consumerBuilder()
+        .stream(lastEventId.streamId().fullName())
+        .offset(OffsetSpecification.first())
+        .messageHandler(sseStreamPublisher)
+        .build();
+
+    return sseStreamPublisher;
   }
 
-  public StreamPublisher createStreamPublisher(StreamId streamId) {
+  public RabbitStreamPublisher createStreamPublisher(StreamId streamId) {
     Producer producer = this.environment.producerBuilder().stream(streamId.fullName()).build();
-    return new StreamPublisher(streamId, producer, objectMapper, 0);
+    return new RabbitStreamPublisher(streamId, producer, objectMapper, 0);
   }
 }

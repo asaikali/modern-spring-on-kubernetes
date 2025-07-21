@@ -10,14 +10,14 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class StreamPublisher implements AutoCloseable {
+public class RabbitStreamPublisher implements AutoCloseable {
 
   private final StreamId streamId;
   private final Producer producer;
   private final AtomicLong index;
   private final ObjectMapper objectMapper;
 
-  public StreamPublisher(
+  public RabbitStreamPublisher(
       StreamId streamId, Producer producer, ObjectMapper objectMapper, long startIndex) {
     this.streamId = Objects.requireNonNull(streamId);
     this.producer = Objects.requireNonNull(producer);

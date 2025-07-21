@@ -54,7 +54,7 @@ Content-Type: application/json
 
 ### Resume Stream
 GET http://localhost:8080/orders
-Last-Event-Id: aapl.67ad8fe3-d422-4f6c-88e9-dbc31c9d5107_0
+Last-Event-Id: aapl.57595736-9c91-456a-8951-165a7a841ec5_0
 
 ### Test Redirect
 GET http://localhost:8080/test/redirect?symbol=APPL
