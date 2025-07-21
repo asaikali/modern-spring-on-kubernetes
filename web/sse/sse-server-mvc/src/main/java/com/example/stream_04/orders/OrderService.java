@@ -67,7 +67,7 @@ class OrderService {
                 this.rabbitSseStreamFactory.createRabbitStreamPublisher(sseStreamId)) {
 
               var buyAttemptStatus = initialBuyAttemptStatus;
-              do {
+              while(true) {
 
                 String type =
                     switch (buyAttemptStatus) {
@@ -77,15 +77,17 @@ class OrderService {
 
                 boolean published = streamPublisher.publish(buyAttemptStatus, type);
                 if (published) {
-                  logger.info("published event: ", buyAttemptStatus);
+                  logger.info("published event: {} ", buyAttemptStatus);
                 } else {
                   // TODO retry the send to the RabbitMQ
                 }
 
+                if(type.equals("order-executed")) break;
+
                 // Wait before attempting to buy
-                Thread.sleep(Duration.ofSeconds(1));
+                Thread.sleep(Duration.ofMillis(500));
                 buyAttemptStatus = attemptBuy(order);
-              } while (buyAttemptStatus instanceof LimitOrderPending);
+              }
             }
           } catch (Exception e) {
             logger.error("Error in price polling loop for stream {}", sseStreamId.fullName(), e);

@@ -42,7 +42,7 @@ public class RabbitSseBridge implements MessageHandler {
    *     SSE stream
    */
   public RabbitSseBridge(SseEventId lastSseEventId, String finalEventType) {
-    this.sseEmitter = new SseEmitter();
+    this.sseEmitter = new SseEmitter(0L);
     this.lastSseEventId = lastSseEventId;
     this.finalEventType = finalEventType;
 

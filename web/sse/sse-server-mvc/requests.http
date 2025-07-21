@@ -67,6 +67,6 @@ Content-Type: application/json
 
 ### Resume Stream
 GET http://localhost:8080/orders
-Last-Event-Id: aapl.0b196875-2515-4ad3-bd73-d60abb888ab2_0
+Last-Event-Id: appl.2b30d039-9fcf-40f4-8f1c-170017f4249f_0
 
 
