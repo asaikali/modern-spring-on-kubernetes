@@ -33,7 +33,7 @@ class OrderService {
 
   public SseEmitter resume(SseEventId lastEventId) {
     RabbitSseBridge rabbitSseBridge =
-        this.rabbitSseStreamFactory.createSsePublisher(lastEventId, "order-completed");
+        this.rabbitSseStreamFactory.createRabbitSseBrdige(lastEventId, "order-completed");
     return rabbitSseBridge.getSseEmitter();
   }
 
