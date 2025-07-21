@@ -11,6 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
 
+/**
+ * Start from the begging a rabbitMQ stream and emmits via SSE any messages
+ * that occurred after the lastEventId
+ */
 public class SseStreamPublisher implements MessageHandler {
 
   private Logger logger = LoggerFactory.getLogger(SseStreamPublisher.class);
@@ -45,6 +49,11 @@ public class SseStreamPublisher implements MessageHandler {
 
     final SseEventBuilder eventBuilder = SseEmitter.event().id(sseEventId).name(type).data(body);
 
+    // We execute the sseEnd because this method we are is passed to the
+    // RabbitMQ stream consumer on a callback. RabbitMQ streams assume non-
+    // blocking behaviour this is why we need to create a virtual thread
+    // to send the request on the outbound SSE stream. we don't want to
+    // block the thread pool used by RabbitMQ streams client library
     this.executor.execute(
         () -> {
           try {

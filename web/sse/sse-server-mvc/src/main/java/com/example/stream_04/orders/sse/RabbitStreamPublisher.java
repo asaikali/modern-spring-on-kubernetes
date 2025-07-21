@@ -10,6 +10,14 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Publishes events to a RabbitMQ stream and waits for each event to be
+ * acknowdbelegd by rabbit because order and in-order deliver is very important
+ * for this use case. In this example secanrio in this package we are
+ * dealining with a an upstream service that produces a set of evevnts that
+ * we want to capture, we want those events to be published in sequence to the
+ * stream and not out of orde. this wyh we need for every send confirumation.
+ */
 public class RabbitStreamPublisher implements AutoCloseable {
 
   private final SseStreamId sseStreamId;
