@@ -17,19 +17,19 @@ import org.springframework.stereotype.Service;
  * properly created before publishers or consumers are instantiated.
  */
 @Service
-public class SseRabbitStreamManager {
+public class RabbitSseStreamFactory {
 
   private final Environment environment;
   private final ObjectMapper objectMapper;
 
   /**
-   * Creates a new SseRabbitStreamManager with the specified RabbitMQ environment and ObjectMapper.
+   * Creates a new RabbitSseStreamFactory with the specified RabbitMQ environment and ObjectMapper.
    *
    * @param environment The RabbitMQ stream environment used to create streams, producers, and
    *     consumers
    * @param objectMapper The Jackson ObjectMapper used for JSON serialization/deserialization
    */
-  public SseRabbitStreamManager(Environment environment, ObjectMapper objectMapper) {
+  public RabbitSseStreamFactory(Environment environment, ObjectMapper objectMapper) {
     this.environment = environment;
     this.objectMapper = objectMapper;
   }

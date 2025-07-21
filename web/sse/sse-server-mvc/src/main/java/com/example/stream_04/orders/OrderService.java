@@ -4,8 +4,8 @@ import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
 import com.example.stream_04.orders.sse.server.ApiResponse;
 import com.example.stream_04.orders.sse.server.RabbitSseBridge;
+import com.example.stream_04.orders.sse.server.RabbitSseStreamFactory;
 import com.example.stream_04.orders.sse.server.SseEventId;
-import com.example.stream_04.orders.sse.server.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.server.SseStreamId;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -22,18 +22,18 @@ class OrderService {
 
   private final Logger logger = LoggerFactory.getLogger(OrderService.class);
   private final StockPriceService stockPriceService;
-  private final SseRabbitStreamManager sseRabbitStreamManager;
+  private final RabbitSseStreamFactory rabbitSseStreamFactory;
   private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
 
   public OrderService(
-      StockPriceService stockPriceService, SseRabbitStreamManager sseRabbitStreamManager) {
+      StockPriceService stockPriceService, RabbitSseStreamFactory rabbitSseStreamFactory) {
     this.stockPriceService = stockPriceService;
-    this.sseRabbitStreamManager = sseRabbitStreamManager;
+    this.rabbitSseStreamFactory = rabbitSseStreamFactory;
   }
 
   public SseEmitter resume(SseEventId lastEventId) {
     RabbitSseBridge rabbitSseBridge =
-        this.sseRabbitStreamManager.createSsePublisher(lastEventId, "order-completed");
+        this.rabbitSseStreamFactory.createSsePublisher(lastEventId, "order-completed");
     return rabbitSseBridge.getSseEmitter();
   }
 
@@ -54,7 +54,7 @@ class OrderService {
           try {
 
             try (var streamPublisher =
-                this.sseRabbitStreamManager.createRabbitStreamPublisher(sseStreamId)) {
+                this.rabbitSseStreamFactory.createRabbitStreamPublisher(sseStreamId)) {
               while (true) {
                 // Poll current price
                 StockPrice price = stockPriceService.getCurrentPrice(order.symbol());
