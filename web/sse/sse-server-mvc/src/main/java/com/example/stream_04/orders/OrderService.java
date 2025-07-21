@@ -7,7 +7,6 @@ import com.example.stream_04.orders.sse.server.RabbitSseBridge;
 import com.example.stream_04.orders.sse.server.RabbitSseStreamFactory;
 import com.example.stream_04.orders.sse.server.SseEventId;
 import com.example.stream_04.orders.sse.server.SseStreamId;
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.Executor;
@@ -57,24 +56,25 @@ class OrderService {
                 this.rabbitSseStreamFactory.createRabbitStreamPublisher(sseStreamId)) {
               while (true) {
                 // Poll current price
-                StockPrice price = stockPriceService.getCurrentPrice(order.symbol());
-                BigDecimal current = price.price();
+                StockPrice symbol = stockPriceService.getCurrentPrice(order.symbol());
+
                 // Check if we should complete the order
-                if (current.compareTo(order.maxPrice()) <= 0) {
-                  logger.info("Order completed for {} at price {}", order.symbol(), current);
-                  var orderCompleted = new LimitOrderExecuted(order, current, Instant.now());
-                  boolean published = streamPublisher.publish(orderCompleted, "order-completed");
+                if (symbol.price().compareTo(order.maxPrice()) <= 0) {
+                  var orderCompleted = new LimitOrderExecuted(order, symbol.price(), Instant.now());
+                  boolean published = streamPublisher.publish(orderCompleted, "order-executed");
                   if (published) {
-                    logger.info("Order completed for {} at price {}", order.symbol(), current);
+                    logger.info(
+                        "Order Executed for {} at price {}", order.symbol(), symbol.price());
                   } else {
                     // TODO retry the send to the RabbitMQ
                   }
                   break;
                 }
 
-                boolean published = streamPublisher.publish(price, "order-pending");
+                LimitOrderPending orderPending = new LimitOrderPending(order, symbol);
+                boolean published = streamPublisher.publish(orderPending, "order-pending");
                 if (published) {
-                  logger.info("Order completed for {} at price {}", order.symbol(), current);
+                  logger.info("Order completed for {} at price {}", order.symbol(), symbol.price());
                 } else {
                   // TODO retry the send to the RabbitMQ
                 }
