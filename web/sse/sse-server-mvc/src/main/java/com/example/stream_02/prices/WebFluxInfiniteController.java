@@ -1,5 +1,7 @@
 package com.example.stream_02.prices;
 
+import com.example.stocks.StockPrice;
+import com.example.stocks.StockPriceService;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
@@ -23,7 +25,7 @@ import reactor.core.publisher.Flux;
  * http://localhost:8080/webflux/stream/infinite?symbol=GOOGL}
  */
 @RestController
-public class WebFluxInfiniteController {
+class WebFluxInfiniteController {
 
   private final Logger logger = LoggerFactory.getLogger(WebFluxInfiniteController.class);
   private final StockPriceService stockPriceService;

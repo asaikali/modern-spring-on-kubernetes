@@ -2,7 +2,7 @@ package com.example.stream_03.watchlist;
 
 import java.util.Optional;
 
-public interface EventStreamRepository {
+interface EventStreamRepository {
 
   /** Creates a new event stream and returns it. */
   EventStream create();

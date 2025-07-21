@@ -1,5 +1,7 @@
 package com.example.stream_02.prices;
 
+import com.example.stocks.StockPrice;
+import com.example.stocks.StockPriceService;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
@@ -25,7 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEvent
  * http://localhost:8080/mvc/stream/infinite?symbol=GOOGL}
  */
 @RestController
-public class MvcInfiniteController {
+class MvcInfiniteController {
 
   private final Logger logger = LoggerFactory.getLogger(MvcInfiniteController.class);
   private final TaskScheduler scheduler;

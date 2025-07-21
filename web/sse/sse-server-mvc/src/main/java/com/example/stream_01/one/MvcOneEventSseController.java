@@ -25,7 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEvent
  * <p>Test with: {@code curl -N -H "Accept: text/event-stream" http://localhost:8080/mvc/stream/one}
  */
 @RestController
-public class MvcOneEventSseController {
+class MvcOneEventSseController {
 
   private final Logger logger = LoggerFactory.getLogger(MvcOneEventSseController.class);
 

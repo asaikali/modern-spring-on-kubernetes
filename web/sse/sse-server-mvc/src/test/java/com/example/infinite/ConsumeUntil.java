@@ -1,6 +1,6 @@
 package com.example.infinite;
 
-import com.example.stream_02.prices.StockPrice;
+import com.example.stocks.StockPrice;
 import java.math.BigDecimal;
 import java.time.Duration;
 import org.springframework.core.ParameterizedTypeReference;

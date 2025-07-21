@@ -1,7 +1,7 @@
 package com.example.stream_03.watchlist;
 
-import com.example.stream_02.prices.StockPrice;
-import com.example.stream_02.prices.StockPriceService;
+import com.example.stocks.StockPrice;
+import com.example.stocks.StockPriceService;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
 
 @Service
-public class WatchListService {
+class WatchListService {
 
   private final Logger logger = LoggerFactory.getLogger(WatchListService.class);
   private final TaskScheduler scheduler;

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemoryEventStreamRepository implements EventStreamRepository {
+class InMemoryEventStreamRepository implements EventStreamRepository {
 
   private final Map<StreamId, EventStream> streams = new ConcurrentHashMap<>();
 

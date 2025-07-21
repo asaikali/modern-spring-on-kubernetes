@@ -1,7 +1,7 @@
 package com.example.stream_04.orders;
 
-import com.example.stream_02.prices.StockPrice;
-import com.example.stream_02.prices.StockPriceService;
+import com.example.stocks.StockPrice;
+import com.example.stocks.StockPriceService;
 import com.example.stream_04.orders.sse.EventId;
 import com.example.stream_04.orders.sse.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.SseStreamPublisher;

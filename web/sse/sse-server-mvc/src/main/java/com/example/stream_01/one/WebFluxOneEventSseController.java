@@ -22,7 +22,7 @@ import reactor.core.publisher.Flux;
  * http://localhost:8080/webflux/stream/one}
  */
 @RestController
-public class WebFluxOneEventSseController {
+class WebFluxOneEventSseController {
 
   private final Logger logger = LoggerFactory.getLogger(WebFluxOneEventSseController.class);
 

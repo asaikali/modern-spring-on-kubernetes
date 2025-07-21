@@ -6,7 +6,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/watchlist")
-public class WatchListController {
+class WatchListController {
 
   private final WatchListService service;
 

@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class InMemoryEventStream implements EventStream {
+class InMemoryEventStream implements EventStream {
 
   private final StreamId streamId;
   private final AtomicInteger indexCounter = new AtomicInteger();

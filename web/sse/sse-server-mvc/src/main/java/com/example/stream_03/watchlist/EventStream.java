@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public interface EventStream {
+interface EventStream {
 
   /** Appends a value to the stream and returns the resulting Event. */
   Event append(String value);

@@ -1,6 +1,6 @@
 package com.example.stream_03.watchlist;
 
-public record EventId(StreamId streamId, int index) {
+record EventId(StreamId streamId, int index) {
 
   public EventId {
     if (index < 0) {
