@@ -1,14 +1,6 @@
 package com.example.stream_04.orders;
 
-final class EventualResponse implements Response {
+import com.example.stream_04.orders.sse.server.SseEventId;
 
-  private String lastEvenId;
-
-  public EventualResponse(String lastEvenId) {
-    this.lastEvenId = lastEvenId;
-  }
-
-  public String getLastEvenId() {
-    return lastEvenId;
-  }
+record EventualResponse( SseEventId lastEventId) implements Response {
 }

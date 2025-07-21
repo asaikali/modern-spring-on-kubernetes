@@ -6,6 +6,7 @@ import com.example.stream_04.orders.sse.server.SseEventId;
 import com.example.stream_04.orders.sse.server.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.server.SseStreamId;
 import com.example.stream_04.orders.sse.server.SseStreamPublisher;
+import com.sun.java.accessibility.util.EventID;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
@@ -30,10 +31,9 @@ class OrderService {
     this.sseRabbitStreamManager = sseRabbitStreamManager;
   }
 
-  public SseEmitter resume(String lastEventId) {
+  public SseEmitter resume(SseEventId lastEventId) {
     SseStreamPublisher sseStreamPublisher =
-        this.sseRabbitStreamManager.createSsePublisher(
-            SseEventId.fromString(lastEventId), "order-completed");
+        this.sseRabbitStreamManager.createSsePublisher(lastEventId, "order-completed");
     return sseStreamPublisher.getSseEmitter();
   }
 
@@ -89,6 +89,6 @@ class OrderService {
         });
 
     var lastEventId = SseEventId.firstEvent(sseStreamId);
-    return new EventualResponse(lastEventId.toString());
+    return new EventualResponse(lastEventId);
   }
 }

@@ -1,5 +1,6 @@
 package com.example.stream_04.orders;
 
+import com.example.stream_04.orders.sse.server.SseEventId;
 import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class OrderClient {
                     .map(
                         sse -> {
                           String lastId = sse.id(); // Can also parse sse.data() if needed
-                          return (Response) new EventualResponse(lastId);
+                          return (Response) new EventualResponse(SseEventId.fromString(lastId));
                         });
               }
 
@@ -73,7 +74,7 @@ public class OrderClient {
 
     response = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)));
     if (response instanceof EventualResponse eventualResponse) {
-      log.info("Stream last event id {} ", eventualResponse.getLastEvenId());
+      log.info("Stream last event id {} ", eventualResponse.lastEventId());
     }
   }
 }

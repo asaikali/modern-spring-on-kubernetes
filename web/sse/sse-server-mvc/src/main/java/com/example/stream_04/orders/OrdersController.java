@@ -1,5 +1,6 @@
 package com.example.stream_04.orders;
 
+import com.example.stream_04.orders.sse.server.SseEventId;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ class OrdersController {
 
       case EventualResponse r -> {
         response.setContentType("text/event-stream");
-        yield orderService.resume(r.getLastEvenId());
+        yield orderService.resume(r.lastEventId());
       }
     };
   }
@@ -39,6 +40,6 @@ class OrdersController {
   /** GET /watchlist/resume Resumes streaming using Last-Event-ID. */
   @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public SseEmitter resume(@RequestHeader("Last-Event-ID") String lastEventId) {
-    return orderService.resume(lastEventId);
+    return orderService.resume(SseEventId.fromString(lastEventId));
   }
 }
