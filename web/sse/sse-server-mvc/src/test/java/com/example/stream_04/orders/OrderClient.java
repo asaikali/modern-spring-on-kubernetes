@@ -1,9 +1,9 @@
 package com.example.stream_04.orders;
 
-import com.example.stream_04.orders.sse.server.ApiOutcome;
-import com.example.stream_04.orders.sse.server.ImmediatePayload;
+import com.example.stream_04.orders.sse.server.ApiResponse;
+import com.example.stream_04.orders.sse.server.ImmediateApiResponse;
 import com.example.stream_04.orders.sse.server.SseEventId;
-import com.example.stream_04.orders.sse.server.StreamReference;
+import com.example.stream_04.orders.sse.server.StreamApiResponse;
 import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public class OrderClient {
 
   private static final Logger log = LoggerFactory.getLogger(OrderClient.class);
 
-  public ApiOutcome placeOrder(BuyOrder order) {
+  public ApiResponse placeOrder(BuyOrder order) {
     WebClient client = WebClient.create("http://localhost:8080/orders");
 
     return client
@@ -33,8 +33,8 @@ public class OrderClient {
               if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
                 return response
                     .bodyToMono(OrderCompleted.class)
-                    .map(o -> new ImmediatePayload(o))
-                    .cast(ApiOutcome.class);
+                    .map(o -> new ImmediateApiResponse(o))
+                    .cast(ApiResponse.class);
               }
 
               if (MediaType.TEXT_EVENT_STREAM.isCompatibleWith(contentType)) {
@@ -46,7 +46,7 @@ public class OrderClient {
                     .map(
                         sse -> {
                           String lastId = sse.id(); // Can also parse sse.data() if needed
-                          return (ApiOutcome) new StreamReference(SseEventId.fromString(lastId));
+                          return (ApiResponse) new StreamApiResponse(SseEventId.fromString(lastId));
                         });
               }
 
@@ -70,13 +70,13 @@ public class OrderClient {
 
     var client = new OrderClient();
 
-    ApiOutcome apiOutcome = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(200)));
-    if (apiOutcome instanceof ImmediatePayload immediateResponse) {
+    ApiResponse apiResponse = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(200)));
+    if (apiResponse instanceof ImmediateApiResponse immediateResponse) {
       log.info(immediateResponse.result().toString());
     }
 
-    apiOutcome = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)));
-    if (apiOutcome instanceof StreamReference eventualResponse) {
+    apiResponse = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)));
+    if (apiResponse instanceof StreamApiResponse eventualResponse) {
       log.info("Stream last event id {} ", eventualResponse.lastEventId());
     }
   }

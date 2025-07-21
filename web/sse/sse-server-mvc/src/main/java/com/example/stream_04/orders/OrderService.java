@@ -2,13 +2,13 @@ package com.example.stream_04.orders;
 
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
-import com.example.stream_04.orders.sse.server.ApiOutcome;
-import com.example.stream_04.orders.sse.server.ImmediatePayload;
+import com.example.stream_04.orders.sse.server.ApiResponse;
+import com.example.stream_04.orders.sse.server.ImmediateApiResponse;
 import com.example.stream_04.orders.sse.server.SseEventId;
 import com.example.stream_04.orders.sse.server.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.server.SseStreamId;
 import com.example.stream_04.orders.sse.server.SseStreamPublisher;
-import com.example.stream_04.orders.sse.server.StreamReference;
+import com.example.stream_04.orders.sse.server.StreamApiResponse;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
@@ -39,12 +39,12 @@ class OrderService {
     return sseStreamPublisher.getSseEmitter();
   }
 
-  public ApiOutcome placeOrder(BuyOrder order) {
+  public ApiResponse placeOrder(BuyOrder order) {
 
     StockPrice initialPrice = this.stockPriceService.getCurrentPrice(order.symbol());
     if (initialPrice.price().compareTo(order.maxPrice()) <= 0) {
       var orderCompleted = new OrderCompleted(order, initialPrice.price(), Instant.now());
-      return new ImmediatePayload(orderCompleted);
+      return new ImmediateApiResponse(orderCompleted);
     }
 
     // generate a new stream id
@@ -91,6 +91,6 @@ class OrderService {
         });
 
     var lastEventId = SseEventId.firstEvent(sseStreamId);
-    return new StreamReference(lastEventId);
+    return new StreamApiResponse(lastEventId);
   }
 }
