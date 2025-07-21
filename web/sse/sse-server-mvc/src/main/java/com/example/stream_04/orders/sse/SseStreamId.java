@@ -14,16 +14,16 @@ import java.util.UUID;
  * @param fullName The complete, canonical representation of the stream ID, formed by combining the
  *     prefix and UUID.
  */
-public record StreamId(String prefix, UUID uuid, String fullName) {
+public record SseStreamId(String prefix, UUID uuid, String fullName) {
 
   private static final int MAX_PREFIX_LENGTH = 32;
 
   /**
-   * Ensures the internal consistency and validity of a StreamId instance upon creation. This
+   * Ensures the internal consistency and validity of a SseStreamId instance upon creation. This
    * constructor performs comprehensive validation on all provided components to guarantee that the
-   * resulting StreamId object is well-formed and adheres to all rules.
+   * resulting SseStreamId object is well-formed and adheres to all rules.
    */
-  public StreamId {
+  public SseStreamId {
     // 1. Null Checks for all components
     Objects.requireNonNull(prefix, "Prefix cannot be null.");
     Objects.requireNonNull(uuid, "UUID cannot be null.");
@@ -59,16 +59,16 @@ public record StreamId(String prefix, UUID uuid, String fullName) {
   }
 
   /**
-   * Creates a new StreamId with the given prefix and a newly generated unique identifier. This
+   * Creates a new SseStreamId with the given prefix and a newly generated unique identifier. This
    * method ensures the new ID adheres to all structural and format requirements.
    *
    * @param prefix A string to categorize the stream. It must be lowercase alphanumeric (a–z, 0–9)
    *     and respect the maximum allowed length.
-   * @return A new, unique StreamId instance.
+   * @return A new, unique SseStreamId instance.
    * @throws IllegalArgumentException if the provided prefix is invalid according to the naming
    *     rules.
    */
-  public static StreamId generate(String prefix) {
+  public static SseStreamId generate(String prefix) {
     Objects.requireNonNull(prefix, "Prefix cannot be null.");
 
     if (!isValidPrefix(prefix)) {
@@ -80,21 +80,21 @@ public record StreamId(String prefix, UUID uuid, String fullName) {
     UUID generatedUuid = UUID.randomUUID();
     String generatedFullName = prefix + "." + generatedUuid.toString();
 
-    return new StreamId(prefix, generatedUuid, generatedFullName);
+    return new SseStreamId(prefix, generatedUuid, generatedFullName);
   }
 
   /**
-   * Creates a StreamId by parsing its full string representation. The input string is expected to
-   * be in the canonical "prefix.uuid" format, where 'prefix' adheres to specified rules and 'uuid'
-   * is a standard UUID string.
+   * Creates a SseStreamId by parsing its full string representation. The input string is expected
+   * to be in the canonical "prefix.uuid" format, where 'prefix' adheres to specified rules and
+   * 'uuid' is a standard UUID string.
    *
    * @param name The complete string representation of the stream ID (e.g.,
    *     "myprefix.a1b2c3d4-e5f6-7890-1234-567890abcdef").
-   * @return A StreamId instance parsed from the given string.
+   * @return A SseStreamId instance parsed from the given string.
    * @throws IllegalArgumentException if the provided name does not conform to the expected format
    *     or contains invalid prefix/UUID components.
    */
-  public static StreamId fromString(String name) {
+  public static SseStreamId fromString(String name) {
     Objects.requireNonNull(name, "Stream name cannot be null.");
 
     var validation = StreamNameValidationResult.forStreamName(name);
@@ -126,11 +126,11 @@ public record StreamId(String prefix, UUID uuid, String fullName) {
           "Invalid UUID segment in stream name: '%s'".formatted(uuidPart), e);
     }
 
-    return new StreamId(parsedPrefix, parsedUuid, name);
+    return new SseStreamId(parsedPrefix, parsedUuid, name);
   }
 
   /**
-   * Checks if a given string adheres to the defined rules for a valid StreamId prefix. A valid
+   * Checks if a given string adheres to the defined rules for a valid SseStreamId prefix. A valid
    * prefix must consist only of lowercase alphanumeric characters (a–z, 0–9) and must not exceed
    * the maximum allowed length.
    *

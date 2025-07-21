@@ -3,35 +3,35 @@ package com.example.stream_04.orders.sse;
 import java.util.Objects;
 
 /**
- * Represents a unique identifier for a specific event within a stream. It is composed of a StreamId
- * and a sequential index.
+ * Represents a unique identifier for a specific event within a stream. It is composed of a
+ * SseStreamId and a sequential index.
  *
  * <p>The canonical string format for an SseEventId is "prefix.uuid_index".
  *
- * @param streamId The identifier of the stream to which this event belongs.
+ * @param sseStreamId The identifier of the stream to which this event belongs.
  * @param index The sequential index of the event within its stream, typically starting from 0 or 1.
  */
-public record SseEventId(StreamId streamId, long index) {
+public record SseEventId(SseStreamId sseStreamId, long index) {
 
   private static final char INDEX_DELIMITER = '_';
 
   /**
-   * Canonical constructor for SseEventId. Ensures that the associated StreamId is not null and the
-   * index is non-negative.
+   * Canonical constructor for SseEventId. Ensures that the associated SseStreamId is not null and
+   * the index is non-negative.
    */
   public SseEventId {
-    Objects.requireNonNull(streamId, "StreamId cannot be null.");
+    Objects.requireNonNull(sseStreamId, "SseStreamId cannot be null.");
     if (index < 0) {
       throw new IllegalArgumentException("Event index cannot be negative. Was: " + index);
     }
   }
 
   public SseEventId withIndex(long index) {
-    return new SseEventId(streamId, index);
+    return new SseEventId(sseStreamId, index);
   }
 
-  public static SseEventId firstEvent(StreamId streamId) {
-    return new SseEventId(streamId, 0);
+  public static SseEventId firstEvent(SseStreamId sseStreamId) {
+    return new SseEventId(sseStreamId, 0);
   }
 
   /**
@@ -42,7 +42,7 @@ public record SseEventId(StreamId streamId, long index) {
    *     "myprefix.a1b2c3d4-e5f6-7890-1234-567890abcdef_123").
    * @return An SseEventId instance parsed from the string.
    * @throws IllegalArgumentException if the input string is null, empty, malformed, or contains
-   *     invalid StreamId or index components.
+   *     invalid SseStreamId or index components.
    */
   public static SseEventId fromString(String eventIdString) {
     Objects.requireNonNull(eventIdString, "Event ID string cannot be null.");
@@ -51,7 +51,7 @@ public record SseEventId(StreamId streamId, long index) {
       throw new IllegalArgumentException("Event ID string cannot be empty.");
     }
 
-    // Find the last occurrence of the delimiter to separate StreamId from index
+    // Find the last occurrence of the delimiter to separate SseStreamId from index
     int delimiterIndex = eventIdString.lastIndexOf(INDEX_DELIMITER);
 
     if (delimiterIndex <= 0 || delimiterIndex == eventIdString.length() - 1) {
@@ -64,13 +64,13 @@ public record SseEventId(StreamId streamId, long index) {
     String streamIdPartString = eventIdString.substring(0, delimiterIndex);
     String indexPartString = eventIdString.substring(delimiterIndex + 1);
 
-    // Parse the StreamId part
-    StreamId parsedStreamId;
+    // Parse the SseStreamId part
+    SseStreamId parsedSseStreamId;
     try {
-      parsedStreamId = StreamId.fromString(streamIdPartString);
+      parsedSseStreamId = SseStreamId.fromString(streamIdPartString);
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException(
-          "Invalid StreamId segment in Event ID string: '%s'".formatted(streamIdPartString), e);
+          "Invalid SseStreamId segment in Event ID string: '%s'".formatted(streamIdPartString), e);
     }
 
     // Parse the index part
@@ -82,7 +82,7 @@ public record SseEventId(StreamId streamId, long index) {
           "Invalid index segment in Event ID string: '%s'".formatted(indexPartString), e);
     }
 
-    return new SseEventId(parsedStreamId, parsedIndex);
+    return new SseEventId(parsedSseStreamId, parsedIndex);
   }
 
   /**
@@ -93,7 +93,7 @@ public record SseEventId(StreamId streamId, long index) {
    */
   @Override
   public String toString() {
-    // StreamId's toString() or fullName() will provide "prefix.uuid"
-    return streamId.fullName() + INDEX_DELIMITER + index;
+    // SseStreamId's toString() or fullName() will provide "prefix.uuid"
+    return sseStreamId.fullName() + INDEX_DELIMITER + index;
   }
 }

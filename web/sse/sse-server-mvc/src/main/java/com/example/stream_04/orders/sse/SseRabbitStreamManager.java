@@ -17,14 +17,14 @@ public class SseRabbitStreamManager {
     this.objectMapper = objectMapper;
   }
 
-  private void createStream(StreamId streamId) {
-    this.environment.streamCreator().stream(streamId.fullName()).create();
+  private void createStream(SseStreamId sseStreamId) {
+    this.environment.streamCreator().stream(sseStreamId.fullName()).create();
   }
 
   public SseStreamPublisher createSsePublisher(SseEventId lastSseEventId, String finalEventType) {
-    this.createStream(lastSseEventId.streamId());
+    this.createStream(lastSseEventId.sseStreamId());
     SseStreamPublisher sseStreamPublisher = new SseStreamPublisher(lastSseEventId, finalEventType);
-    this.environment.consumerBuilder().stream(lastSseEventId.streamId().fullName())
+    this.environment.consumerBuilder().stream(lastSseEventId.sseStreamId().fullName())
         .offset(OffsetSpecification.first())
         .messageHandler(sseStreamPublisher)
         .build();
@@ -32,9 +32,9 @@ public class SseRabbitStreamManager {
     return sseStreamPublisher;
   }
 
-  public RabbitStreamPublisher createStreamPublisher(StreamId streamId) {
-    this.createStream(streamId);
-    Producer producer = this.environment.producerBuilder().stream(streamId.fullName()).build();
-    return new RabbitStreamPublisher(streamId, producer, objectMapper, 0);
+  public RabbitStreamPublisher createStreamPublisher(SseStreamId sseStreamId) {
+    this.createStream(sseStreamId);
+    Producer producer = this.environment.producerBuilder().stream(sseStreamId.fullName()).build();
+    return new RabbitStreamPublisher(sseStreamId, producer, objectMapper, 0);
   }
 }

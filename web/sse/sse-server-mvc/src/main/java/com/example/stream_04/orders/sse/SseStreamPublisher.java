@@ -24,9 +24,9 @@ public class SseStreamPublisher implements MessageHandler {
     this.lastSseEventId = lastSseEventId;
     this.finalEventType = finalEventType;
 
-    sseEmitter.onCompletion(() -> logger.info("Stream {} completed", lastSseEventId.streamId()));
-    sseEmitter.onTimeout(() -> logger.info("Stream {} timed out", lastSseEventId.streamId()));
-    sseEmitter.onError(e -> logger.error("Stream {} error", lastSseEventId.streamId(), e));
+    sseEmitter.onCompletion(() -> logger.info("Stream {} completed", lastSseEventId.sseStreamId()));
+    sseEmitter.onTimeout(() -> logger.info("Stream {} timed out", lastSseEventId.sseStreamId()));
+    sseEmitter.onError(e -> logger.error("Stream {} error", lastSseEventId.sseStreamId(), e));
   }
 
   public SseEmitter getSseEmitter() {

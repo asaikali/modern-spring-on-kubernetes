@@ -4,8 +4,8 @@ import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
 import com.example.stream_04.orders.sse.SseEventId;
 import com.example.stream_04.orders.sse.SseRabbitStreamManager;
+import com.example.stream_04.orders.sse.SseStreamId;
 import com.example.stream_04.orders.sse.SseStreamPublisher;
-import com.example.stream_04.orders.sse.StreamId;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
@@ -46,15 +46,15 @@ public class OrderService {
     }
 
     // generate a new stream id
-    StreamId streamId = StreamId.generate(order.symbol().toLowerCase());
-    logger.info("Created new rabbitmq stream {} ", streamId.fullName());
+    SseStreamId sseStreamId = SseStreamId.generate(order.symbol().toLowerCase());
+    logger.info("Created new rabbitmq stream {} ", sseStreamId.fullName());
 
     this.executor.execute(
         () -> {
           try {
 
             try (var streamPublisher =
-                this.sseRabbitStreamManager.createStreamPublisher(streamId)) {
+                this.sseRabbitStreamManager.createStreamPublisher(sseStreamId)) {
               while (true) {
                 // Poll current price
                 StockPrice price = stockPriceService.getCurrentPrice(order.symbol());
@@ -84,11 +84,11 @@ public class OrderService {
               }
             }
           } catch (Exception e) {
-            logger.error("Error in price polling loop for stream {}", streamId.fullName(), e);
+            logger.error("Error in price polling loop for stream {}", sseStreamId.fullName(), e);
           }
         });
 
-    var lastEventId = SseEventId.firstEvent(streamId);
+    var lastEventId = SseEventId.firstEvent(sseStreamId);
     return new EventualResponse(lastEventId.toString());
   }
 }

@@ -12,14 +12,14 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class RabbitStreamPublisher implements AutoCloseable {
 
-  private final StreamId streamId;
+  private final SseStreamId sseStreamId;
   private final Producer producer;
   private final AtomicLong index;
   private final ObjectMapper objectMapper;
 
   public RabbitStreamPublisher(
-      StreamId streamId, Producer producer, ObjectMapper objectMapper, long startIndex) {
-    this.streamId = Objects.requireNonNull(streamId);
+      SseStreamId sseStreamId, Producer producer, ObjectMapper objectMapper, long startIndex) {
+    this.sseStreamId = Objects.requireNonNull(sseStreamId);
     this.producer = Objects.requireNonNull(producer);
     this.objectMapper = Objects.requireNonNull(objectMapper);
     this.index = new AtomicLong(startIndex);
