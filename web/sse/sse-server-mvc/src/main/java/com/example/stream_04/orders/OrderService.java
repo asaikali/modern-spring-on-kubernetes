@@ -3,10 +3,10 @@ package com.example.stream_04.orders;
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
 import com.example.stream_04.orders.sse.server.ApiResponse;
+import com.example.stream_04.orders.sse.server.RabbitSseBridge;
 import com.example.stream_04.orders.sse.server.SseEventId;
 import com.example.stream_04.orders.sse.server.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.server.SseStreamId;
-import com.example.stream_04.orders.sse.server.SseStreamPublisher;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
@@ -32,9 +32,9 @@ class OrderService {
   }
 
   public SseEmitter resume(SseEventId lastEventId) {
-    SseStreamPublisher sseStreamPublisher =
+    RabbitSseBridge rabbitSseBridge =
         this.sseRabbitStreamManager.createSsePublisher(lastEventId, "order-completed");
-    return sseStreamPublisher.getSseEmitter();
+    return rabbitSseBridge.getSseEmitter();
   }
 
   public ApiResponse placeOrder(BuyOrder order) {

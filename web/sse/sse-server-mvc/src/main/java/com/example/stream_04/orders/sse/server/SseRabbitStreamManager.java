@@ -50,25 +50,25 @@ public class SseRabbitStreamManager {
    * Creates an SSE publisher that consumes messages from a RabbitMQ stream and publishes them as
    * Server-Sent Events.
    *
-   * <p>This method ensures the stream exists, creates a new SseStreamPublisher, and sets up a
-   * RabbitMQ stream consumer that starts reading from the beginning of the stream and forwards
-   * messages to the publisher.
+   * <p>This method ensures the stream exists, creates a new RabbitSseBridge, and sets up a RabbitMQ
+   * stream consumer that starts reading from the beginning of the stream and forwards messages to
+   * the publisher.
    *
    * @param lastSseEventId The ID of the last event that was processed, used to filter out
    *     already-processed messages from the stream
    * @param finalEventType The event type that, when received, will trigger the completion of the
    *     SSE stream
-   * @return A new SseStreamPublisher that can be used to stream events to clients
+   * @return A new RabbitSseBridge that can be used to stream events to clients
    */
-  public SseStreamPublisher createSsePublisher(SseEventId lastSseEventId, String finalEventType) {
+  public RabbitSseBridge createSsePublisher(SseEventId lastSseEventId, String finalEventType) {
     this.createStream(lastSseEventId.sseStreamId());
-    SseStreamPublisher sseStreamPublisher = new SseStreamPublisher(lastSseEventId, finalEventType);
+    RabbitSseBridge rabbitSseBridge = new RabbitSseBridge(lastSseEventId, finalEventType);
     this.environment.consumerBuilder().stream(lastSseEventId.sseStreamId().fullName())
         .offset(OffsetSpecification.first())
-        .messageHandler(sseStreamPublisher)
+        .messageHandler(rabbitSseBridge)
         .build();
 
-    return sseStreamPublisher;
+    return rabbitSseBridge;
   }
 
   /**

@@ -22,16 +22,16 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEvent
  * <p>The publisher can be configured to automatically complete the SSE stream when a message with a
  * specific event type (finalEventType) is received.
  */
-public class SseStreamPublisher implements MessageHandler {
+public class RabbitSseBridge implements MessageHandler {
 
-  private Logger logger = LoggerFactory.getLogger(SseStreamPublisher.class);
+  private Logger logger = LoggerFactory.getLogger(RabbitSseBridge.class);
   private final SseEmitter sseEmitter;
   private final SseEventId lastSseEventId;
   private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
   private final String finalEventType;
 
   /**
-   * Creates a new SseStreamPublisher with the specified last event ID and final event type.
+   * Creates a new RabbitSseBridge with the specified last event ID and final event type.
    *
    * <p>This constructor initializes a new SseEmitter and sets up completion, timeout, and error
    * callbacks with appropriate logging.
@@ -41,7 +41,7 @@ public class SseStreamPublisher implements MessageHandler {
    * @param finalEventType The event type that, when received, will trigger the completion of the
    *     SSE stream
    */
-  public SseStreamPublisher(SseEventId lastSseEventId, String finalEventType) {
+  public RabbitSseBridge(SseEventId lastSseEventId, String finalEventType) {
     this.sseEmitter = new SseEmitter();
     this.lastSseEventId = lastSseEventId;
     this.finalEventType = finalEventType;
