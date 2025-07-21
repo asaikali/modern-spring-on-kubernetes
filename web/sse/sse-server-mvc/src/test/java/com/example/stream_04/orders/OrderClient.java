@@ -30,7 +30,7 @@ public class OrderClient {
               if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
                 return response
                     .bodyToMono(OrderCompleted.class)
-                    .map(ImmediateResponse::new)
+                    .map(o -> new ImmediateResponse(o))
                     .cast(Response.class);
               }
 
@@ -69,7 +69,7 @@ public class OrderClient {
 
     Response response = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(200)));
     if (response instanceof ImmediateResponse immediateResponse) {
-      log.info(immediateResponse.getResult().toString());
+      log.info(immediateResponse.result().toString());
     }
 
     response = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)));

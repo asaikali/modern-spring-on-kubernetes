@@ -28,7 +28,7 @@ class OrdersController {
     var result = this.orderService.placeOrder(order);
     return switch (result) {
       case ImmediateResponse r ->
-          ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(r.getResult());
+          ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(r.result());
 
       case EventualResponse r -> {
         response.setContentType("text/event-stream");
