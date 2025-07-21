@@ -1,9 +1,7 @@
 package com.example.stream_04.orders;
 
 import com.example.stream_04.orders.sse.server.ApiResponse;
-import com.example.stream_04.orders.sse.server.ImmediateApiResponse;
 import com.example.stream_04.orders.sse.server.SseEventId;
-import com.example.stream_04.orders.sse.server.StreamApiResponse;
 import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +31,7 @@ public class OrderClient {
               if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
                 return response
                     .bodyToMono(OrderCompleted.class)
-                    .map(o -> new ImmediateApiResponse(o))
+                    .map(o -> new ApiResponse.Immediate(o))
                     .cast(ApiResponse.class);
               }
 
@@ -46,7 +44,7 @@ public class OrderClient {
                     .map(
                         sse -> {
                           String lastId = sse.id(); // Can also parse sse.data() if needed
-                          return (ApiResponse) new StreamApiResponse(SseEventId.fromString(lastId));
+                          return (ApiResponse) new ApiResponse.Stream(SseEventId.fromString(lastId));
                         });
               }
 
@@ -71,12 +69,12 @@ public class OrderClient {
     var client = new OrderClient();
 
     ApiResponse apiResponse = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(200)));
-    if (apiResponse instanceof ImmediateApiResponse immediateResponse) {
-      log.info(immediateResponse.result().toString());
+    if (apiResponse instanceof ApiResponse.Immediate immediateResponse) {
+      log.info(immediateResponse.payload().toString());
     }
 
     apiResponse = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)));
-    if (apiResponse instanceof StreamApiResponse eventualResponse) {
+    if (apiResponse instanceof ApiResponse.Stream eventualResponse) {
       log.info("Stream last event id {} ", eventualResponse.lastEventId());
     }
   }
