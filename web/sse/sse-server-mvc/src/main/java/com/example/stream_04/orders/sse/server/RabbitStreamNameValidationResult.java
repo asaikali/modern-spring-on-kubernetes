@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
  * Results of validating a RabbitMQ stream name. Each value indicates whether the name is valid or
  * the specific rule that failed.
  */
-public enum StreamNameValidationResult {
+public enum RabbitStreamNameValidationResult {
   VALID(""),
   NULL("Name cannot be null"),
   EMPTY("Name cannot be empty"),
@@ -17,7 +17,7 @@ public enum StreamNameValidationResult {
   private static final Pattern VALID_CHARS = Pattern.compile("^[a-zA-Z0-9._-]+$");
   private final String message;
 
-  StreamNameValidationResult(String message) {
+  RabbitStreamNameValidationResult(String message) {
     this.message = message;
   }
 
@@ -26,9 +26,9 @@ public enum StreamNameValidationResult {
    * method checks for null, empty, length, allowed characters, and reserved prefixes.
    *
    * @param name the stream name to validate
-   * @return a StreamNameValidationResult value indicating success or the specific error
+   * @return a RabbitStreamNameValidationResult value indicating success or the specific error
    */
-  public static StreamNameValidationResult forStreamName(String name) {
+  public static RabbitStreamNameValidationResult forStreamName(String name) {
     if (name == null) {
       return NULL;
     }

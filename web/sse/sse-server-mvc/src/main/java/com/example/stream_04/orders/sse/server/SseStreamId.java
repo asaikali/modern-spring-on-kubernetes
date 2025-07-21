@@ -46,7 +46,7 @@ public record SseStreamId(String prefix, UUID uuid, String fullName) {
 
     // 4. Overall stream name validation (e.g., length, reserved characters beyond prefix/uuid
     // format)
-    var nameValidation = StreamNameValidationResult.forStreamName(fullName);
+    var nameValidation = RabbitStreamNameValidationResult.forStreamName(fullName);
     if (!nameValidation.isValid()) {
       throw new IllegalArgumentException(
           "Invalid stream name: '%s' -> %s".formatted(fullName, nameValidation.getMessage()));
@@ -97,7 +97,7 @@ public record SseStreamId(String prefix, UUID uuid, String fullName) {
   public static SseStreamId fromString(String name) {
     Objects.requireNonNull(name, "Stream name cannot be null.");
 
-    var validation = StreamNameValidationResult.forStreamName(name);
+    var validation = RabbitStreamNameValidationResult.forStreamName(name);
     if (!validation.isValid()) {
       throw new IllegalArgumentException(
           "Invalid stream name: '%s' -> %s".formatted(name, validation.getMessage()));

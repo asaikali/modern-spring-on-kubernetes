@@ -44,7 +44,8 @@ public class OrderClient {
                     .map(
                         sse -> {
                           String lastId = sse.id(); // Can also parse sse.data() if needed
-                          return (ApiResponse) new ApiResponse.Stream(SseEventId.fromString(lastId));
+                          return (ApiResponse)
+                              new ApiResponse.Stream(SseEventId.fromString(lastId));
                         });
               }
 
