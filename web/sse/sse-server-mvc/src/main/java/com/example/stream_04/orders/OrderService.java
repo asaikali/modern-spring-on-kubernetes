@@ -36,15 +36,26 @@ class OrderService {
     return rabbitSseBridge.getSseEmitter();
   }
 
-  public ApiResponse placeOrder(LimitOrderRequest order) {
+  private LimitOrderStatus attemptBuy(LimitOrderRequest limitOrderRequest) {
+    StockPrice currentPrice = stockPriceService.getCurrentPrice(limitOrderRequest.symbol());
 
-    StockPrice initialPrice = this.stockPriceService.getCurrentPrice(order.symbol());
-    if (initialPrice.price().compareTo(order.maxPrice()) <= 0) {
-      var orderCompleted = new LimitOrderExecuted(order, initialPrice.price(), Instant.now());
-      return new ApiResponse.Immediate(orderCompleted);
+    if (currentPrice.price().compareTo(limitOrderRequest.maxPrice()) <= 0) {
+      return new LimitOrderExecuted(limitOrderRequest, currentPrice.price(), Instant.now());
+
+    } else {
+      return new LimitOrderPending(limitOrderRequest, currentPrice);
+    }
+  }
+
+  public ApiResponse placeOrder(LimitOrderRequest order, boolean allowImmediate) {
+
+    // see if we can buy the stock and avoid creating a stream
+    LimitOrderStatus initialBuyAttemptStatus = attemptBuy(order);
+    if (initialBuyAttemptStatus instanceof LimitOrderExecuted orderExecuted && allowImmediate) {
+      return new ApiResponse.Immediate(orderExecuted);
     }
 
-    // generate a new stream id
+    // we need to stream the result, generate a new stream id
     SseStreamId sseStreamId = SseStreamId.generate(order.symbol().toLowerCase());
     logger.info("Created new rabbitmq stream {} ", sseStreamId.fullName());
 
@@ -54,35 +65,27 @@ class OrderService {
 
             try (var streamPublisher =
                 this.rabbitSseStreamFactory.createRabbitStreamPublisher(sseStreamId)) {
-              while (true) {
-                // Poll current price
-                StockPrice symbol = stockPriceService.getCurrentPrice(order.symbol());
 
-                // current price matches the limit order we can purchase the stock
-                if (symbol.price().compareTo(order.maxPrice()) <= 0) {
-                  var orderCompleted = new LimitOrderExecuted(order, symbol.price(), Instant.now());
-                  boolean published = streamPublisher.publish(orderCompleted, "order-executed");
-                  if (published) {
-                    logger.info(
-                        "Published order executed for event {} at price {}", order.symbol(), symbol.price());
-                  } else {
-                    // TODO retry the send to the RabbitMQ
-                  }
-                  break;
-                }
+              var buyAttemptStatus = initialBuyAttemptStatus;
+              do {
 
-                // send an order pending message
-                LimitOrderPending orderPending = new LimitOrderPending(order, symbol);
-                boolean published = streamPublisher.publish(orderPending, "order-pending");
+                String type =
+                    switch (buyAttemptStatus) {
+                      case LimitOrderExecuted orderExecuted -> "order-executed";
+                      case LimitOrderPending orderPending -> "order-pending";
+                    };
+
+                boolean published = streamPublisher.publish(buyAttemptStatus, type);
                 if (published) {
-                  logger.info("published order pending event for {} at price {}", order.symbol(), symbol.price());
+                  logger.info("published event: ", buyAttemptStatus);
                 } else {
                   // TODO retry the send to the RabbitMQ
                 }
 
                 // Wait before polling again
                 Thread.sleep(Duration.ofSeconds(1));
-              }
+                buyAttemptStatus = attemptBuy(order);
+              } while (buyAttemptStatus instanceof LimitOrderPending);
             }
           } catch (Exception e) {
             logger.error("Error in price polling loop for stream {}", sseStreamId.fullName(), e);

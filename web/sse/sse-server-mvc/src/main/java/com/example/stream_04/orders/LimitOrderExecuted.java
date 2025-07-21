@@ -4,4 +4,5 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 record LimitOrderExecuted(
-    LimitOrderRequest limitOrderRequest, BigDecimal purchasePrice, Instant purchaseTime) {}
+    LimitOrderRequest limitOrderRequest, BigDecimal purchasePrice, Instant purchaseTime)
+    implements LimitOrderStatus {}
