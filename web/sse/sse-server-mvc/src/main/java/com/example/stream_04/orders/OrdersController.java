@@ -27,10 +27,10 @@ class OrdersController {
   public Object subscribe(@RequestBody BuyOrder order, HttpServletResponse response) {
     var result = this.orderService.placeOrder(order);
     return switch (result) {
-      case ImmediateResponse r ->
+      case ImmediateApiOutcome r ->
           ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(r.result());
 
-      case EventualResponse r -> {
+      case EventualApiOutcome r -> {
         response.setContentType("text/event-stream");
         yield orderService.resume(r.lastEventId());
       }

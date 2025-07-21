@@ -6,7 +6,6 @@ import com.example.stream_04.orders.sse.server.SseEventId;
 import com.example.stream_04.orders.sse.server.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.server.SseStreamId;
 import com.example.stream_04.orders.sse.server.SseStreamPublisher;
-import com.sun.java.accessibility.util.EventID;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
@@ -37,12 +36,12 @@ class OrderService {
     return sseStreamPublisher.getSseEmitter();
   }
 
-  public Response placeOrder(BuyOrder order) {
+  public ApiOutcome placeOrder(BuyOrder order) {
 
     StockPrice initialPrice = this.stockPriceService.getCurrentPrice(order.symbol());
     if (initialPrice.price().compareTo(order.maxPrice()) <= 0) {
       var orderCompleted = new OrderCompleted(order, initialPrice.price(), Instant.now());
-      return new ImmediateResponse(orderCompleted);
+      return new ImmediateApiOutcome(orderCompleted);
     }
 
     // generate a new stream id
@@ -89,6 +88,6 @@ class OrderService {
         });
 
     var lastEventId = SseEventId.firstEvent(sseStreamId);
-    return new EventualResponse(lastEventId);
+    return new EventualApiOutcome(lastEventId);
   }
 }

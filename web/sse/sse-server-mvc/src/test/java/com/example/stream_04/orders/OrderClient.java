@@ -14,7 +14,7 @@ public class OrderClient {
 
   private static final Logger log = LoggerFactory.getLogger(OrderClient.class);
 
-  public Response placeOrder(BuyOrder order) {
+  public ApiOutcome placeOrder(BuyOrder order) {
     WebClient client = WebClient.create("http://localhost:8080/orders");
 
     return client
@@ -30,8 +30,8 @@ public class OrderClient {
               if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
                 return response
                     .bodyToMono(OrderCompleted.class)
-                    .map(o -> new ImmediateResponse(o))
-                    .cast(Response.class);
+                    .map(o -> new ImmediateApiOutcome(o))
+                    .cast(ApiOutcome.class);
               }
 
               if (MediaType.TEXT_EVENT_STREAM.isCompatibleWith(contentType)) {
@@ -43,7 +43,7 @@ public class OrderClient {
                     .map(
                         sse -> {
                           String lastId = sse.id(); // Can also parse sse.data() if needed
-                          return (Response) new EventualResponse(SseEventId.fromString(lastId));
+                          return (ApiOutcome) new EventualApiOutcome(SseEventId.fromString(lastId));
                         });
               }
 
@@ -67,13 +67,13 @@ public class OrderClient {
 
     var client = new OrderClient();
 
-    Response response = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(200)));
-    if (response instanceof ImmediateResponse immediateResponse) {
+    ApiOutcome apiOutcome = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(200)));
+    if (apiOutcome instanceof ImmediateApiOutcome immediateResponse) {
       log.info(immediateResponse.result().toString());
     }
 
-    response = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)));
-    if (response instanceof EventualResponse eventualResponse) {
+    apiOutcome = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)));
+    if (apiOutcome instanceof EventualApiOutcome eventualResponse) {
       log.info("Stream last event id {} ", eventualResponse.lastEventId());
     }
   }
