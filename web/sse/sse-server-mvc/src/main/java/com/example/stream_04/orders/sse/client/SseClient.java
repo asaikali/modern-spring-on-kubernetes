@@ -1,4 +1,4 @@
-package com.example.sse.client;
+package com.example.stream_04.orders.sse.client;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;

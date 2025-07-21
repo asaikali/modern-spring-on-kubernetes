@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.example.sse.client.SseClient;
+import com.example.stream_04.orders.sse.client.SseClient;
 import org.springframework.web.reactive.function.client.WebClient;
 
 public class SseClientExample {
