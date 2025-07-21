@@ -14,7 +14,7 @@ public class OrderClient2 {
 
   private static final Logger log = LoggerFactory.getLogger(OrderClient2.class);
 
-  public Mono<String> placeOrder(BuyOrder order) {
+  public Mono<String> placeOrder(LimitOrderRequest order) {
     WebClient client = WebClient.create("http://localhost:8080/orders");
 
     return client
@@ -69,7 +69,8 @@ public class OrderClient2 {
 
     try {
       // Much simpler - just get the final result
-      String result = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101))).block();
+      String result =
+          client.placeOrder(new LimitOrderRequest("APPL", 100, BigDecimal.valueOf(101))).block();
 
       System.out.println("\nFinal result: " + result);
 

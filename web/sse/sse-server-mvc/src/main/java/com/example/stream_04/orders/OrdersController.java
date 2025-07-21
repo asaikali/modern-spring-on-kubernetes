@@ -25,7 +25,7 @@ class OrdersController {
 
   /** POST /watchlist Creates a new stream for the requested symbol and returns an SSE stream. */
   @PostMapping(produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_JSON_VALUE})
-  public Object subscribe(@RequestBody BuyOrder order, HttpServletResponse response) {
+  public Object subscribe(@RequestBody LimitOrderRequest order, HttpServletResponse response) {
     var result = this.orderService.placeOrder(order);
     return switch (result) {
       case ApiResponse.Immediate immediate ->

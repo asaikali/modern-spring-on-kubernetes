@@ -15,7 +15,7 @@ public class OrderClient {
 
   private static final Logger log = LoggerFactory.getLogger(OrderClient.class);
 
-  public ApiResponse placeOrder(BuyOrder order) {
+  public ApiResponse placeOrder(LimitOrderRequest order) {
     WebClient client = WebClient.create("http://localhost:8080/orders");
 
     return client
@@ -30,7 +30,7 @@ public class OrderClient {
 
               if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)) {
                 return response
-                    .bodyToMono(OrderCompleted.class)
+                    .bodyToMono(LimitOrderExecuted.class)
                     .map(o -> new ApiResponse.Immediate(o))
                     .cast(ApiResponse.class);
               }
@@ -64,17 +64,18 @@ public class OrderClient {
           "quantity": "10",
           "maxPrice": 190.00
         }
-        """; // new BuyOrder("APPL",100, BigDecimal.valueOf(200));
-    var eventual = new BuyOrder("APPL", 100, BigDecimal.valueOf(101));
+        """; // new LimitOrderRequest("APPL",100, BigDecimal.valueOf(200));
+    var eventual = new LimitOrderRequest("APPL", 100, BigDecimal.valueOf(101));
 
     var client = new OrderClient();
 
-    ApiResponse apiResponse = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(200)));
+    ApiResponse apiResponse =
+        client.placeOrder(new LimitOrderRequest("APPL", 100, BigDecimal.valueOf(200)));
     if (apiResponse instanceof ApiResponse.Immediate immediateResponse) {
       log.info(immediateResponse.payload().toString());
     }
 
-    apiResponse = client.placeOrder(new BuyOrder("APPL", 100, BigDecimal.valueOf(101)));
+    apiResponse = client.placeOrder(new LimitOrderRequest("APPL", 100, BigDecimal.valueOf(101)));
     if (apiResponse instanceof ApiResponse.Stream eventualResponse) {
       log.info("Stream last event id {} ", eventualResponse.lastEventId());
     }

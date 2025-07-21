@@ -46,9 +46,12 @@ public class RabbitSseBridge implements MessageHandler {
     this.lastSseEventId = lastSseEventId;
     this.finalEventType = finalEventType;
 
-    sseEmitter.onCompletion(() -> logger.info("Stream {} completed", lastSseEventId.createRabbitSseBridge()));
-    sseEmitter.onTimeout(() -> logger.info("Stream {} timed out", lastSseEventId.createRabbitSseBridge()));
-    sseEmitter.onError(e -> logger.error("Stream {} error", lastSseEventId.createRabbitSseBridge(), e));
+    sseEmitter.onCompletion(
+        () -> logger.info("Stream {} completed", lastSseEventId.createRabbitSseBridge()));
+    sseEmitter.onTimeout(
+        () -> logger.info("Stream {} timed out", lastSseEventId.createRabbitSseBridge()));
+    sseEmitter.onError(
+        e -> logger.error("Stream {} error", lastSseEventId.createRabbitSseBridge(), e));
   }
 
   /**

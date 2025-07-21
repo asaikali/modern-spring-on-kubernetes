@@ -37,11 +37,11 @@ class OrderService {
     return rabbitSseBridge.getSseEmitter();
   }
 
-  public ApiResponse placeOrder(BuyOrder order) {
+  public ApiResponse placeOrder(LimitOrderRequest order) {
 
     StockPrice initialPrice = this.stockPriceService.getCurrentPrice(order.symbol());
     if (initialPrice.price().compareTo(order.maxPrice()) <= 0) {
-      var orderCompleted = new OrderCompleted(order, initialPrice.price(), Instant.now());
+      var orderCompleted = new LimitOrderExecuted(order, initialPrice.price(), Instant.now());
       return new ApiResponse.Immediate(orderCompleted);
     }
 
@@ -62,7 +62,7 @@ class OrderService {
                 // Check if we should complete the order
                 if (current.compareTo(order.maxPrice()) <= 0) {
                   logger.info("Order completed for {} at price {}", order.symbol(), current);
-                  var orderCompleted = new OrderCompleted(order, current, Instant.now());
+                  var orderCompleted = new LimitOrderExecuted(order, current, Instant.now());
                   boolean published = streamPublisher.publish(orderCompleted, "order-completed");
                   if (published) {
                     logger.info("Order completed for {} at price {}", order.symbol(), current);
