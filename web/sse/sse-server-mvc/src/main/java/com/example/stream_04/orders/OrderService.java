@@ -54,7 +54,7 @@ public class OrderService {
           try {
 
             try (var streamPublisher =
-                this.sseRabbitStreamManager.createStreamPublisher(sseStreamId)) {
+                this.sseRabbitStreamManager.createRabbitStreamPublisher(sseStreamId)) {
               while (true) {
                 // Poll current price
                 StockPrice price = stockPriceService.getCurrentPrice(order.symbol());
