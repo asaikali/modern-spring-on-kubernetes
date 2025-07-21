@@ -2,7 +2,7 @@ package com.example.stream_04.orders;
 
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
-import com.example.stream_04.orders.sse.EventId;
+import com.example.stream_04.orders.sse.SseEventId;
 import com.example.stream_04.orders.sse.SseRabbitStreamManager;
 import com.example.stream_04.orders.sse.SseStreamPublisher;
 import com.example.stream_04.orders.sse.StreamId;
@@ -33,7 +33,7 @@ public class OrderService {
   public SseEmitter resume(String lastEventId) {
     SseStreamPublisher sseStreamPublisher =
         this.sseRabbitStreamManager.createSsePublisher(
-            EventId.fromString(lastEventId), "order-completed");
+            SseEventId.fromString(lastEventId), "order-completed");
     return sseStreamPublisher.getSseEmitter();
   }
 
@@ -88,7 +88,7 @@ public class OrderService {
           }
         });
 
-    var lastEventId = EventId.firstEvent(streamId);
+    var lastEventId = SseEventId.firstEvent(streamId);
     return new EventualResponse(lastEventId.toString());
   }
 }

@@ -15,18 +15,18 @@ public class SseStreamPublisher implements MessageHandler {
 
   private Logger logger = LoggerFactory.getLogger(SseStreamPublisher.class);
   private final SseEmitter sseEmitter;
-  private final EventId lastEventId;
+  private final SseEventId lastSseEventId;
   private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
   private final String finalEventType;
 
-  public SseStreamPublisher(EventId lastEventId, String finalEventType) {
+  public SseStreamPublisher(SseEventId lastSseEventId, String finalEventType) {
     this.sseEmitter = new SseEmitter();
-    this.lastEventId = lastEventId;
+    this.lastSseEventId = lastSseEventId;
     this.finalEventType = finalEventType;
 
-    sseEmitter.onCompletion(() -> logger.info("Stream {} completed", lastEventId.streamId()));
-    sseEmitter.onTimeout(() -> logger.info("Stream {} timed out", lastEventId.streamId()));
-    sseEmitter.onError(e -> logger.error("Stream {} error", lastEventId.streamId(), e));
+    sseEmitter.onCompletion(() -> logger.info("Stream {} completed", lastSseEventId.streamId()));
+    sseEmitter.onTimeout(() -> logger.info("Stream {} timed out", lastSseEventId.streamId()));
+    sseEmitter.onError(e -> logger.error("Stream {} error", lastSseEventId.streamId(), e));
   }
 
   public SseEmitter getSseEmitter() {
@@ -36,12 +36,12 @@ public class SseStreamPublisher implements MessageHandler {
   @Override
   public void handle(Context context, Message message) {
     long messageId = message.getProperties().getMessageIdAsLong();
-    if (messageId <= lastEventId.index()) return;
+    if (messageId <= lastSseEventId.index()) return;
 
     final String body = new String(message.getBodyAsBinary(), StandardCharsets.UTF_8);
     final String type = (String) message.getApplicationProperties().get("type");
     final long index = message.getProperties().getMessageIdAsLong();
-    final String sseEventId = lastEventId.withIndex(index).toString();
+    final String sseEventId = lastSseEventId.withIndex(index).toString();
 
     final SseEventBuilder eventBuilder = SseEmitter.event().id(sseEventId).name(type).data(body);
 

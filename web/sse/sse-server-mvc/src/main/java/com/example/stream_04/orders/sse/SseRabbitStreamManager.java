@@ -21,10 +21,10 @@ public class SseRabbitStreamManager {
     this.environment.streamCreator().stream(streamId.fullName()).create();
   }
 
-  public SseStreamPublisher createSsePublisher(EventId lastEventId, String finalEventType) {
-    this.createStream(lastEventId.streamId());
-    SseStreamPublisher sseStreamPublisher = new SseStreamPublisher(lastEventId, finalEventType);
-    this.environment.consumerBuilder().stream(lastEventId.streamId().fullName())
+  public SseStreamPublisher createSsePublisher(SseEventId lastSseEventId, String finalEventType) {
+    this.createStream(lastSseEventId.streamId());
+    SseStreamPublisher sseStreamPublisher = new SseStreamPublisher(lastSseEventId, finalEventType);
+    this.environment.consumerBuilder().stream(lastSseEventId.streamId().fullName())
         .offset(OffsetSpecification.first())
         .messageHandler(sseStreamPublisher)
         .build();

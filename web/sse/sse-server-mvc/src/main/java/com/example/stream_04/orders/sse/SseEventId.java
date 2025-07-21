@@ -6,45 +6,45 @@ import java.util.Objects;
  * Represents a unique identifier for a specific event within a stream. It is composed of a StreamId
  * and a sequential index.
  *
- * <p>The canonical string format for an EventId is "prefix.uuid_index".
+ * <p>The canonical string format for an SseEventId is "prefix.uuid_index".
  *
  * @param streamId The identifier of the stream to which this event belongs.
  * @param index The sequential index of the event within its stream, typically starting from 0 or 1.
  */
-public record EventId(StreamId streamId, long index) {
+public record SseEventId(StreamId streamId, long index) {
 
   private static final char INDEX_DELIMITER = '_';
 
   /**
-   * Canonical constructor for EventId. Ensures that the associated StreamId is not null and the
+   * Canonical constructor for SseEventId. Ensures that the associated StreamId is not null and the
    * index is non-negative.
    */
-  public EventId {
+  public SseEventId {
     Objects.requireNonNull(streamId, "StreamId cannot be null.");
     if (index < 0) {
       throw new IllegalArgumentException("Event index cannot be negative. Was: " + index);
     }
   }
 
-  public EventId withIndex(long index) {
-    return new EventId(streamId, index);
+  public SseEventId withIndex(long index) {
+    return new SseEventId(streamId, index);
   }
 
-  public static EventId firstEvent(StreamId streamId) {
-    return new EventId(streamId, 0);
+  public static SseEventId firstEvent(StreamId streamId) {
+    return new SseEventId(streamId, 0);
   }
 
   /**
-   * Parses a full event ID string into an EventId object. The input string must be in the format
+   * Parses a full event ID string into an SseEventId object. The input string must be in the format
    * "prefix.uuid_index".
    *
    * @param eventIdString The string representation of the event ID (e.g.,
    *     "myprefix.a1b2c3d4-e5f6-7890-1234-567890abcdef_123").
-   * @return An EventId instance parsed from the string.
+   * @return An SseEventId instance parsed from the string.
    * @throws IllegalArgumentException if the input string is null, empty, malformed, or contains
    *     invalid StreamId or index components.
    */
-  public static EventId fromString(String eventIdString) {
+  public static SseEventId fromString(String eventIdString) {
     Objects.requireNonNull(eventIdString, "Event ID string cannot be null.");
 
     if (eventIdString.isEmpty()) {
@@ -82,13 +82,14 @@ public record EventId(StreamId streamId, long index) {
           "Invalid index segment in Event ID string: '%s'".formatted(indexPartString), e);
     }
 
-    return new EventId(parsedStreamId, parsedIndex);
+    return new SseEventId(parsedStreamId, parsedIndex);
   }
 
   /**
-   * Returns the canonical string representation of this EventId in the format "prefix.uuid_index".
+   * Returns the canonical string representation of this SseEventId in the format
+   * "prefix.uuid_index".
    *
-   * @return The formatted string representation of the EventId.
+   * @return The formatted string representation of the SseEventId.
    */
   @Override
   public String toString() {
