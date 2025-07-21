@@ -8,10 +8,10 @@ import java.util.Objects;
  *
  * <p>The canonical string format for an SseEventId is "prefix.uuid_index".
  *
- * @param sseStreamId The identifier of the stream to which this event belongs.
+ * @param createRabbitSseBridge The identifier of the stream to which this event belongs.
  * @param index The sequential index of the event within its stream, typically starting from 0 or 1.
  */
-public record SseEventId(SseStreamId sseStreamId, long index) {
+public record SseEventId(SseStreamId createRabbitSseBridge, long index) {
 
   private static final char INDEX_DELIMITER = '_';
 
@@ -20,14 +20,14 @@ public record SseEventId(SseStreamId sseStreamId, long index) {
    * the index is non-negative.
    */
   public SseEventId {
-    Objects.requireNonNull(sseStreamId, "SseStreamId cannot be null.");
+    Objects.requireNonNull(createRabbitSseBridge, "SseStreamId cannot be null.");
     if (index < 0) {
       throw new IllegalArgumentException("Event index cannot be negative. Was: " + index);
     }
   }
 
   public SseEventId withIndex(long index) {
-    return new SseEventId(sseStreamId, index);
+    return new SseEventId(createRabbitSseBridge, index);
   }
 
   public static SseEventId firstEvent(SseStreamId sseStreamId) {
@@ -94,6 +94,6 @@ public record SseEventId(SseStreamId sseStreamId, long index) {
   @Override
   public String toString() {
     // SseStreamId's toString() or fullName() will provide "prefix.uuid"
-    return sseStreamId.fullName() + INDEX_DELIMITER + index;
+    return createRabbitSseBridge.fullName() + INDEX_DELIMITER + index;
   }
 }
