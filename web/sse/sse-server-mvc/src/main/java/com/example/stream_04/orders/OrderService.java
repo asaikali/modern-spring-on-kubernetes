@@ -67,7 +67,7 @@ class OrderService {
                 this.rabbitSseStreamFactory.createRabbitStreamPublisher(sseStreamId)) {
 
               var buyAttemptStatus = initialBuyAttemptStatus;
-              while(true) {
+              while (true) {
 
                 String type =
                     switch (buyAttemptStatus) {
@@ -82,7 +82,7 @@ class OrderService {
                   // TODO retry the send to the RabbitMQ
                 }
 
-                if(type.equals("order-executed")) break;
+                if (type.equals("order-executed")) break;
 
                 // Wait before attempting to buy
                 Thread.sleep(Duration.ofMillis(500));
