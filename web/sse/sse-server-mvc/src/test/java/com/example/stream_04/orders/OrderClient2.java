@@ -1,6 +1,5 @@
-package com.example.orders;
+package com.example.stream_04.orders;
 
-import com.example.stream_04.orders.BuyOrder;
 import java.math.BigDecimal;
 import java.time.Duration;
 import org.slf4j.Logger;

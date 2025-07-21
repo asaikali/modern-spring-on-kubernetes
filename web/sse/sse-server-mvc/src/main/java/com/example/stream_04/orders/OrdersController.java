@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/orders")
-public class OrdersController {
+class OrdersController {
 
   private final OrderService orderService;
 

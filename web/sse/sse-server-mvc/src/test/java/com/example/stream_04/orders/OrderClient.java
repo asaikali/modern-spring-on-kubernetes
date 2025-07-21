@@ -1,10 +1,5 @@
-package com.example.orders;
+package com.example.stream_04.orders;
 
-import com.example.stream_04.orders.BuyOrder;
-import com.example.stream_04.orders.EventualResponse;
-import com.example.stream_04.orders.ImmediateResponse;
-import com.example.stream_04.orders.OrderCompleted;
-import com.example.stream_04.orders.Response;
 import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

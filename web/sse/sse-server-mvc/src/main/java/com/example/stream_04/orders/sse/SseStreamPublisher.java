@@ -13,14 +13,14 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEvent
 
 /**
  * Consumes messages from a RabbitMQ stream and publishes them as Server-Sent Events (SSE).
- * 
- * <p>This class implements the MessageHandler interface to process messages from a RabbitMQ
- * stream. It starts reading from the beginning of the stream and emits via SSE any messages
- * that occurred after the specified last event ID. It uses virtual threads to avoid blocking
- * the RabbitMQ stream client thread pool when sending SSE events.
- * 
- * <p>The publisher can be configured to automatically complete the SSE stream when a message
- * with a specific event type (finalEventType) is received.
+ *
+ * <p>This class implements the MessageHandler interface to process messages from a RabbitMQ stream.
+ * It starts reading from the beginning of the stream and emits via SSE any messages that occurred
+ * after the specified last event ID. It uses virtual threads to avoid blocking the RabbitMQ stream
+ * client thread pool when sending SSE events.
+ *
+ * <p>The publisher can be configured to automatically complete the SSE stream when a message with a
+ * specific event type (finalEventType) is received.
  */
 public class SseStreamPublisher implements MessageHandler {
 
@@ -32,14 +32,14 @@ public class SseStreamPublisher implements MessageHandler {
 
   /**
    * Creates a new SseStreamPublisher with the specified last event ID and final event type.
-   * 
+   *
    * <p>This constructor initializes a new SseEmitter and sets up completion, timeout, and error
    * callbacks with appropriate logging.
    *
    * @param lastSseEventId The ID of the last event that was processed, used to filter out
-   *                      already-processed messages from the stream
-   * @param finalEventType The event type that, when received, will trigger the completion
-   *                      of the SSE stream
+   *     already-processed messages from the stream
+   * @param finalEventType The event type that, when received, will trigger the completion of the
+   *     SSE stream
    */
   public SseStreamPublisher(SseEventId lastSseEventId, String finalEventType) {
     this.sseEmitter = new SseEmitter();
@@ -53,9 +53,8 @@ public class SseStreamPublisher implements MessageHandler {
 
   /**
    * Returns the SseEmitter associated with this publisher.
-   * 
-   * <p>This emitter can be used by Spring MVC controllers to stream Server-Sent Events
-   * to clients.
+   *
+   * <p>This emitter can be used by Spring MVC controllers to stream Server-Sent Events to clients.
    *
    * @return The SseEmitter instance that will emit events from the RabbitMQ stream
    */
@@ -65,14 +64,14 @@ public class SseStreamPublisher implements MessageHandler {
 
   /**
    * Handles messages received from the RabbitMQ stream.
-   * 
-   * <p>This method is called by the RabbitMQ stream consumer for each message in the stream.
-   * It filters out messages that have already been processed (based on the lastSseEventId),
-   * converts the message to an SSE event, and sends it to the client using a virtual thread
-   * to avoid blocking the RabbitMQ stream client thread pool.
-   * 
-   * <p>If a message with the configured finalEventType is received, the consumer is closed
-   * and the SSE stream is completed.
+   *
+   * <p>This method is called by the RabbitMQ stream consumer for each message in the stream. It
+   * filters out messages that have already been processed (based on the lastSseEventId), converts
+   * the message to an SSE event, and sends it to the client using a virtual thread to avoid
+   * blocking the RabbitMQ stream client thread pool.
+   *
+   * <p>If a message with the configured finalEventType is received, the consumer is closed and the
+   * SSE stream is completed.
    *
    * @param context The message context provided by the RabbitMQ stream consumer
    * @param message The message received from the RabbitMQ stream

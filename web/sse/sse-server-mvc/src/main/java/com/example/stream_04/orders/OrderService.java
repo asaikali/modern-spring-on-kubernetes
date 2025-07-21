@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
-public class OrderService {
+class OrderService {
 
   private final Logger logger = LoggerFactory.getLogger(OrderService.class);
   private final StockPriceService stockPriceService;

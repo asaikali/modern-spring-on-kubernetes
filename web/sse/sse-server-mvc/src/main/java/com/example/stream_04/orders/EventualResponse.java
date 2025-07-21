@@ -1,6 +1,6 @@
 package com.example.stream_04.orders;
 
-public final class EventualResponse implements Response {
+final class EventualResponse implements Response {
 
   private String lastEvenId;
 
