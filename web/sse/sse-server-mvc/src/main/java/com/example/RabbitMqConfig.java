@@ -1,4 +1,4 @@
-package com.example.rabbitmq;
+package com.example;
 
 import com.rabbitmq.stream.Environment;
 import org.springframework.context.annotation.Bean;

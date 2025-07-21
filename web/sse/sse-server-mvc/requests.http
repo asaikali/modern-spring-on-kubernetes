@@ -10,6 +10,9 @@ Accept: text/event-stream
 GET http://localhost:8080/mvc/stream/infinite
 Accept: text/event-stream
 
+### Test if HTTP redirects work with SSE streams
+GET http://localhost:8080/test/redirect?symbol=APPL
+
 ### MVC infinite events
 GET http://localhost:8080/webflux/stream/infinite
 Accept: text/event-stream
@@ -56,5 +59,4 @@ Content-Type: application/json
 GET http://localhost:8080/orders
 Last-Event-Id: aapl.a4439ab4-20a6-4ef6-9b13-e17a78ed0e44_0
 
-### Test Redirect
-GET http://localhost:8080/test/redirect?symbol=APPL
+
