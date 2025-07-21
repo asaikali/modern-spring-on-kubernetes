@@ -1,6 +1,6 @@
 package com.example.stream_04.orders;
 
-import com.example.stream_04.orders.sse.server.ApiResponse;
+import com.example.stream_04.orders.sse.ApiResponse;
 import com.example.stream_04.orders.sse.server.SseEventId;
 import java.math.BigDecimal;
 import org.slf4j.Logger;

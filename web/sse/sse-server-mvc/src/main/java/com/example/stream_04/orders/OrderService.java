@@ -2,7 +2,7 @@ package com.example.stream_04.orders;
 
 import com.example.stocks.StockPrice;
 import com.example.stocks.StockPriceService;
-import com.example.stream_04.orders.sse.server.ApiResponse;
+import com.example.stream_04.orders.sse.ApiResponse;
 import com.example.stream_04.orders.sse.server.RabbitSseBridge;
 import com.example.stream_04.orders.sse.server.RabbitSseStreamFactory;
 import com.example.stream_04.orders.sse.server.SseEventId;

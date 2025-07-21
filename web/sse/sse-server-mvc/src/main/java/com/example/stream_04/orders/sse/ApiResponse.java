@@ -1,4 +1,6 @@
-package com.example.stream_04.orders.sse.server;
+package com.example.stream_04.orders.sse;
+
+import com.example.stream_04.orders.sse.server.SseEventId;
 
 /**
  * Represents the top-level sealed interface for the outcome of an API operation. An API operation
