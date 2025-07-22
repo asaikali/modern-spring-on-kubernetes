@@ -16,7 +16,7 @@ The application will start on `http://localhost:8080`
 
 ## Prerequisites
 
-- Java 17+
+- Java 21+,  we use Virtual Threads in the sample 
 - Maven 3.6+
 - RabbitMQ (for advanced stream examples)
 
