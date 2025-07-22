@@ -75,7 +75,10 @@ public class OrdersClient {
                           long index = tuple.getT1();
                           ServerSentEvent<String> sseEvent = tuple.getT2();
 
-                          log.info(" subscribe/index,event-type: {},{}", index,sseEvent.event().toUpperCase());
+                          log.info(
+                              " subscribe/index,event-type: {},{}",
+                              index,
+                              sseEvent.event().toUpperCase());
                           if (index == 0) {
                             if ("order-executed".equals(sseEvent.event())) {
                               log.info(" converted stream response to Immediate response");
@@ -110,7 +113,8 @@ public class OrdersClient {
     OrdersClient client = new OrdersClient();
     // try price of 111 to get an immediate fill
     // try a price of 101 or 100.5 to get a stream
-    // even if order can be filled right away set allow immediate to false to force a stream to be returned
+    // even if order can be filled right away set allow immediate to false to force a stream to be
+    // returned
     var streamOrder = new LimitOrderRequest("APPL", 100, BigDecimal.valueOf(100.5));
     ApiResponse response = client.makeOrder(streamOrder, true);
     switch (response) {
@@ -123,6 +127,5 @@ public class OrdersClient {
 
     System.out.println("Press Enter to exit...");
     System.in.read();
-
   }
 }

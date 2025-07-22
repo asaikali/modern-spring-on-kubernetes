@@ -1,58 +1,153 @@
-Here is your **GitHub-friendly Markdown** version of the final HTML index:
+# SSE Server MVC - Spring Boot Demo
 
----
+A comprehensive demonstration of Server-Sent Events (SSE) implementation using 
+Spring Boot, showcasing both Spring MVC and WebFlux approaches with progressive 
+complexity.
 
-# SSE Test Server - Endpoint Index
+## Quick Start
 
-### MVC - Minimal Production-focused Endpoints
-These examples demonstrate how to implement SSE endpoints using Spring MVC for typical app needs.
+This is a standard Spring Boot application. Run it using:
 
-| Endpoint | Description |
-| --- | --- |
-| [`/mvc/stream/one`](http://localhost:8080/mvc/stream/one) | Sends one event then terminates. Suitable for one-shot notifications. |
-| [`/mvc/stream/infinite`](http://localhost:8080/mvc/stream/infinite) | Never terminates; emits events at regular intervals. Suitable for ongoing data feeds. |
+```bash
+./mvnw spring-boot:run
+```
 
----
+The application will start on `http://localhost:8080`
 
-### WebFlux - Minimal Production-focused Endpoints
-These examples demonstrate SSE implementation with reactive streams for high-concurrency apps.
+## Prerequisites
 
-| Endpoint | Description |
-| --- | --- |
-| [`/webflux/stream/one`](http://localhost:8080/webflux/stream/one) | Sends one event then terminates. Demonstrates Mono-based SSE. |
-| [`/webflux/stream/infinite`](http://localhost:8080/webflux/stream/infinite) | Never terminates; emits events at regular intervals. Demonstrates Flux-based SSE. |
+- Java 17+
+- Maven 3.6+
+- RabbitMQ (for advanced stream examples)
 
----
+## Exploring the Functionality
 
-### Test - GET / streams
-Classic use case: unsolicited server notifications (e.g. price updates, logs, chat messages). Includes edge cases for client resilience testing, idle timeout handling, partial events, and malformed streams.
+This project is designed to be explored in a specific order, following the 
+numbered packages. Each demonstrates increasing complexity and real-world 
+scenarios:
 
-| Endpoint | Description | Notes / Edge cases |
-| --- | --- | --- |
-| [`/test/stream/burst`](http://localhost:8080/test/stream/burst) | Sends burst of 1-25 events then closes | Batch notifications |
-| [`/test/stream/none`](http://localhost:8080/test/stream/none) | Opens stream but never sends events | Tests client/proxy idle timeout behavior |
-| [`/test/stream/bad`](http://localhost:8080/test/stream/bad) | Sends malformed SSE data | Missing data line, invalid UTF-8 |
-| [`/test/stream/abrupt-close`](http://localhost:8080/test/stream/abrupt-close) | Starts sending then closes mid-event | Tests partial transmissions, network interruptions |
-| [`/test/stream/delayed-first-event`](http://localhost:8080/test/stream/delayed-first-event) | Sends headers immediately, delays first event | Tests client idle detection |
-| [`/test/stream/error-status`](http://localhost:8080/test/stream/error-status) | Returns non-200 status code | Tests client error handling on connect |
-| [`/test/stream/redirect`](http://localhost:8080/test/stream/redirect) | Returns 302 redirect to another SSE endpoint | Tests client redirect support |
-| [`/test/stream/retry-field`](http://localhost:8080/test/stream/retry-field) | Includes retry field in events | Tests reconnect interval respect |
-| [`/test/stream/custom-event-types`](http://localhost:8080/test/stream/custom-event-types) | Sends events with custom event types | Tests client event type dispatch logic |
+### 1. Start Here: Basic SSE Concepts (`stream_01`)
 
----
+**Package:** `com.example.stream_01.one`
 
-### Test - POST / RPC Streams
-RPC style: inspired by MCP streamable HTTP. Client sends JSON RPC requests; server streams intermediate notifications, progress updates, and final completion messages. Essential for implementing structured long-running operations with streaming results.
+Begin with the fundamental SSE implementations that send a single event:
 
-| Endpoint | Description | Notes / Edge cases |
-| --- | --- | --- |
-| [`/test/rpc/long`](http://localhost:8080/test/rpc/long) | Streams notifications + final result | Client terminates upon result |
-| [`/test/rpc/short`](http://localhost:8080/test/rpc/short) | Responds with single event result | Client or server terminates stream |
-| [`/test/rpc/error`](http://localhost:8080/test/rpc/error) | Returns error response or SSE error event | Tests RPC error propagation |
-| [`/test/rpc/none`](http://localhost:8080/test/rpc/none) | Opens stream but never sends events | Tests timeout for hanging RPC streams |
-| [`/test/rpc/abrupt-close`](http://localhost:8080/test/rpc/abrupt-close) | Starts streaming then abruptly closes | Simulates server crash or network interruption |
-| [`/test/rpc/delayed-first-event`](http://localhost:8080/test/rpc/delayed-first-event) | Sends headers immediately, delays first event | Tests client idle timeout settings |
+- **MVC Approach:** `/mvc/stream/one`
+    - `MvcOneEventSseController.java` - Uses `SseEmitter` with background threads
+    - Demonstrates all SSE fields: comments, retry time, event ID, event type, and data
 
----
+- **WebFlux Approach:** `/webflux/stream/one`
+    - `WebFluxOneEventSseController.java` - Uses `ServerSentEvent` with reactive streams
+    - Shows reactive SSE implementation patterns
 
-Let me know if you want a **separate minimal version for README.md** focusing only on MVC and WebFlux teaching endpoints.
+**Try these endpoints:**
+```bash
+curl -N -H "Accept: text/event-stream" http://localhost:8080/mvc/stream/one
+curl -N -H "Accept: text/event-stream" http://localhost:8080/webflux/stream/one
+```
+
+### 2. Infinite Streams (`stream_02`)
+
+**Package:** `com.example.stream_02.prices`
+
+Learn how to handle continuous data streams with real-time stock price updates:
+
+- **MVC Infinite:** `/mvc/stream/infinite`
+    - `MvcInfiniteController.java` - Scheduled background tasks with `SseEmitter`
+    - Demonstrates strongly-typed objects (StockPrice) serialized to JSON
+
+- **WebFlux Infinite:** `/webflux/stream/infinite`
+    - `WebFluxInfiniteController.java` - Reactive streams with `Flux.interval()`
+    - Shows non-blocking reactive approach
+
+**Try these endpoints:**
+```bash
+curl -N -H "Accept: text/event-stream" http://localhost:8080/mvc/stream/infinite
+curl -N -H "Accept: text/event-stream" http://localhost:8080/webflux/stream/infinite?symbol=GOOGL
+```
+
+### 3. Stream Management & Resumption (`stream_03`)
+
+**Package:** `com.example.stream_03.watchlist`
+
+Advanced stream patterns with persistence and client resumption:
+
+- **Stream Creation:** `POST /watchlist`
+- **Stream Resumption:** `GET /watchlist` with `Last-Event-ID` header
+- **Key Components:**
+    - `EventStream` interface - Abstract stream operations
+    - `EventId` and `StreamId` - Unique identifiers for events and streams
+    - `WatchListService` - Business logic for stream lifecycle
+
+**Try the watchlist functionality:**
+```bash
+# Create a new watchlist stream
+curl -X POST http://localhost:8080/watchlist \
+  -H "Content-Type: application/json" \
+  -H "Accept: text/event-stream" \
+  -d '{"symbol": "AAPL"}'
+
+# Resume from a specific event (use Last-Event-ID from previous response)
+curl -H "Last-Event-ID: your-event-id-here" \
+  -H "Accept: text/event-stream" \
+  http://localhost:8080/watchlist
+```
+
+### 4. Advanced Integration Patterns (`stream_04`)
+
+**Package:** `com.example.stream_04.orders`
+
+Complex SSE implementation demonstrating RabbitMQ integration and sophisticated response handling:
+
+- **Hybrid API Responses:** Returns either immediate JSON or SSE stream
+- **RabbitMQ Integration:** Durable event streams with persistence
+- **Advanced Client Patterns:** Smart client handling of different response types
+
+**Key Components:**
+- `OrdersController.java` - Smart endpoint that returns JSON or SSE based on order status
+- `ApiResponse` sealed interface - Type-safe handling of immediate vs. streaming responses
+- `RabbitSseStreamFactory` - RabbitMQ stream management
+
+**Try the orders functionality:**
+```bash
+# Order that executes immediately (returns JSON)
+curl -X POST http://localhost:8080/orders \
+  -H "Content-Type: application/json" \
+  -d '{"symbol": "AAPL", "quantity": "10", "maxPrice": 190.00}'
+
+# Order that requires streaming (returns SSE)
+curl -X POST http://localhost:8080/orders \
+  -H "Content-Type: application/json" \
+  -H "Accept: text/event-stream" \
+  -d '{"symbol": "AAPL", "quantity": "10", "maxPrice": 101.00}'
+
+# Resume an existing order stream
+curl -H "Last-Event-ID: your-event-id" \
+  -H "Accept: text/event-stream" \
+  http://localhost:8080/orders
+```
+
+## Additional Examples
+
+### Async Servlet Processing
+- **Endpoint:** `/servlet/async?count=8`
+- **File:** `SseServlet.java`
+- Demonstrates raw servlet async processing without Spring abstractions
+
+## Key Learning Points
+
+1. **Start Simple:** Begin with single-event streams to understand SSE basics
+2. **Progress to Infinite:** Learn continuous streaming patterns
+3. **Add Persistence:** Understand stream management and resumption
+4. **Advanced Integration:** Explore complex patterns with message queues
+
+## Architecture Highlights
+
+- **Spring MVC vs WebFlux:** Compare blocking vs reactive approaches
+- **Background Processing:** Proper thread management for SSE
+- **Error Handling:** Comprehensive error and timeout management
+- **Client Resumption:** Handle network interruptions gracefully
+- **Hybrid APIs:** Smart response type selection based on business logic
+
+This progression ensures you understand both the fundamentals and advanced 
+patterns needed for production SSE implementations.
