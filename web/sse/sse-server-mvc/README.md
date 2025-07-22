@@ -14,6 +14,10 @@ This is a standard Spring Boot application. Run it using:
 
 The application will start on `http://localhost:8080`
 
+IntelliJ Users: There's a requests.http file in the project root 
+that contains pre-configured HTTP requests for testing all the SSE endpoints 
+using IntelliJ's built-in HTTP client.
+
 ## Prerequisites
 
 - Java 21+,  we use Virtual Threads in the sample 
