@@ -1,106 +1,64 @@
+// SseClient.java
 package com.example.stream_04.orders.sse.client;
 
-import java.time.Duration;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import org.springframework.core.ParameterizedTypeReference;
+
 import org.springframework.http.MediaType;
-import org.springframework.http.codec.ServerSentEvent;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.util.retry.Retry;
+import org.springframework.web.client.RestClient;
 
-/** Native WebFlux SSE client with automatic resumption */
-public class SseClient implements AutoCloseable {
+/**
+ * A simple SSE client using RestClient.
+ * Calls your handler for each completed event.
+ */
+public class SseClient {
+    private final RestClient client;
 
-  private final WebClient webClient;
-  private final String endpoint;
-  private final AtomicReference<String> lastEventId = new AtomicReference<>();
-  private volatile boolean running = true;
-
-  // Event handlers
-  private Function<ServerSentEvent<String>, Boolean> onEvent;
-  private Consumer<Throwable> onError;
-  private Runnable onConnect;
-
-  public SseClient(WebClient.Builder webClientBuilder, String endpoint) {
-    this.webClient = webClientBuilder.build();
-    this.endpoint = endpoint;
-  }
-
-  /** Set event handler - return true to continue, false to terminate stream */
-  public SseClient onEvent(Function<ServerSentEvent<String>, Boolean> handler) {
-    this.onEvent = handler;
-    return this;
-  }
-
-  /** Set error handler */
-  public SseClient onError(Consumer<Throwable> handler) {
-    this.onError = handler;
-    return this;
-  }
-
-  /** Set connection handler */
-  public SseClient onConnect(Runnable handler) {
-    this.onConnect = handler;
-    return this;
-  }
-
-  /** Start consuming SSE stream with automatic resumption */
-  public void start() {
-
-    webClient
-        .post()
-        .uri(endpoint)
-        .accept(MediaType.TEXT_EVENT_STREAM)
-        .headers(
-            headers -> {
-              // Resume from last event ID if available
-              String eventId = lastEventId.get();
-              if (eventId != null) {
-                headers.set("Last-Event-ID", eventId);
-              }
-            })
-        .retrieve()
-        .bodyToFlux(new ParameterizedTypeReference<ServerSentEvent<String>>() {})
-        .doOnNext(event -> lastEventId.set(event.id()))
-        .takeWhile(
-            event -> {
-              // Store event ID for resumption
-              if (event.id() != null) {
-                lastEventId.set(event.id());
-              }
-
-              // Call handler and check if we should continue
-              if (onEvent != null) {
-                return onEvent.apply(event);
-              }
-              return true; // Continue if no handler
-            })
-        .retryWhen(
-            Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(1))
-                .maxBackoff(Duration.ofSeconds(30))
-                .filter(throwable -> running))
-        .subscribe(
-            event -> {}, // Event handling done in takeWhile
-            this::handleError);
-  }
-
-  /** Handle errors */
-  private void handleError(Throwable error) {
-    if (onError != null) {
-      onError.accept(error);
+    public SseClient(RestClient client) {
+        this.client = client;
     }
-  }
 
-  /** Get the last received event ID */
-  public String getLastEventId() {
-    return lastEventId.get();
-  }
+    /**
+     * Subscribe to the given SSE URI. For each event, your handler
+     * is called with a RawSseEvent containing the raw text.
+     */
+    public void subscribe(String uri, Consumer<RawSseEvent> handler) {
+        client.get()
+            .uri(uri)
+            .accept(MediaType.TEXT_EVENT_STREAM)
+            .exchange((req, resp) -> {
+                try (
+                  InputStream is = resp.getBody();
+                  BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
+                ) {
+                    StringBuilder rawBuf    = new StringBuilder();
+                    String         line;
+                    boolean        firstLine = true;
 
-  /** Stop consuming and close */
-  @Override
-  public void close() {
-    running = false;
-  }
+                    while ((line = br.readLine()) != null) {
+                        // Strip UTF-8 BOM on the very first line, if any
+                        if (firstLine && line.startsWith("\uFEFF")) {
+                            line = line.substring(1);
+                        }
+                        firstLine = false;
+
+                        if (line.isEmpty()) {
+                            // Blank line = end of one SSE event
+                            if (rawBuf.length() > 0) {
+                                // build and emit
+                                handler.accept(new RawSseEvent(rawBuf.toString()));
+                                rawBuf.setLength(0);
+                            }
+                        } else {
+                            // accumulate this logical line
+                            rawBuf.append(line).append('\n');
+                        }
+                    }
+                }
+                return null;
+            });
+    }
 }
