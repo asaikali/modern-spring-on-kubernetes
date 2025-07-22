@@ -10,9 +10,9 @@ import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-public class OrderClient2 {
+public class ExperimentOrderClient2 {
 
-  private static final Logger log = LoggerFactory.getLogger(OrderClient2.class);
+  private static final Logger log = LoggerFactory.getLogger(ExperimentOrderClient2.class);
 
   public Mono<String> placeOrder(LimitOrderRequest order) {
     WebClient client = WebClient.create("http://localhost:8080/orders");
@@ -65,7 +65,7 @@ public class OrderClient2 {
   }
 
   public static void main(String[] args) {
-    var client = new OrderClient2();
+    var client = new ExperimentOrderClient2();
 
     try {
       // Much simpler - just get the final result

@@ -11,9 +11,9 @@ import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-public class OrderClient {
+public class ExperimentOrderClient {
 
-  private static final Logger log = LoggerFactory.getLogger(OrderClient.class);
+  private static final Logger log = LoggerFactory.getLogger(ExperimentOrderClient.class);
 
   public ApiResponse placeOrder(LimitOrderRequest order) {
     WebClient client = WebClient.create("http://localhost:8080/orders");
@@ -67,7 +67,7 @@ public class OrderClient {
         """; // new LimitOrderRequest("APPL",100, BigDecimal.valueOf(200));
     var eventual = new LimitOrderRequest("APPL", 100, BigDecimal.valueOf(101));
 
-    var client = new OrderClient();
+    var client = new ExperimentOrderClient();
 
     ApiResponse apiResponse =
         client.placeOrder(new LimitOrderRequest("APPL", 100, BigDecimal.valueOf(200)));
