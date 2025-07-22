@@ -165,3 +165,94 @@ This client implementation illustrates real-world patterns for consuming APIs th
 
 This progression ensures you understand both the fundamentals and advanced 
 patterns needed for production SSE implementations.
+
+## Orders Streaming 
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant OC as OrdersController
+    participant OS as OrderService
+    participant RSF as RabbitSseStreamFactory
+    participant RSB as RabbitSseBridge
+
+    Client->>OC: POST /orders(order, allowImmediate)
+    activate OC
+
+    OC->>OS: placeOrder(order, allowImmediate)
+    activate OS
+    OS->>OS: attemptBuy(order)
+    OS-->>OC: ApiResponse(Stream or Immediate)
+    deactivate OS
+
+    alt Immediate result
+        OC-->>Client: 200 OK + JSON payload
+    else Stream result
+        OC->>OC: response.setContentType("text/event-stream")
+        OC->>OS: resume(lastEventId)
+        activate OS
+
+        OS->>RSF: createRabbitSseBrdige(lastEventId, "order-executed")
+        activate RSF
+        RSF-->>OS: RabbitSseBridge
+        deactivate RSF
+
+        OS->>RSB: getSseEmitter()
+        activate RSB
+        RSB-->>OS: SseEmitter
+        deactivate RSB
+
+        OS-->>OC: SseEmitter
+        deactivate OS
+
+        OC-->>Client: return SSE stream
+    end
+
+    deactivate OC
+```
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant OC as OrdersController
+    participant OS as OrderService
+    participant RSP as RabbitStreamPublisher
+    participant RMQ as RabbitMQ Stream
+    participant RSB as RabbitSseBridge
+    participant SE as SseEmitter
+
+    Client->>OC: POST /orders(order, allowImmediate=false)
+    activate OC
+    OC->>OS: placeOrder(order, false)
+    activate OS
+    OS->>OS: attemptBuy(...)
+    OS->>RSP: createRabbitStreamPublisher(sseStreamId)
+    activate RSP
+    Note right of RSP: background publish loop via executor
+    deactivate RSP
+    OS-->>OC: ApiResponse.Stream(lastEventId)
+    deactivate OS
+
+    OC->>OC: response.setContentType("text/event-stream")
+    OC->>OS: resume(lastEventId)
+    activate OS
+    OS->>RSB: createRabbitSseBridge(lastEventId, "order-executed")
+    activate RSB
+    RSB->>SE: getSseEmitter()
+    activate SE
+    RSB-->>OS: SseEmitter
+    deactivate RSB
+    OS-->>OC: SseEmitter
+    deactivate OS
+    OC-->>Client: SSE connection established
+
+    loop Publish events to RMQ
+        RSP->>RMQ: publish(status, type)
+    end
+
+    loop Consume & emit SSE
+        RMQ->>RSB: deliver message
+        RSB->>SE: send(event)
+        SE-->>Client: SSE event
+    end
+```
