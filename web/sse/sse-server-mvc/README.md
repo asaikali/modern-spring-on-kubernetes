@@ -168,6 +168,53 @@ patterns needed for production SSE implementations.
 
 ## Orders Streaming 
 
+### using RabbitMQ Stream as a source for SSE streams
+```mermaid
+flowchart LR
+  subgraph Server
+    OC[OrdersController]
+    OS[OrderService]
+    RSP[RabbitStreamPublisher]
+    RSB[RabbitSseBridge]
+    SE[SseEmitter]
+  end
+
+  Client(OrderClient)
+  RMQ[(RabbitMQ Stream)]
+
+  Client -- placeOrder() --> OC
+  OC --> OS
+  OS --> RSP -- publishes --> RMQ
+  RMQ --> RSB -- consumes --> SE
+  SE --> Client
+
+  style Client fill:#f9f,stroke:#333,stroke-width:2px
+  style RMQ fill:#bbf,stroke:#333,stroke-width:2px
+```
+### Publishing to the rabbit stream 
+```mermaid
+sequenceDiagram
+    autonumber
+    participant OC as OrdersController
+    participant OS as OrderService
+    participant RSP as RabbitStreamPublisher
+    participant RMQ as RabbitMQ Stream
+
+    OC->>OS: placeOrder(order, false)
+    OS->>OS: attemptBuy() → LimitOrderPending
+    OS->>RSP: createRabbitStreamPublisher(streamId)
+    activate RSP
+    Note over RSP: background loop (virtual threads publishing to RMQ)
+    deactivate RSP
+    OS-->>OC: ApiResponse.Stream(lastEventId)
+
+    loop Every 500ms until executed
+      OS->>RSP: publish(status, type)
+      RSP->>RMQ: send message
+    end
+```
+
+### Consuming the Rabbit Stream into an SSE stream from a client 
 ```mermaid
 sequenceDiagram
     participant Client
@@ -209,6 +256,29 @@ sequenceDiagram
     end
 
     deactivate OC
+```
+### All in one diagram
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Client as OrderClient
+    participant OC as OrdersController
+    participant OS as OrderService
+    participant RSB as RabbitSseBridge
+    participant SE as SseEmitter
+
+    Client->>OC: POST /orders?allowImmediate=false
+    OC->>OS: resume(lastEventId)
+    OS->>RSB: createRabbitSseBridge(lastEventId, "order-executed")
+    RSB->>SE: getSseEmitter()
+    OC-->>Client: returns SSE connection
+
+    loop RabbitMQ delivers messages
+        RSB->>SE: send(event)
+        SE-->>Client: SSE event
+    end
+
+    Note right of Client: captures SSE events, remembers IDs, blocks until "order-executed" arrives
 ```
 
 ```mermaid
