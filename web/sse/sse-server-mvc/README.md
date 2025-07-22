@@ -138,6 +138,16 @@ curl -H "Last-Event-ID: your-event-id" \
 - **File:** `SseServlet.java`
 - Demonstrates raw servlet async processing without Spring abstractions
 
+### Advanced Client Implementation
+The `stream_04` package includes `OrderClient.java`, which demonstrates sophisticated client-side handling of the hybrid API response pattern. This client shows how to:
+
+- Handle both immediate JSON responses and SSE streams from a single endpoint
+- Intelligently process different content types (`application/json` vs `text/event-stream`)
+- Convert single-event streams back to immediate responses when appropriate
+- Manage stream completion based on specific event types
+
+This client implementation illustrates real-world patterns for consuming APIs that can return either immediate results or streaming responses based on business logic.
+
 ## Key Learning Points
 
 1. **Start Simple:** Begin with single-event streams to understand SSE basics
