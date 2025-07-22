@@ -1,25 +1,31 @@
-package com.example.one;
+package com.example.stream_02.prices;
 
 import java.time.Duration;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.scheduler.Schedulers;
 import reactor.util.retry.Retry;
 
-public class ConsumeMvcOne {
+public class ConsumeForever {
 
   public static void main(String[] args) throws InterruptedException {
     WebClient client = WebClient.create("http://localhost:8080");
 
     client
         .get()
-        .uri("/mvc/stream/one")
+        .uri("/mvc/stream/infinite")
         .accept(MediaType.TEXT_EVENT_STREAM)
         .retrieve()
         .bodyToFlux(new ParameterizedTypeReference<ServerSentEvent<String>>() {})
         .retryWhen(
             Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(1)).maxBackoff(Duration.ofSeconds(30)))
+        .doOnNext(
+            event -> System.out.println("Current Thread: " + Thread.currentThread().getName()))
+        .publishOn(Schedulers.boundedElastic())
+        .doOnNext(
+            event -> System.out.println("Current Thread: " + Thread.currentThread().getName()))
         .subscribe(
             event -> {
               System.out.println("<SSEEvent>");

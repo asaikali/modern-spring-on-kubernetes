@@ -1,5 +1,6 @@
-package com.example.one;
+package com.example.stream_01.one;
 
+import java.io.IOException;
 import java.time.Duration;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -9,7 +10,7 @@ import reactor.util.retry.Retry;
 
 public class ConsumeWebfluxOne {
 
-  public static void main(String[] args) throws InterruptedException {
+  public static void main(String[] args) throws InterruptedException, IOException {
     WebClient client = WebClient.create("http://localhost:8080");
 
     client
@@ -50,7 +51,7 @@ public class ConsumeWebfluxOne {
             error -> System.err.println("Error: " + error),
             () -> System.out.println("Stream completed"));
 
-    // Keep application alive for demo
-    Thread.sleep(60_000);
+    System.out.println("Press Enter to exit...");
+    System.in.read();
   }
 }
