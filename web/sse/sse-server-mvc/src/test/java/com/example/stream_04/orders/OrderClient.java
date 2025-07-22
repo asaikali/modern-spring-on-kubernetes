@@ -19,12 +19,12 @@ import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-public class OrdersClient {
+public class OrderClient {
 
-  private static final Logger log = LoggerFactory.getLogger(OrdersClient.class);
+  private static final Logger log = LoggerFactory.getLogger(OrderClient.class);
   private WebClient webClient;
 
-  public OrdersClient() {
+  public OrderClient() {
     this.webClient = WebClient.builder().baseUrl("http://localhost:8080").build();
   }
 
@@ -110,7 +110,7 @@ public class OrdersClient {
   }
 
   public static void main(String[] args) throws InterruptedException, IOException {
-    OrdersClient client = new OrdersClient();
+    OrderClient client = new OrderClient();
     // try price of 111 to get an immediate fill
     // try a price of 101 or 100.5 to get a stream
     // even if order can be filled right away set allow immediate to false to force a stream to be
