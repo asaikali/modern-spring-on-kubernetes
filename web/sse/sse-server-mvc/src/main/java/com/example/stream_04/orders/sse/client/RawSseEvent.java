@@ -3,23 +3,22 @@ package com.example.stream_04.orders.sse.client;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.Objects;
 
 /**
  * Immutable holder of the raw text of one SSE event—
- * exactly as it arrived, excluding the blank-line separator.
+ * exactly as it arrived from the stream.
  * 
  * Follows WHATWG HTML Living Standard § 9.2 Server-sent events
  * https://html.spec.whatwg.org/multipage/server-sent-events.html
  */
-public record RawSseEvent(String rawEvent) {
+public record RawSseEvent(String text) {
 
     /**
      * Compact constructor for validation
      */
     public RawSseEvent {
-        if (rawEvent == null || rawEvent.isEmpty()) {
-            throw new IllegalArgumentException("rawEvent cannot be null or empty");
+        if (text == null || text.isEmpty()) {
+            throw new IllegalArgumentException("text cannot be null or empty");
         }
     }
 
@@ -30,7 +29,7 @@ public record RawSseEvent(String rawEvent) {
      * 
      * See WHATWG HTML § 9.2.6 "Interpreting an event stream"
      */
-    public record Fields(
+    public static record Fields(
         String id,
         String event,
         Duration retry,
@@ -52,7 +51,7 @@ public record RawSseEvent(String rawEvent) {
         String        eventId       = null;
         Duration      retryValue    = null;
 
-        String[] lines = rawEvent.split("\n");
+        String[] lines = text.split("\n");
         
         for (String line : lines) {
             if (line.isEmpty()) continue;
@@ -147,7 +146,7 @@ public record RawSseEvent(String rawEvent) {
      * Convert this raw event text to a UTF-8 byte array.
      */
     public byte[] toBytes() {
-        return rawEvent.getBytes(StandardCharsets.UTF_8);
+        return text.getBytes(StandardCharsets.UTF_8);
     }
 
     /**
@@ -158,8 +157,12 @@ public record RawSseEvent(String rawEvent) {
      *
      * @param bytes the UTF-8 encoded raw event text
      * @return a new RawSseEvent instance with raw text
+     * @throws IllegalArgumentException if bytes is null
      */
     public static RawSseEvent fromBytes(byte[] bytes) {
+        if (bytes == null) {
+            throw new IllegalArgumentException("bytes cannot be null");
+        }
         String raw = new String(bytes, StandardCharsets.UTF_8);
         return new RawSseEvent(raw);
     }
