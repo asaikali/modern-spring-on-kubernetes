@@ -13,6 +13,9 @@ import org.springframework.web.client.RestClient;
 /**
  * A simple SSE client using RestClient.
  * Calls your handler for each completed event.
+ * 
+ * Implements the client-side SSE processing per WHATWG HTML § 9.2 Server-sent events
+ * https://html.spec.whatwg.org/multipage/server-sent-events.html
  */
 public class SseClient {
     private final RestClient client;
@@ -24,11 +27,16 @@ public class SseClient {
     /**
      * Subscribe to the given SSE URI. For each event, your handler
      * is called with a RawSseEvent containing the raw text.
+     * 
+     * Follows the SSE parsing algorithm from § 9.2.6 "Interpreting an event stream":
+     * - Lines separated by blank lines form individual events
+     * - UTF-8 decoding with optional BOM handling
+     * - BufferedReader.readLine() handles CRLF/LF/CR line endings per Java spec
      */
     public void subscribe(String uri, Consumer<RawSseEvent> handler) {
         client.get()
             .uri(uri)
-            .accept(MediaType.TEXT_EVENT_STREAM)
+            .accept(MediaType.TEXT_EVENT_STREAM)  // § 9.2.5: MIME type is "text/event-stream"
             .exchange((req, resp) -> {
                 try (
                   InputStream is = resp.getBody();
@@ -39,14 +47,14 @@ public class SseClient {
                     boolean        firstLine = true;
 
                     while ((line = br.readLine()) != null) {
-                        // Strip UTF-8 BOM on the very first line, if any
+                        // § 9.2.6: "The UTF-8 decode algorithm strips one leading UTF-8 Byte Order Mark (BOM), if any"
                         if (firstLine && line.startsWith("\uFEFF")) {
                             line = line.substring(1);
                         }
                         firstLine = false;
 
                         if (line.isEmpty()) {
-                            // Blank line = end of one SSE event
+                            // § 9.2.6: "If the line is empty (a blank line) - Dispatch the event"
                             if (rawBuf.length() > 0) {
                                 // build and emit
                                 handler.accept(new RawSseEvent(rawBuf.toString()));
@@ -54,6 +62,7 @@ public class SseClient {
                             }
                         } else {
                             // accumulate this logical line
+                            // Note: we append \n to normalize line endings as expected by parseFields()
                             rawBuf.append(line).append('\n');
                         }
                     }
