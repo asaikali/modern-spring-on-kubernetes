@@ -50,6 +50,6 @@ public class SseClient {
             throw new RuntimeException("Failed to process SSE stream", e);
           }
           return null;
-        });
+        }, false);
   }
 }
