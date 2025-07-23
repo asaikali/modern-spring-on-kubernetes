@@ -13,7 +13,6 @@ public final class SseStreamUtils {
 
   // Prevent instantiation
   private SseStreamUtils() {
-    /* no-op */
   }
 
   /**
