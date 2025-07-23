@@ -29,7 +29,7 @@ public record RawSseEvent(String text) {
      * 
      * See WHATWG HTML § 9.2.6 "Interpreting an event stream"
      */
-    public static record Fields(
+    public record Fields(
         String id,
         String event,
         Duration retry,
