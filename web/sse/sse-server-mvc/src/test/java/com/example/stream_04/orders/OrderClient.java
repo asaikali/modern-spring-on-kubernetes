@@ -115,7 +115,7 @@ public class OrderClient {
     // try a price of 101 or 100.5 to get a stream
     // even if order can be filled right away set allow immediate to false to force a stream to be
     // returned
-    var streamOrder = new LimitOrderRequest("APPL", 100, BigDecimal.valueOf(110.5));
+    var streamOrder = new LimitOrderRequest("APPL", 100, BigDecimal.valueOf(101.5));
     ApiResponse response = client.makeOrder(streamOrder, true);
     switch (response) {
       case Immediate immediate:

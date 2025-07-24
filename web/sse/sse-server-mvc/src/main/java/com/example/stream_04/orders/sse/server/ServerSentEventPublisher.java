@@ -1,7 +1,6 @@
 package com.example.stream_04.orders.sse.server;
 
 import com.rabbitmq.stream.Message;
-import com.rabbitmq.stream.MessageHandler.Context;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executor;
@@ -17,7 +16,6 @@ public class ServerSentEventPublisher implements AutoCloseable {
   private final SseEmitter sseEmitter;
   private final SseEventId lastSseEventId;
   private final Executor executor = Executors.newVirtualThreadPerTaskExecutor();
-
 
   public ServerSentEventPublisher(SseEventId lastEventId) {
     this.sseEmitter = new SseEmitter(0L);
@@ -41,7 +39,6 @@ public class ServerSentEventPublisher implements AutoCloseable {
   public SseEmitter getSseEmitter() {
     return sseEmitter;
   }
-
 
   public void publish(Message message) {
 

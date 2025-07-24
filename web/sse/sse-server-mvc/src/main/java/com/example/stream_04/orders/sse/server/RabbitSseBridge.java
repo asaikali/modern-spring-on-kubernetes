@@ -3,16 +3,11 @@ package com.example.stream_04.orders.sse.server;
 import com.rabbitmq.stream.Consumer;
 import com.rabbitmq.stream.Message;
 import com.rabbitmq.stream.MessageHandler;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
 
 /**
  * Consumes messages from a RabbitMQ stream and publishes them as Server-Sent Events (SSE).
@@ -45,7 +40,10 @@ public class RabbitSseBridge implements MessageHandler, AutoCloseable {
    * @param finalEventType The event type that, when received, will trigger the completion of the
    *     SSE stream
    */
-  public RabbitSseBridge(SseEventId lastSseEventId, String finalEventType, ServerSentEventPublisher serverSentEventPublisher) {
+  public RabbitSseBridge(
+      SseEventId lastSseEventId,
+      String finalEventType,
+      ServerSentEventPublisher serverSentEventPublisher) {
     this.lastSseEventId = lastSseEventId;
     this.finalEventType = finalEventType;
     this.serverSentEventPublisher = serverSentEventPublisher;
@@ -77,19 +75,20 @@ public class RabbitSseBridge implements MessageHandler, AutoCloseable {
     consumerRef.compareAndSet(null, context.consumer());
     this.serverSentEventPublisher.publish(message);
     final String type = (String) message.getApplicationProperties().get("type");
-    if(finalEventType.equals(type)) {
+    if (finalEventType.equals(type)) {
       try {
         this.close();
       } catch (Exception e) {
-        logger.error("Error closing sse stream ",e);
+        logger.error("Error closing sse stream ", e);
         throw new RuntimeException(e);
       }
-    };
+    }
+    ;
   }
 
   @Override
   public void close() throws Exception {
-    if(isClosed.compareAndSet(false, true)) {
+    if (isClosed.compareAndSet(false, true)) {
       this.consumerRef.get().close();
       this.serverSentEventPublisher.close();
     }

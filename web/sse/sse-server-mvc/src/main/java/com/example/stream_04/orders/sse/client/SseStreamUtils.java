@@ -12,8 +12,7 @@ import java.io.IOException;
 public final class SseStreamUtils {
 
   // Prevent instantiation
-  private SseStreamUtils() {
-  }
+  private SseStreamUtils() {}
 
   /**
    * Reads lines from {@code reader}, parses SSE text/event-stream frames, and invokes the handler.

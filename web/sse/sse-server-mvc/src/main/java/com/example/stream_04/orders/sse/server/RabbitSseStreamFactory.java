@@ -62,8 +62,10 @@ public class RabbitSseStreamFactory {
    */
   public RabbitSseBridge createRabbitSseBrdige(SseEventId lastSseEventId, String finalEventType) {
     this.createStream(lastSseEventId.createRabbitSseBridge());
-    ServerSentEventPublisher serverSentEventPublisher = new ServerSentEventPublisher(lastSseEventId);
-    RabbitSseBridge rabbitSseBridge = new RabbitSseBridge(lastSseEventId, finalEventType, serverSentEventPublisher);
+    ServerSentEventPublisher serverSentEventPublisher =
+        new ServerSentEventPublisher(lastSseEventId);
+    RabbitSseBridge rabbitSseBridge =
+        new RabbitSseBridge(lastSseEventId, finalEventType, serverSentEventPublisher);
     this.environment.consumerBuilder().stream(lastSseEventId.createRabbitSseBridge().fullName())
         .offset(OffsetSpecification.first())
         .messageHandler(rabbitSseBridge)
