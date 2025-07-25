@@ -28,7 +28,6 @@ class OrdersController {
   @PostMapping(produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_JSON_VALUE})
   public Object subscribe(
       @RequestBody LimitOrderRequest order,
-      HttpServletResponse response,
       @RequestParam(required = false, defaultValue = "true") boolean allowImmediate) {
     var result = this.orderService.placeOrder(order, allowImmediate);
     return switch (result) {
@@ -36,7 +35,6 @@ class OrdersController {
           ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(immediate.payload());
 
       case ApiResponse.Stream stream -> {
-        response.setContentType("text/event-stream");
         yield orderService.resume(stream.lastEventId());
       }
     };
