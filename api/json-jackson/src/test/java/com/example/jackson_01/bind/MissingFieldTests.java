@@ -1,4 +1,4 @@
-package com.example.jackson.bind;
+package com.example.jackson_01.bind;
 
 import static org.assertj.core.api.Assertions.*;
 
