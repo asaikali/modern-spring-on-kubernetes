@@ -52,7 +52,6 @@ public class MissingFieldTests {
     assertThat(missing.emails()).isNull();
   }
 
-
   @Test
   @DisplayName("Deserialization handles missing fields gracefully")
   void deserializeWithExtraFields_shouldSucceed() throws JsonProcessingException {

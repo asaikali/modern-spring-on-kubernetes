@@ -15,7 +15,8 @@ public class PrettyPrintTests {
   static final Person PERSON_OBJECT =
       new Person("Alice", "Mathematics", List.of("student", "honor-roll", "club-member"));
 
-  static final String expectedNoSpaceJson = """
+  static final String expectedNoSpaceJson =
+      """
     {
       "name":"Alice",
       "subject":"Mathematics",
@@ -30,12 +31,11 @@ public class PrettyPrintTests {
 
   @Test
   @DisplayName("Pretty-print using default printer")
-  void serializeWithDefaultPrettyPrinter_shouldIncludeSpacesAroundColons() throws JsonProcessingException {
+  void serializeWithDefaultPrettyPrinter_shouldIncludeSpacesAroundColons()
+      throws JsonProcessingException {
     ObjectMapper mapper = new ObjectMapper();
 
-    String json = mapper
-        .writerWithDefaultPrettyPrinter()
-        .writeValueAsString(PERSON_OBJECT);
+    String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(PERSON_OBJECT);
 
     System.out.println("Default PrettyPrinter output:\n" + json);
 
@@ -44,12 +44,11 @@ public class PrettyPrintTests {
 
   @Test
   @DisplayName("Pretty-print using custom NoSpacePrettyPrinter")
-  void serializeWithNoSpacePrettyPrinter_shouldMatchExpectedFormatting() throws JsonProcessingException {
+  void serializeWithNoSpacePrettyPrinter_shouldMatchExpectedFormatting()
+      throws JsonProcessingException {
     ObjectMapper mapper = new ObjectMapper();
 
-    String json = mapper
-        .writer(new NoSpacePrettyPrinter())
-        .writeValueAsString(PERSON_OBJECT);
+    String json = mapper.writer(new NoSpacePrettyPrinter()).writeValueAsString(PERSON_OBJECT);
 
     System.out.println("NoSpacePrettyPrinter output:\n" + json);
 

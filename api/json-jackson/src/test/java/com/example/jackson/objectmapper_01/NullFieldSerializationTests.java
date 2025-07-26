@@ -27,8 +27,8 @@ public class NullFieldSerializationTests {
   @Test
   @DisplayName("Serialization excludes null fields globally using mapper config")
   void serializeWithGlobalInclusionConfig_shouldOmitNulls() throws Exception {
-    ObjectMapper mapper = new ObjectMapper()
-        .setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    ObjectMapper mapper =
+        new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
     var partial = new Person("Alice", 34, true, null);
     String json = mapper.writeValueAsString(partial);

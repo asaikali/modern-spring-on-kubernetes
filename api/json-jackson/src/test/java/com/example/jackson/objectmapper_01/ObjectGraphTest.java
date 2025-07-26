@@ -87,6 +87,7 @@ public class ObjectGraphTest {
       throw new IllegalArgumentException("Unknown status: " + value);
     }
   }
+
   @Test
   @DisplayName("Deserialization of object graph")
   void deserialize_shouldSucceed() throws JsonProcessingException {
