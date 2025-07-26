@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ObjectMapperMissingFieldTests {
+public class MissingFieldTests {
 
   @JsonIgnoreProperties(ignoreUnknown = true)
   record Person(
