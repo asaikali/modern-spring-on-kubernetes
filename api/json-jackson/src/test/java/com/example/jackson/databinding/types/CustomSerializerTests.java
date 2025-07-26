@@ -1,4 +1,4 @@
-package com.example.jackson.customization;
+package com.example.jackson.databinding.types;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
