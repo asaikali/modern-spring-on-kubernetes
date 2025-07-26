@@ -45,7 +45,9 @@ public class ObjectGraphMixinTest {
           Status.ACTIVE);
 
   record Role(String name, int level) {}
+
   record Address(String street, String city, String postalCode, String country) {}
+
   record Person(
       String name,
       int age,
