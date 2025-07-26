@@ -1,4 +1,4 @@
-package com.example.jackson.databinding;
+package com.example.jackson.databinding.json.fields;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
