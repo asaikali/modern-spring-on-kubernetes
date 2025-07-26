@@ -1,0 +1,7 @@
+### Public View - Only exposes username
+GET http://localhost:8080/user/public
+Accept: application/json
+
+### Internal View - Exposes all fields
+GET http://localhost:8080/user/internal
+Accept: application/json
