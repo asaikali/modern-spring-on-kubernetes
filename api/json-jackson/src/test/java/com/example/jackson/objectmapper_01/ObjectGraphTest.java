@@ -2,7 +2,9 @@ package com.example.jackson.objectmapper_01;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -14,21 +16,22 @@ public class ObjectGraphTest {
   static final String PERSON_JSON =
       """
       {
-        "name": "Alice",
-        "age": 34,
-        "active": true,
-        "emails": ["alice@example.com", "a.smith@work.com"],
-        "address": {
-          "street": "123 Maple Street",
-          "city": "Toronto",
-          "postalCode": "M5V 2T6",
-          "country": "Canada"
-        },
-        "roles": [
-          { "name": "admin", "level": 10 },
-          { "name": "user", "level": 1 }
-        ]
-      }
+       "name": "Alice",
+       "age": 34,
+       "active": true,
+       "emails": ["alice@example.com", "a.smith@work.com"],
+       "address": {
+         "street": "123 Maple Street",
+         "city": "Toronto",
+         "postalCode": "M5V 2T6",
+         "country": "Canada"
+       },
+       "roles": [
+         { "name": "admin", "level": 10 },
+         { "name": "user", "level": 1 }
+       ],
+       "status": "A"
+     }
       """;
 
   static final Person PERSON_OBJECT =
@@ -38,7 +41,8 @@ public class ObjectGraphTest {
           true,
           List.of("alice@example.com", "a.smith@work.com"),
           new Address("123 Maple Street", "Toronto", "M5V 2T6", "Canada"),
-          List.of(new Role("admin", 10), new Role("user", 1)));
+          List.of(new Role("admin", 10), new Role("user", 1)),
+          Status.ACTIVE);
 
   record Role(@JsonProperty("name") String name, @JsonProperty("level") int level) {}
 
@@ -54,8 +58,35 @@ public class ObjectGraphTest {
       @JsonProperty("active") boolean active,
       @JsonProperty("emails") List<String> emails,
       @JsonProperty("address") Address address,
-      @JsonProperty("roles") List<Role> roles) {}
+      @JsonProperty("roles") List<Role> roles,
+      @JsonProperty("status") Status status) {}
 
+  enum Status {
+    ACTIVE("A"),
+    INACTIVE("I"),
+    PENDING("P");
+
+    private final String code;
+
+    Status(String code) {
+      this.code = code;
+    }
+
+    @JsonValue
+    public String getCode() {
+      return code;
+    }
+
+    @JsonCreator
+    public static Status fromCode(String value) {
+      for (Status status : values()) {
+        if (status.code.equalsIgnoreCase(value)) {
+          return status;
+        }
+      }
+      throw new IllegalArgumentException("Unknown status: " + value);
+    }
+  }
   @Test
   @DisplayName("Deserialization of object graph")
   void deserialize_shouldSucceed() throws JsonProcessingException {
