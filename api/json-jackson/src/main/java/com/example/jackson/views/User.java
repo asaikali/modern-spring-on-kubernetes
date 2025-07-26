@@ -2,7 +2,7 @@ package com.example.jackson.views;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-public class User {
+class User {
 
   @JsonView(Views.Public.class)
   private String username;

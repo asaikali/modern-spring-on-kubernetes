@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
+class UserController {
 
   private final User testUser =
       new User().setEmail("adib@exmaple.com").setUsername("adib").setSecretNote("secretNote");
