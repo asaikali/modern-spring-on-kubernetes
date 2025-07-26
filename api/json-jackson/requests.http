@@ -5,3 +5,24 @@ Accept: application/json
 ### Internal View - Exposes all fields
 GET http://localhost:8080/user/internal
 Accept: application/json
+
+
+### Register user with public input view (only username bound)
+POST http://localhost:8080/user/register
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "secret_note": "ignored-field"
+}
+
+###
+
+### Register internal user (username + password bound)
+POST http://localhost:8080/user/internal
+Content-Type: application/json
+
+{
+  "username": "bob",
+  "secret_note": "secret"
+}

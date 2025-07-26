@@ -13,34 +13,31 @@ public class User {
   @JsonView(Views.Internal.class)
   private String secretNote;
 
-  public User(String username, String email, String secretNote) {
-    this.username = username;
-    this.email = email;
-    this.secretNote = secretNote;
-  }
-
   // Getters & Setters
   public String getUsername() {
     return username;
   }
 
-  public void setUsername(String username) {
+  public User setUsername(String username) {
     this.username = username;
+    return this;
   }
 
   public String getEmail() {
     return email;
   }
 
-  public void setEmail(String email) {
+  public User setEmail(String email) {
     this.email = email;
+    return this;
   }
 
   public String getSecretNote() {
     return secretNote;
   }
 
-  public void setSecretNote(String secretNote) {
+  public User setSecretNote(String secretNote) {
     this.secretNote = secretNote;
+    return this;
   }
 }
