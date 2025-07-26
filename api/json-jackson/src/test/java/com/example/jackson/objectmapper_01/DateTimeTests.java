@@ -14,7 +14,7 @@ import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ObjectMapperDateTimeTests {
+public class DateTimeTests {
 
   record Person(
       @JsonProperty("name") String name,
