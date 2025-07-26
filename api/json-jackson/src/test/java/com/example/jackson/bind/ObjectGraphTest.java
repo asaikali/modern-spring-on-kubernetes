@@ -1,4 +1,4 @@
-package com.example.jackson.objectmapper_01;
+package com.example.jackson.bind;
 
 import static org.assertj.core.api.Assertions.*;
 

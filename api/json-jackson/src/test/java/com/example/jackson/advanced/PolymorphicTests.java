@@ -1,4 +1,4 @@
-package com.example.jackson.objectmapper_01;
+package com.example.jackson.advanced;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.awt.Rectangle;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
