@@ -26,3 +26,11 @@ Content-Type: application/json
   "username": "bob",
   "secret_note": "secret"
 }
+
+### Filtered public fields
+GET http://localhost:8080/filter/public
+Accept: application/json
+
+### Filtered internal fields
+GET http://localhost:8080/filter/internal
+Accept: application/json
