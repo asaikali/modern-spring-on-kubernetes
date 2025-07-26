@@ -1,4 +1,4 @@
-package com.example.jackson.advanced;
+package com.example.jackson.customization;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

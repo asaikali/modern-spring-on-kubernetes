@@ -1,4 +1,4 @@
-package com.example.jackson.views;
+package com.example.jackson.projection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

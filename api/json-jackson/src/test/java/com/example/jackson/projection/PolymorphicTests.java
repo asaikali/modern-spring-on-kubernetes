@@ -1,4 +1,4 @@
-package com.example.jackson.variance;
+package com.example.jackson.projection;
 
 import static org.assertj.core.api.Assertions.*;
 

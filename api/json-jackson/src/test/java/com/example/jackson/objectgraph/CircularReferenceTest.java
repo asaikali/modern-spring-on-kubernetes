@@ -1,4 +1,4 @@
-package com.example.jackson.circular;
+package com.example.jackson.objectgraph;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
