@@ -1,4 +1,4 @@
-package com.example.jackson.projection;
+package com.example.jackson.presentation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
