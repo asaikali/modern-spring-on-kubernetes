@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 
 public class ConvertValueTest {
 
-  static final SourcePerson SOURCE_OBJECT =
-      new SourcePerson("Alice", 34, List.of("admin", "user"));
+  static final SourcePerson SOURCE_OBJECT = new SourcePerson("Alice", 34, List.of("admin", "user"));
 
   static final TargetPerson TARGET_OBJECT =
       new TargetPerson("Alice", 34, List.of(new Role("admin"), new Role("user")));
@@ -51,11 +50,7 @@ public class ConvertValueTest {
     assertThat(converted).isEqualTo(TARGET_OBJECT);
 
     // 4. Convert from raw map to SourcePerson
-    Map<String, Object> map = Map.of(
-        "name", "Alice",
-        "age", 34,
-        "roles", List.of("admin", "user")
-    );
+    Map<String, Object> map = Map.of("name", "Alice", "age", 34, "roles", List.of("admin", "user"));
 
     SourcePerson fromMap = mapper.convertValue(map, SourcePerson.class);
     assertThat(fromMap).isEqualTo(SOURCE_OBJECT);

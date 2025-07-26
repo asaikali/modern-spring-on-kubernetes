@@ -13,7 +13,8 @@ import org.junit.jupiter.api.Test;
 
 public class DynamicPropertiesTests {
 
-  // JSON string with both known fields ("id", "name") and unknown fields (e.g., "favoriteColor", "hobby")
+  // JSON string with both known fields ("id", "name") and unknown fields (e.g., "favoriteColor",
+  // "hobby")
   static final String JSON_WITH_DYNAMIC_PROPS =
       """
       {
@@ -27,6 +28,7 @@ public class DynamicPropertiesTests {
 
   // Java object that represents the same data
   static final User USER_OBJECT = new User(1001, "Alice");
+
   static {
     USER_OBJECT.addDynamic("favoriteColor", "blue");
     USER_OBJECT.addDynamic("hobby", "cycling");
@@ -36,9 +38,8 @@ public class DynamicPropertiesTests {
   /**
    * A user record that supports dynamic properties.
    *
-   * - Known fields: id, name
-   * - Unknown/dynamic fields: captured into a Map via @JsonAnySetter
-   * - During serialization, entries from that Map are written into the root JSON via @JsonAnyGetter
+   * <p>- Known fields: id, name - Unknown/dynamic fields: captured into a Map via @JsonAnySetter -
+   * During serialization, entries from that Map are written into the root JSON via @JsonAnyGetter
    */
   static class User {
     private int id;
@@ -63,8 +64,8 @@ public class DynamicPropertiesTests {
     }
 
     /**
-     * @JsonAnySetter tells Jackson to call this method for any JSON property
-     * that doesn't map to a known field.
+     * @JsonAnySetter tells Jackson to call this method for any JSON property that doesn't map to a
+     * known field.
      */
     @JsonAnySetter
     public void addDynamic(String key, Object value) {
@@ -72,8 +73,8 @@ public class DynamicPropertiesTests {
     }
 
     /**
-     * @JsonAnyGetter tells Jackson to serialize all entries from the map
-     * as if they were top-level properties in the object.
+     * @JsonAnyGetter tells Jackson to serialize all entries from the map as if they were top-level
+     * properties in the object.
      */
     @JsonAnyGetter
     public Map<String, Object> getDynamicProperties() {

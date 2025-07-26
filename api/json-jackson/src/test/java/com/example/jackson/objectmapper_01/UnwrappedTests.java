@@ -23,17 +23,11 @@ public class UnwrappedTests {
       """;
 
   static final Person FLATTENED_OBJECT =
-      new Person(
-          "Alice",
-          "Smith",
-          new Address("123 Maple Street", "Toronto", "M5V 2T6", "Canada"));
+      new Person("Alice", "Smith", new Address("123 Maple Street", "Toronto", "M5V 2T6", "Canada"));
 
   record Address(String street, String city, String postalCode, String country) {}
 
-  record Person(
-      String firstName,
-      String lastName,
-      @JsonUnwrapped Address address) {}
+  record Person(String firstName, String lastName, @JsonUnwrapped Address address) {}
 
   @Test
   @DisplayName("Deserialization of flattened JSON with @JsonUnwrapped")

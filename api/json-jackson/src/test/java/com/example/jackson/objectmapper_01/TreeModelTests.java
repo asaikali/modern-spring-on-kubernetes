@@ -10,10 +10,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * Demonstrates how to use Jackson's Tree Model API (JsonNode) to
- * - read unknown or dynamic JSON into a navigable object tree
- * - manipulate fields
- * - serialize back to a JSON string
+ * Demonstrates how to use Jackson's Tree Model API (JsonNode) to - read unknown or dynamic JSON
+ * into a navigable object tree - manipulate fields - serialize back to a JSON string
  */
 public class TreeModelTests {
 
