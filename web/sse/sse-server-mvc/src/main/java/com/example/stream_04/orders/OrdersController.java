@@ -2,7 +2,6 @@ package com.example.stream_04.orders;
 
 import com.example.stream_04.orders.sse.ApiResponse;
 import com.example.stream_04.orders.sse.server.SseEventId;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

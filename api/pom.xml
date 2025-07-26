@@ -15,5 +15,6 @@
   <description>Demo Project Showing various ways of building and documenting apis in spring</description>
   <modules>
     <module>open-api</module>
+    <module>json-jackson</module>
   </modules>
 </project>
