@@ -4,7 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
 /**
- * A simple SSE client using RestClient. Delegates stream parsing to SseStreamUtils for clean
+ * A simple SSE client using RestClient. Delegates stream parsing to SseParser for clean
  * separation of concerns.
  *
  * <p>Implements the client-side SSE processing per WHATWG HTML § 9.2 Server-sent events
@@ -20,7 +20,7 @@ public class SseClient {
 
   /**
    * Subscribe to the given SSE URI. For each event, the handler is called with a RawSseEvent
-   * containing the raw text. Processing is delegated to SseStreamUtils.processStream().
+   * containing the raw text. Processing is delegated to SseParser.processStream().
    *
    * @param uri the SSE endpoint URI
    * @param handler callback invoked for each parsed SSE event; return false to stop streaming
@@ -32,7 +32,7 @@ public class SseClient {
         .accept(MediaType.TEXT_EVENT_STREAM) // § 9.2.5: MIME type must be text/event-stream
         .exchange(
             (httpRequest, clientHttpResponse) -> {
-              SseStreamUtils.processSeeStream(clientHttpResponse, handler, 1_000_000);
+              SseParser.processSeeStream(clientHttpResponse, handler, 1_000_000);
               return null;
             },
             false);

@@ -12,10 +12,10 @@ import org.springframework.http.client.ClientHttpResponse;
  * <p>Implements parsing according to WHATWG HTML Living Standard: Sections 9.2.5 (Parsing an event
  * stream) and 9.2.6 (Interpreting an event stream), last updated 22 July 2025.
  */
-public final class SseStreamUtils {
+public final class SseParser {
 
   // Prevent instantiation
-  private SseStreamUtils() {}
+  private SseParser() {}
 
   /**
    * Reads lines from {@code reader}, parses SSE text/event-stream frames, and invokes the handler.
@@ -73,7 +73,7 @@ public final class SseStreamUtils {
         new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
       // Delegate parsing to the static utility method
       // maxEventChars bound prevents unbounded growth (character count guard)
-      SseStreamUtils.processStream(reader, handler, maxEventChars);
+      SseParser.processStream(reader, handler, maxEventChars);
     } catch (IOException e) {
       // Wrap in unchecked to simplify API
       throw new RuntimeException("Failed to process SSE stream", e);
