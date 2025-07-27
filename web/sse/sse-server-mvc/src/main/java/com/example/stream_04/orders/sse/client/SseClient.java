@@ -31,8 +31,8 @@ public class SseClient {
         .uri(uri)
         .accept(MediaType.TEXT_EVENT_STREAM) // § 9.2.5: MIME type must be text/event-stream
         .exchange(
-            (req, resp) -> {
-              SseStreamUtils.processSeeStream(resp, handler);
+            (httpRequest, clientHttpResponse) -> {
+              SseStreamUtils.processSeeStream(clientHttpResponse, handler, 1_000_000);
               return null;
             },
             false);

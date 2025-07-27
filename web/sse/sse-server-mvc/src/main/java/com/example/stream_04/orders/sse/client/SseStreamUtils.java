@@ -68,12 +68,12 @@ public final class SseStreamUtils {
     // At EOF: per spec §9.2.5, discard any buffered but unterminated event
   }
 
-  public static void processSeeStream(ClientHttpResponse response, SseEventHandler handler) {
+  public static void processSeeStream(ClientHttpResponse response, SseEventHandler handler, int maxEventChars) {
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
       // Delegate parsing to the static utility method
       // maxEventChars bound prevents unbounded growth (character count guard)
-      SseStreamUtils.processStream(reader, handler, 1_000_000);
+      SseStreamUtils.processStream(reader, handler, maxEventChars);
     } catch (IOException e) {
       // Wrap in unchecked to simplify API
       throw new RuntimeException("Failed to process SSE stream", e);
