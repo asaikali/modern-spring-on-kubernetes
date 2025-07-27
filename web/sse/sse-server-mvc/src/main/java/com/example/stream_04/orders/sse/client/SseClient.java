@@ -1,9 +1,5 @@
 package com.example.stream_04.orders.sse.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
@@ -36,16 +32,7 @@ public class SseClient {
         .accept(MediaType.TEXT_EVENT_STREAM) // § 9.2.5: MIME type must be text/event-stream
         .exchange(
             (req, resp) -> {
-              try (BufferedReader reader =
-                  new BufferedReader(
-                      new InputStreamReader(resp.getBody(), StandardCharsets.UTF_8))) {
-                // Delegate parsing to the static utility method
-                // maxEventChars bound prevents unbounded growth (character count guard)
-                SseStreamUtils.processStream(reader, handler, 1_000_000);
-              } catch (IOException e) {
-                // Wrap in unchecked to simplify API
-                throw new RuntimeException("Failed to process SSE stream", e);
-              }
+              SseStreamUtils.processSeeStream(resp, handler);
               return null;
             },
             false);

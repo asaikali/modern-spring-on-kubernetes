@@ -2,6 +2,9 @@ package com.example.stream_04.orders.sse.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import org.springframework.http.client.ClientHttpResponse;
 
 /**
  * Utility for processing Server-Sent Events (SSE) streams.
@@ -63,5 +66,17 @@ public final class SseStreamUtils {
     }
 
     // At EOF: per spec §9.2.5, discard any buffered but unterminated event
+  }
+
+  public static void processSeeStream(ClientHttpResponse response, SseEventHandler handler) {
+    try (BufferedReader reader =
+        new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
+      // Delegate parsing to the static utility method
+      // maxEventChars bound prevents unbounded growth (character count guard)
+      SseStreamUtils.processStream(reader, handler, 1_000_000);
+    } catch (IOException e) {
+      // Wrap in unchecked to simplify API
+      throw new RuntimeException("Failed to process SSE stream", e);
+    }
   }
 }
