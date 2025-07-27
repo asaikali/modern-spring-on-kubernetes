@@ -31,16 +31,16 @@ public final class SseStreamProcessor {
    * Parse SSE stream from a RestClient response with configurable limits.
    *
    * @param response the ClientHttpResponse containing the SSE stream
-   * @param handler callback for each complete RawSseEvent; return false to stop early
+   * @param eventHandler callback for each complete RawSseEvent; return false to stop early
    * @param maxEventChars maximum allowed characters per event to prevent unbounded growth
    */
   public static void parseStream(
       ClientHttpResponse response,
-      Function<RawSseEvent, ProcessingResult> handler,
+      Function<RawSseEvent, ProcessingResult> eventHandler,
       int maxEventChars) {
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
-      parseStream(reader, handler, maxEventChars);
+      parseStream(reader, eventHandler, maxEventChars);
     } catch (IOException e) {
       throw new RuntimeException("Failed to process SSE stream", e);
     }
@@ -59,12 +59,12 @@ public final class SseStreamProcessor {
    * </ul>
    *
    * @param reader buffered reader over a UTF-8 text/event-stream source
-   * @param handler callback for each complete RawSseEvent; return false to stop early
+   * @param eventHandler callback for each complete RawSseEvent; return false to stop early
    * @param maxEventChars maximum allowed characters per event to prevent unbounded growth
    * @throws IOException if an I/O error occurs or maxEventChars is exceeded
    */
   private static void parseStream(
-      BufferedReader reader, Function<RawSseEvent, ProcessingResult> handler, long maxEventChars)
+      BufferedReader reader, Function<RawSseEvent, ProcessingResult> eventHandler, long maxEventChars)
       throws IOException {
     StringBuilder buffer = new StringBuilder();
 
@@ -77,7 +77,7 @@ public final class SseStreamProcessor {
       if (line.isEmpty()) {
         if (buffer.length() > 0) {
           RawSseEvent event = new RawSseEvent(buffer.toString());
-          if (handler.apply(event) == ProcessingResult.STOP) {
+          if (eventHandler.apply(event) == ProcessingResult.STOP) {
             return;
           }
           buffer.setLength(0);
