@@ -14,7 +14,7 @@ public class Main {
     // 3) Subscribe and handle each RawSseEvent
     sse.subscribe(
         "http://localhost:8080/mvc/stream/infinite",
-        (index, rawEvent) -> {
+        (rawEvent) -> {
           System.out.println(">>> SSE event:");
           System.out.println(rawEvent.text());
 

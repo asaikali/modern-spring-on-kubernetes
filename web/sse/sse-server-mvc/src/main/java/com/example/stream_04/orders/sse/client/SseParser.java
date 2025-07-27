@@ -34,7 +34,8 @@ public final class SseParser {
    * @param handler callback for each complete RawSseEvent; return false to stop early
    * @param maxEventChars maximum allowed characters per event to prevent unbounded growth
    */
-  public static void parseStream(ClientHttpResponse response, SseEventHandler handler, int maxEventChars) {
+  public static void parseStream(
+      ClientHttpResponse response, SseEventHandler handler, int maxEventChars) {
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
       parseEventStream(reader, handler, maxEventChars);
@@ -60,10 +61,9 @@ public final class SseParser {
    * @param maxEventChars maximum allowed characters per event to prevent unbounded growth
    * @throws IOException if an I/O error occurs or maxEventChars is exceeded
    */
-  private static void parseEventStream(BufferedReader reader, SseEventHandler handler, long maxEventChars)
-      throws IOException {
+  private static void parseEventStream(
+      BufferedReader reader, SseEventHandler handler, long maxEventChars) throws IOException {
     StringBuilder buffer = new StringBuilder();
-    long eventIndex = 0;
 
     // Strip UTF-8 BOM if present (§9.2.5)
     stripBomIfPresent(reader);
@@ -74,7 +74,7 @@ public final class SseParser {
       if (line.isEmpty()) {
         if (buffer.length() > 0) {
           RawSseEvent event = new RawSseEvent(buffer.toString());
-          if (!handler.handle(eventIndex++, event)) {
+          if (!handler.handle(event)) {
             return; // stop if handler returns false
           }
           buffer.setLength(0);
@@ -89,9 +89,7 @@ public final class SseParser {
     // At EOF: per spec §9.2.5, discard any buffered but unterminated event
   }
 
-  /**
-   * Strip a leading UTF-8 BOM (U+FEFF) if present per SSE specification §9.2.5.
-   */
+  /** Strip a leading UTF-8 BOM (U+FEFF) if present per SSE specification §9.2.5. */
   private static void stripBomIfPresent(BufferedReader reader) throws IOException {
     reader.mark(1);
     int firstChar = reader.read();
