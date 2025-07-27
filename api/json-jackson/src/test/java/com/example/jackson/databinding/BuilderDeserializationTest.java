@@ -9,31 +9,27 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * Demonstrates how to deserialize a JSON object into a Java object
- * that uses the Builder pattern. Jackson does not support builder-based
- * deserialization out-of-the-box, so we must explicitly:
+ * Demonstrates how to deserialize a JSON object into a Java object that uses the Builder pattern.
+ * Jackson does not support builder-based deserialization out-of-the-box, so we must explicitly:
  *
- * - Annotate the main class with @JsonDeserialize(builder = ...)
- * - Annotate the builder class with @JsonPOJOBuilder
+ * <p>- Annotate the main class with @JsonDeserialize(builder = ...) - Annotate the builder class
+ * with @JsonPOJOBuilder
  *
- * This allows Jackson to instantiate and populate the builder, then
- * call the build() method to get the target object.
+ * <p>This allows Jackson to instantiate and populate the builder, then call the build() method to
+ * get the target object.
  */
 public class BuilderDeserializationTest {
 
-  /**
-   * JSON input with fields that match the builder method names.
-   */
-  static final String inputJson = """
+  /** JSON input with fields that match the builder method names. */
+  static final String inputJson =
+      """
       {
         "name": "Ada Lovelace",
         "age": 36
       }
       """;
 
-  /**
-   * Immutable Person class with a builder.
-   */
+  /** Immutable Person class with a builder. */
   @JsonDeserialize(builder = Person.Builder.class)
   static class Person {
     private final String name;
@@ -52,9 +48,7 @@ public class BuilderDeserializationTest {
       return age;
     }
 
-    /**
-     * Builder class. The `withPrefix = "with"` matches methods like `withName()`.
-     */
+    /** Builder class. The `withPrefix = "with"` matches methods like `withName()`. */
     @JsonPOJOBuilder(withPrefix = "with")
     public static class Builder {
       private String name;
