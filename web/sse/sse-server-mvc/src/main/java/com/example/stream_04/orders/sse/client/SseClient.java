@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
 /**
- * A simple SSE client using RestClient. Delegates stream parsing to SseStreamProcessor for clean separation
- * of concerns.
+ * A simple SSE client using RestClient. Delegates stream parsing to SseStreamProcessor for clean
+ * separation of concerns.
  *
  * <p>Implements the client-side SSE processing per WHATWG HTML § 9.2 Server-sent events
  * (https://html.spec.whatwg.org/multipage/server-sent-events.html), including: - § 9.2.5:

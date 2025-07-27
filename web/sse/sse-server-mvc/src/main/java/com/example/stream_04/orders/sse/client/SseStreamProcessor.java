@@ -24,9 +24,7 @@ public final class SseStreamProcessor {
     STOP
   }
 
-  /**
-   * Information about a parsing error that allows recovery.
-   */
+  /** Information about a parsing error that allows recovery. */
   public record ProcessingError(Type type, String message, Throwable cause) {
 
     public enum Type {
@@ -41,7 +39,6 @@ public final class SseStreamProcessor {
 
   // Prevent instantiation
   private SseStreamProcessor() {}
-
 
   /**
    * Parse SSE stream from a RestClient response with configurable limits.
@@ -81,8 +78,10 @@ public final class SseStreamProcessor {
    * @throws IOException if an I/O error occurs or maxEventChars is exceeded
    */
   private static void parseStream(
-      BufferedReader reader, Function<RawSseEvent, ProcessingResult> eventHandler,
-      Function<ProcessingError,ProcessingResult> errorHandler, long maxEventChars)
+      BufferedReader reader,
+      Function<RawSseEvent, ProcessingResult> eventHandler,
+      Function<ProcessingError, ProcessingResult> errorHandler,
+      long maxEventChars)
       throws IOException {
     StringBuilder linesBuffer = new StringBuilder();
 
@@ -104,7 +103,10 @@ public final class SseStreamProcessor {
               return;
             }
           } catch (Exception e) {
-            ProcessingResult result = errorHandler.apply( new ProcessingError(Type.HANDLER_ERROR, "Exception while executing handler",e ) );
+            ProcessingResult result =
+                errorHandler.apply(
+                    new ProcessingError(
+                        Type.HANDLER_ERROR, "Exception while executing handler", e));
             if (result == ProcessingResult.STOP) {
               return;
             }
@@ -115,9 +117,18 @@ public final class SseStreamProcessor {
         // Non-Blank line => store the line in the event buffer
         // Validate event size before adding line
         if (linesBuffer.length() + line.length() + 1 > maxEventChars) {
-          ProcessingResult result = errorHandler.apply( new ProcessingError(Type.SIZE_LIMIT_EXCEEDED, "SSE event exceeds maximum allowed size of " + maxEventChars,null));
+          ProcessingResult result =
+              errorHandler.apply(
+                  new ProcessingError(
+                      Type.SIZE_LIMIT_EXCEEDED,
+                      "SSE event exceeds maximum allowed size of " + maxEventChars,
+                      null));
           if (result == ProcessingResult.STOP) {
             return;
+          } else {
+            // Skip this oversized event - reset buffer
+            linesBuffer.setLength(0);
+            continue; // Skip to next line
           }
         }
         linesBuffer.append(line).append('\n');
