@@ -13,7 +13,7 @@ import org.springframework.http.client.ClientHttpResponse;
  * <p>Implements parsing according to WHATWG HTML Living Standard: Sections 9.2.5 (Parsing an event
  * stream) and 9.2.6 (Interpreting an event stream), last updated 22 July 2025.
  */
-public final class SseParser {
+public final class SseStreamProcessor {
 
   /** Result of processing an event or error, indicating whether to continue or stop the stream. */
   public enum ProcessingResult {
@@ -24,18 +24,8 @@ public final class SseParser {
   }
 
   // Prevent instantiation
-  private SseParser() {}
+  private SseStreamProcessor() {}
 
-  /**
-   * Parse SSE stream from a RestClient response using default configuration.
-   *
-   * @param response the ClientHttpResponse containing the SSE stream
-   * @param handler callback for each complete RawSseEvent; return false to stop early
-   */
-  public static void parseStream(
-      ClientHttpResponse response, Function<RawSseEvent, ProcessingResult> handler) {
-    parseStream(response, handler, 1_000_000);
-  }
 
   /**
    * Parse SSE stream from a RestClient response with configurable limits.
@@ -50,7 +40,7 @@ public final class SseParser {
       int maxEventChars) {
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
-      parseEventStream(reader, handler, maxEventChars);
+      parseStream(reader, handler, maxEventChars);
     } catch (IOException e) {
       throw new RuntimeException("Failed to process SSE stream", e);
     }
@@ -73,7 +63,7 @@ public final class SseParser {
    * @param maxEventChars maximum allowed characters per event to prevent unbounded growth
    * @throws IOException if an I/O error occurs or maxEventChars is exceeded
    */
-  private static void parseEventStream(
+  private static void parseStream(
       BufferedReader reader, Function<RawSseEvent, ProcessingResult> handler, long maxEventChars)
       throws IOException {
     StringBuilder buffer = new StringBuilder();
