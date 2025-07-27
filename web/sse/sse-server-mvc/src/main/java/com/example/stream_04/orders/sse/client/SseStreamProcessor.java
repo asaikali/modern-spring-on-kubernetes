@@ -1,5 +1,6 @@
 package com.example.stream_04.orders.sse.client;
 
+import com.example.stream_04.orders.sse.client.SseStreamProcessor.ProcessingError.Type;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +24,21 @@ public final class SseStreamProcessor {
     STOP
   }
 
+  /**
+   * Information about a parsing error that allows recovery.
+   */
+  public record ProcessingError(Type type, String message, Throwable cause) {
+
+    public enum Type {
+      /** Event exceeded maximum size limit */
+      SIZE_LIMIT_EXCEEDED,
+      /** Event text was invalid (empty/null) */
+      INVALID_EVENT,
+      /** User's event handler threw an exception */
+      HANDLER_ERROR
+    }
+  }
+
   // Prevent instantiation
   private SseStreamProcessor() {}
 
@@ -37,10 +53,11 @@ public final class SseStreamProcessor {
   public static void parseStream(
       ClientHttpResponse response,
       Function<RawSseEvent, ProcessingResult> eventHandler,
+      Function<ProcessingError, ProcessingResult> errorHandler,
       int maxEventChars) {
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
-      parseStream(reader, eventHandler, maxEventChars);
+      parseStream(reader, eventHandler, errorHandler, maxEventChars);
     } catch (IOException e) {
       throw new RuntimeException("Failed to process SSE stream", e);
     }
@@ -64,52 +81,49 @@ public final class SseStreamProcessor {
    * @throws IOException if an I/O error occurs or maxEventChars is exceeded
    */
   private static void parseStream(
-      BufferedReader reader, Function<RawSseEvent, ProcessingResult> eventHandler, long maxEventChars)
+      BufferedReader reader, Function<RawSseEvent, ProcessingResult> eventHandler,
+      Function<ProcessingError,ProcessingResult> errorHandler, long maxEventChars)
       throws IOException {
-    StringBuilder buffer = new StringBuilder();
+    StringBuilder linesBuffer = new StringBuilder();
 
-    // Strip UTF-8 BOM if present (§9.2.5)
-    stripBomIfPresent(reader);
-
-    String line;
-    while ((line = reader.readLine()) != null) {
-      // Blank line => dispatch complete event (§9.2.5)
-      if (line.isEmpty()) {
-        if (buffer.length() > 0) {
-          RawSseEvent event = new RawSseEvent(buffer.toString());
-          if (eventHandler.apply(event) == ProcessingResult.STOP) {
-            return;
-          }
-          buffer.setLength(0);
-        }
-      } else {
-        // Validate event size before adding line
-        validateEventSize(buffer, line, maxEventChars);
-        buffer.append(line).append('\n');
-      }
-    }
-
-    // At EOF: per spec §9.2.5, discard any buffered but unterminated event
-  }
-
-  /** Strip a leading UTF-8 BOM (U+FEFF) if present per SSE specification §9.2.5. */
-  private static void stripBomIfPresent(BufferedReader reader) throws IOException {
+    // Strip a leading UTF-8 BOM (U+FEFF) if present per SSE specification §9.2.5.
     reader.mark(1);
     int firstChar = reader.read();
     if (firstChar != 0xFEFF) {
       reader.reset();
     }
-  }
 
-  /**
-   * Validate that adding a line won't exceed the maximum event size limit.
-   *
-   * @throws IOException if the size limit would be exceeded
-   */
-  private static void validateEventSize(StringBuilder buffer, String line, long maxEventChars)
-      throws IOException {
-    if (buffer.length() + line.length() + 1 > maxEventChars) {
-      throw new IOException("SSE event exceeded maxEventChars=" + maxEventChars);
+    String line;
+    while ((line = reader.readLine()) != null) {
+      if (line.isEmpty()) {
+        // Blank line => dispatch complete event (§9.2.5)
+        if (linesBuffer.length() > 0) {
+          RawSseEvent event = new RawSseEvent(linesBuffer.toString());
+          try {
+            if (eventHandler.apply(event) == ProcessingResult.STOP) {
+              return;
+            }
+          } catch (Exception e) {
+            ProcessingResult result = errorHandler.apply( new ProcessingError(Type.HANDLER_ERROR, "Exception while executing handler",e ) );
+            if (result == ProcessingResult.STOP) {
+              return;
+            }
+          }
+          linesBuffer.setLength(0);
+        }
+      } else {
+        // Non-Blank line => store the line in the event buffer
+        // Validate event size before adding line
+        if (linesBuffer.length() + line.length() + 1 > maxEventChars) {
+          ProcessingResult result = errorHandler.apply( new ProcessingError(Type.SIZE_LIMIT_EXCEEDED, "SSE event exceeds maximum allowed size of " + maxEventChars,null));
+          if (result == ProcessingResult.STOP) {
+            return;
+          }
+        }
+        linesBuffer.append(line).append('\n');
+      }
     }
+
+    // At EOF: per spec §9.2.5, discard any buffered but unterminated event
   }
 }
