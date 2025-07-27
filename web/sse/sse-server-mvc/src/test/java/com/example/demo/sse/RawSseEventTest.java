@@ -1,7 +1,8 @@
-package com.example.stream_04.orders.sse.client;
+package com.example.demo.sse;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.example.sse.RawSseEvent;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import org.junit.jupiter.api.Test;

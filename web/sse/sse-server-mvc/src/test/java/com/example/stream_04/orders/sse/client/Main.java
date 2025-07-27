@@ -1,7 +1,8 @@
 // Main.java (example usage)
 package com.example.stream_04.orders.sse.client;
 
-import com.example.stream_04.orders.sse.client.SseStreamProcessor.ProcessingResult;
+import com.example.sse.RawSseEvent;
+import com.example.sse.SseStreamProcessor.ProcessingResult;
 import org.springframework.web.client.RestClient;
 
 public class Main {

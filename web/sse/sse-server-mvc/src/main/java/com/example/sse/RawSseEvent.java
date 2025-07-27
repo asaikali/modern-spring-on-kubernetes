@@ -1,5 +1,5 @@
 // RawSseEvent.java
-package com.example.stream_04.orders.sse.client;
+package com.example.sse;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;

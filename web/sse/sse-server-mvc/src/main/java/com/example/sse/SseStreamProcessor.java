@@ -1,6 +1,6 @@
-package com.example.stream_04.orders.sse.client;
+package com.example.sse;
 
-import com.example.stream_04.orders.sse.client.SseStreamProcessor.ProcessingError.Type;
+import com.example.sse.SseStreamProcessor.ProcessingError.Type;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
