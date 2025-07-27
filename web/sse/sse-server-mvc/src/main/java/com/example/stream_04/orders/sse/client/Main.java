@@ -1,6 +1,7 @@
 // Main.java (example usage)
 package com.example.stream_04.orders.sse.client;
 
+import com.example.stream_04.orders.sse.client.SseParser.ProcessingResult;
 import org.springframework.web.client.RestClient;
 
 public class Main {
@@ -28,7 +29,7 @@ public class Main {
             System.out.println("Event ID: " + fields.id());
           }
 
-          return true;
+          return ProcessingResult.CONTINUE;
         });
   }
 }

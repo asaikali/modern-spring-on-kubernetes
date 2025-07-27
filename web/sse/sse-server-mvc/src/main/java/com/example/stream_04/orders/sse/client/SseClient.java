@@ -1,5 +1,7 @@
 package com.example.stream_04.orders.sse.client;
 
+import com.example.stream_04.orders.sse.client.SseParser.ProcessingResult;
+import java.util.function.Function;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
@@ -25,7 +27,7 @@ public class SseClient {
    * @param uri the SSE endpoint URI
    * @param handler callback invoked for each parsed SSE event; return false to stop streaming
    */
-  public void subscribe(String uri, SseEventHandler handler) {
+  public void subscribe(String uri, Function<RawSseEvent, ProcessingResult> handler) {
     client
         .get()
         .uri(uri)

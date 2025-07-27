@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Function;
 import org.springframework.http.client.ClientHttpResponse;
 
 /**
@@ -14,6 +15,14 @@ import org.springframework.http.client.ClientHttpResponse;
  */
 public final class SseParser {
 
+  /** Result of processing an event or error, indicating whether to continue or stop the stream. */
+  public enum ProcessingResult {
+    /** Continue processing the stream */
+    CONTINUE,
+    /** Stop processing the stream */
+    STOP
+  }
+
   // Prevent instantiation
   private SseParser() {}
 
@@ -23,7 +32,8 @@ public final class SseParser {
    * @param response the ClientHttpResponse containing the SSE stream
    * @param handler callback for each complete RawSseEvent; return false to stop early
    */
-  public static void parseStream(ClientHttpResponse response, SseEventHandler handler) {
+  public static void parseStream(
+      ClientHttpResponse response, Function<RawSseEvent, ProcessingResult> handler) {
     parseStream(response, handler, 1_000_000);
   }
 
@@ -35,7 +45,9 @@ public final class SseParser {
    * @param maxEventChars maximum allowed characters per event to prevent unbounded growth
    */
   public static void parseStream(
-      ClientHttpResponse response, SseEventHandler handler, int maxEventChars) {
+      ClientHttpResponse response,
+      Function<RawSseEvent, ProcessingResult> handler,
+      int maxEventChars) {
     try (BufferedReader reader =
         new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))) {
       parseEventStream(reader, handler, maxEventChars);
@@ -62,7 +74,8 @@ public final class SseParser {
    * @throws IOException if an I/O error occurs or maxEventChars is exceeded
    */
   private static void parseEventStream(
-      BufferedReader reader, SseEventHandler handler, long maxEventChars) throws IOException {
+      BufferedReader reader, Function<RawSseEvent, ProcessingResult> handler, long maxEventChars)
+      throws IOException {
     StringBuilder buffer = new StringBuilder();
 
     // Strip UTF-8 BOM if present (§9.2.5)
@@ -74,8 +87,8 @@ public final class SseParser {
       if (line.isEmpty()) {
         if (buffer.length() > 0) {
           RawSseEvent event = new RawSseEvent(buffer.toString());
-          if (!handler.handle(event)) {
-            return; // stop if handler returns false
+          if (handler.apply(event) == ProcessingResult.STOP) {
+            return;
           }
           buffer.setLength(0);
         }
