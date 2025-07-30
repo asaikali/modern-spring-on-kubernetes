@@ -15,5 +15,6 @@
 	
 	<modules>
 		<module>rest-client</module>
+		<module>web-client</module>
 	</modules>
 </project>

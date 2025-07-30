@@ -30,6 +30,7 @@ public class RestClientConsumer {
                   }
                 }
               }
+              response.close();
               return "DONE";
             });
   }
