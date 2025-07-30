@@ -14,6 +14,7 @@
   <packaging>pom</packaging>
   <description>Demo Project Showing Web Endpoints and Clients</description>
   <modules>
+    <module>http-clients</module>
     <module>graphql</module>
     <module>rest</module>
     <module>sse</module>
