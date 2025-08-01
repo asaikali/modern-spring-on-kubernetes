@@ -9,10 +9,10 @@ import org.springframework.web.servlet.function.ServerResponse;
 @Configuration
 public class Routes {
 
-    @Bean
-    RouterFunction<ServerResponse> helloRoute() {
-        return RouterFunctions.route()
-            .GET("/hello", req -> ServerResponse.ok().body("Hello World"))
-            .build();
-    }
+  @Bean
+  RouterFunction<ServerResponse> helloRoute() {
+    return RouterFunctions.route()
+        .GET("/hello", req -> ServerResponse.ok().body("Hello World"))
+        .build();
+  }
 }

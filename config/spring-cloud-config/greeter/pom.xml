@@ -4,16 +4,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.example</groupId>
-	<artifactId>billboard</artifactId>
+	<artifactId>greeter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>billboard</name>
-	<description>billboard demo app</description>
+	<name>greeter</name>
+	<description>Demo Client Application That Uses the Config Server</description>
 
 	<parent>
 		<groupId>com.example</groupId>
-		<artifactId>spring-cloud-config-basics</artifactId>
+		<artifactId>spring-cloud-config</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -22,13 +22,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+		<!-- required to have same property processing behaviour as spring boot 2.3 or earlier -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-bootstrap</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -45,5 +51,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

@@ -17,6 +17,6 @@
 	<modules>
 		<module>custom-resource</module>
 		<module>config-map-and-secret</module>
-		<module>spring-cloud-config-basics</module>
+		<module>spring-cloud-config</module>
 	</modules>
 </project>
