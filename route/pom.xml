@@ -18,5 +18,6 @@
     <module>gateway-message-service</module>
     <module>gateway-billboard-client</module>
     <module>webflux-gateway</module>
+    <module>webmvc-gateway</module>
   </modules>
 </project>

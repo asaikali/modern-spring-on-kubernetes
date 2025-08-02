@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: gateway-server
-          image: "webflux-gateway-server:0.0.1-SNAPSHOT"
+          image: "webmvc-gateway-server:0.0.1-SNAPSHOT"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9090
