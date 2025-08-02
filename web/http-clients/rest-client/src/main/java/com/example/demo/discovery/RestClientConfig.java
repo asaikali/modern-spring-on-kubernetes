@@ -1,7 +1,6 @@
-package com.example.demo;
+package com.example.demo.discovery;
 
 import org.springframework.boot.autoconfigure.web.client.RestClientBuilderConfigurer;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -12,12 +11,14 @@ import org.springframework.web.client.RestClient;
  * configurations, some load balanced and some not.
  */
 @Configuration
-public class LoadBalancerConfig {
+public class RestClientConfig {
 
   @Bean
-  @LoadBalanced
-  RestClient.Builder restClientBuilder(RestClientBuilderConfigurer configurer) {
-    return configurer.configure(RestClient.builder());
+  @CustomDiscovery
+  RestClient.Builder discoveryRestClient(RestClientBuilderConfigurer configurer) {
+    return configurer
+        .configure(RestClient.builder())
+        .requestInterceptor(new DiscoveryRewriteInterceptor());
   }
 
   @Bean
