@@ -7,4 +7,4 @@ spring:
       uri: http://localhost:8888  # only works in boot 2.3 or earlier unless special legacy processing mode is configured
       # make app startup fail if it can't connect to config server rather than start
       # with no configs
-      fail-fast: true
+      fail-fast: false
