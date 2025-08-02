@@ -6,3 +6,8 @@ management:
   endpoint:
     health:
       show-details: always
+
+logging:
+  level:
+    org.apache.hc.client5.http.headers: DEBUG
+    # org.apache.hc.client5.http.wire: DEBUG
