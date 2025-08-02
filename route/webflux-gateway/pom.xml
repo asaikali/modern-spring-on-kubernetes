@@ -9,7 +9,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>reactive-gateway</artifactId>
+  <artifactId>webflux-gateway</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>Demo Project showing Spring Cloud Gateway</description>
