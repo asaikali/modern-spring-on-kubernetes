@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +11,7 @@ public class RootController {
 
   private RestClient restClient;
 
-  public RootController(RestClient.Builder clientBuilder) {
+  public RootController(@LoadBalanced RestClient.Builder clientBuilder) {
     this.restClient = clientBuilder.build();
   }
 
