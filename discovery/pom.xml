@@ -15,6 +15,7 @@
 	<packaging>pom</packaging>
 	
 	<modules>
+		<module>discovery-client</module>
 		<module>k8s-service</module>
 		<module>eureka</module>
 <!--		<module>dns</module>-->
