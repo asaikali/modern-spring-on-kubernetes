@@ -12,8 +12,11 @@
   <artifactId>route</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <description>Demo Project showing various ways of routing traffic to app</description>
+  <description>Demo Project showing Spring Cloud Gateway</description>
+
   <modules>
+    <module>gateway-message-service</module>
+    <module>gateway-billboard-client</module>
     <module>webflux-gateway</module>
   </modules>
 </project>
