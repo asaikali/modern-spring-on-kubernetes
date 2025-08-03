@@ -1,0 +1,11 @@
+### Root
+GET http://localhost:8080/
+
+
+### Acutators
+GET http://localhost:8080/actuator
+
+
+### Dedicate Endpoint
+GET http://localhost:8080/actuator/storage-config
+

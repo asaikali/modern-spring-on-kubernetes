@@ -16,6 +16,7 @@
 	
 	<modules>
 		<module>application-context</module>
+		<module>configuration-properties</module>
 		<module>custom-resource</module>
 		<module>config-map-and-secret</module>
 		<module>spring-cloud-config</module>

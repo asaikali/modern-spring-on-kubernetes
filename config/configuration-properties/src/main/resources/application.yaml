@@ -1,0 +1,40 @@
+storage:
+  type: S3
+  caching-enabled: true
+  max-retries: 5
+  throttle-factor: 0.75
+  url-expiry: 2025-12-31
+  supported-types:
+    - image/png
+    - image/jpeg
+    - application/pdf
+  metadata:
+    project: "my-app"
+    environment: "prod"
+  providers:
+    local:
+      base-path: "/data/files"
+    s3:
+      access-key: "AKIAEXAMPLE"
+      secret-key: "SECRETEXAMPLE"
+      region: "us-east-1"
+      bucket-name: "my-bucket"
+    gcs:
+      credentials-path: "/etc/gcp/creds.json"
+      bucket-name: "gcs-bucket"
+  provider:
+
+
+# expose all the spring boot actuators good for demos.
+# NEVER DO THIS in production
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+
+
