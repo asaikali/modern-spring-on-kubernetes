@@ -30,13 +30,9 @@ public class NumbersResponseEmitterStream {
         String event = String.format("id: %d\nevent: number\ndata: %d\n\n", counter, counter);
         emitter.send(event, MediaType.TEXT_PLAIN);
         counter++;
-        TimeUnit.SECONDS.sleep(1);
       }
     } catch (IOException ex) {
-      log.info("Client disconnected: {}", ex.toString());
-    } catch (InterruptedException ex) {
-      Thread.currentThread().interrupt(); // Important: restore interrupt status
-      log.info("Stream interrupted");
+      log.info("Client disconnected: counter={}, exception={}", counter,ex.toString(),ex);
     }
   }
 }
