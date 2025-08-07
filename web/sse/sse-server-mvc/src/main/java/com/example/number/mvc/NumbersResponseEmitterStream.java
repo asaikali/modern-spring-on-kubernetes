@@ -2,7 +2,6 @@ package com.example.number.mvc;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -32,7 +31,7 @@ public class NumbersResponseEmitterStream {
         counter++;
       }
     } catch (IOException ex) {
-      log.info("Client disconnected: counter={}, exception={}", counter,ex.toString(),ex);
+      log.info("Client disconnected: counter={}, exception={}", counter, ex.toString(), ex);
     }
   }
 }
