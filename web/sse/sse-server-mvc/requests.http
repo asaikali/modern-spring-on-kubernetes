@@ -2,6 +2,9 @@
 GET http://localhost:8080/sse/numbers
 Accept: text/event-stream
 
+### MVC numbers
+GET http://localhost:8080/sse/numbers/emitter
+Accept: text/event-stream
 
 ### MVC one event
 GET http://localhost:8080/mvc/stream/one
