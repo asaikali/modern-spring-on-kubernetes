@@ -26,10 +26,8 @@ public class NumbersResponseEmitterStream {
     int counter = 0;
 
     try {
-      while (!Thread.currentThread().isInterrupted()) {
+      while (true) {
         String event = String.format("id: %d\nevent: number\ndata: %d\n\n", counter, counter);
-        log.info("publishing event: \n{}", event);
-
         emitter.send(event, MediaType.TEXT_PLAIN);
         counter++;
         TimeUnit.SECONDS.sleep(1);
@@ -37,14 +35,8 @@ public class NumbersResponseEmitterStream {
     } catch (IOException ex) {
       log.info("Client disconnected: {}", ex.toString());
     } catch (InterruptedException ex) {
-      Thread.currentThread().interrupt();
+      Thread.currentThread().interrupt(); // Important: restore interrupt status
       log.info("Stream interrupted");
-    } finally {
-      try {
-        emitter.complete();
-      } catch (Exception ex) {
-        log.debug("Error completing emitter: {}", ex.toString());
-      }
     }
   }
 }
