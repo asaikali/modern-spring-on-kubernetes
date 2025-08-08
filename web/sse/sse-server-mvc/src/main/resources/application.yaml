@@ -2,8 +2,28 @@ spring:
   threads:
     virtual:
       enabled: true
+
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+    include-message: never
+    include-binding-errors: never
+    path: /error-disabled
+
+#  logging.level.org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping=DEBUG
 services:
   hello: "/hello"
+
 
 management:
   endpoints:
