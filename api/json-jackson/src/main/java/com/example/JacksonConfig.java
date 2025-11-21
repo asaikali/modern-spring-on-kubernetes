@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.autoconfigure.jackson.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,7 +18,7 @@ public class JacksonConfig {
    * Boot will automatically pick this bean and apply the changes during startup.
    */
   @Bean
-  public Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
+  public JsonMapperBuilderCustomizer jacksonCustomizer() {
     return builder -> {
       // Enable pretty printing (useful for dev/debug output)
       builder.indentOutput(true);

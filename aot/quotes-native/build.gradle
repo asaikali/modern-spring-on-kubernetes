@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '3.0.6'
+	id 'org.springframework.boot' version '4.0.0'
 	id 'io.spring.dependency-management' version '1.1.0'
 	id 'org.graalvm.buildtools.native' version '0.9.20'
 	id 'java'
@@ -10,14 +10,12 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 repositories {
-	maven { url 'https://repo.spring.io/milestone' }
 	mavenCentral()
-	maven { url 'https://repo.spring.io/snapshot' }
 }
 
 ext {
-	set('springCloudVersion', "2022.0.2")
-	set('testcontainersVersion', "1.18.0")
+	set('springCloudVersion', "2025.0.0")
+	set('testcontainersVersion', "1.21.1")
 }
 
 dependencies {
