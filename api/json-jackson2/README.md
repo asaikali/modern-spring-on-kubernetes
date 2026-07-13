@@ -1,6 +1,8 @@
-# Jackson JSON Processing Demo
+# Jackson 2 JSON Processing Demo
 
-This project demonstrates comprehensive Jackson JSON processing capabilities through JUnit tests and a Spring Boot REST API. It showcases advanced Jackson features for JSON serialization, deserialization, and configuration in real-world scenarios.
+This project demonstrates comprehensive **Jackson 2** (`com.fasterxml.jackson`) JSON processing capabilities through JUnit tests and a Spring Boot REST API. It showcases advanced Jackson features for JSON serialization, deserialization, and configuration in real-world scenarios.
+
+Spring Boot 4 uses Jackson 3 by default, but Jackson 2 will remain widespread in the ecosystem for years; this module keeps the Jackson 2 versions of the samples working on Boot 4 via the `spring-boot-jackson2` bridge module and explicit Jackson 2 dependencies. See the sibling [json-jackson3](../json-jackson3/README.md) module for the same samples on Jackson 3 (`tools.jackson`).
 
 ## Features Overview
 
