@@ -8,5 +8,5 @@ Followed by compiling a native application image, native tests and understanding
 ### [quotes-native app](quotes-native/README.md)
 Example shows how to build JIT(JVM) and Native Java images with Spring Native and GraalVM. It follows the same `Quotes` application used throughout this workshop.
 
-Instructions show you how to build/run both application and container images, using either `Gradle` or `Maven`.
+Instructions show you how to build/run both application and container images using `Maven`.
 

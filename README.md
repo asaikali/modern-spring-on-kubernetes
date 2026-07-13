@@ -17,7 +17,6 @@ sample and points out interesting things to look at.
 * [Java 21 JDK](https://sdkman.io/)
 * [Java 21 GraalVM](https://sdkman.io/)
 * [Maven](https://maven.apache.org/index.html)
-* [Gradle](https://gradle.org/)
 * Favourite Java IDE one of
     * [Eclipse Spring Tool Suite](https://spring.io/tools)
     * [IntelliJ](https://www.jetbrains.com/idea/download)

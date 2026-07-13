@@ -1,7 +1,7 @@
 # Quotes App - Native Image Example
 Example shows how to build JIT(JVM) and Native Java images with Spring Native and GraalVM.
 
-Instructions show you how to build/run both application and container images, using either `Gradle` or `Maven`.
+Instructions show you how to build/run both application and container images using `Maven`.
 
 ### Prerequisites
 * [Java 21 JDK](https://adoptium.net/)
@@ -28,38 +28,6 @@ Instructions show you how to build/run both application and container images, us
 
 ### Known issues
 * `java.lang.management.ThreadInfo` is not exposed at this time in Spring Native, due to an [open issue](https://github.com/oracle/graal/issues/1039) in GraalVM - this can result in a failure of the Native Java application build with GraalVM
-
-## **Build and Test with Gradle**
-### App Images
-**Build and test the JIT Application on a regular Java 17 JVM**
-* build the app `./gradlew build`
-* check the `build/libs` folder, observe the size of the `quotes-native-0.0.1-SNAPSHOT.jar` file
-* run the app on the JVM `./gradlew bootRun`
-* test the app using a browser [http://localhost:8080/](http://localhost:8080/)
-
-**Build and test the Native Java Application**
-* build the app `./gradlew clean nativeCompile`
-* observe the significantly longer build time for the native image
-* check the `build/native/nativeCompile` folder, observe the size of the `quotes-native` executable file. Note that the image is larger than the JIT image, but does not require the JRE for execution
-* run the app on the JVM `./build/native/nativeCompile/quotes-native` or `./gradlew nativeRun`
-* test the app using a browser [http://localhost:8080/](http://localhost:8080/)
-
-### Container images
-**Build and test the Containerized JIT Application using a regular Java 17 VM**
-* build the JIT app and containerize with buildpacks `./gradlew bootBuildImage --imageName quotes-native:jit`
-* **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native:jit`
-* check the size of the container `docker images | grep quotes*`
-* `dive` into the container to observe the container layers, including JRE, app classes and dependent libraries `dive quotes-native:jit`
-* run the container `docker run -p 8080:8080 quotes-native:jit`
-* test the app using a browser [http://localhost:8080/](http://localhost:8080/)
-
-**Build and test the Containerized Native Java Application**
-* build the Native Java app and containerize with buildpacks `./gradlew bootBuildImage -Pnative --imageName quotes-native:aot`
-* **[alternatively]** you can download a pre-built Docker container `docker pull ghcr.io/ddobrin/quotes-native:aot`
-* check the size of the container `docker images | grep quotes*`. Observe the significantly smaller size of the `quotes-native:aot` container
-* `dive` into the container to observe that only the native image has been added `dive quotes-native:aot`
-* run the container `docker run -p 8080:8080 quotes-native:aot`
-* test the app using a browser [http://localhost:8080/](http://localhost:8080/)
 
 ## **Build and Test with Maven**
 
