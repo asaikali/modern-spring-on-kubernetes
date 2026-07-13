@@ -1,7 +1,5 @@
 package com.example.stream_01.one;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -11,6 +9,7 @@ import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Educational Spring WebFlux controller demonstrating Server-Sent Events (SSE).
@@ -34,7 +33,7 @@ class WebFluxOneEventSseController {
    * @return Flux of ServerSentEvent containing one complete SSE event
    */
   @GetMapping(path = "/webflux/stream/one", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public Flux<ServerSentEvent<String>> streamOneFullSpecEvent() throws JsonProcessingException {
+  public Flux<ServerSentEvent<String>> streamOneFullSpecEvent() {
 
     // Create the event directly - happens immediately when method is called
     ServerSentEvent<String> event = createSseEvent();
@@ -51,13 +50,13 @@ class WebFluxOneEventSseController {
    *
    * @return ServerSentEvent with all SSE fields populated
    */
-  private ServerSentEvent<String> createSseEvent() throws JsonProcessingException {
+  private ServerSentEvent<String> createSseEvent() {
     // ==================================================================================
     // STEP 1: Create sample data for demonstration
     // ==================================================================================
 
     var userMap = Map.of("firstName", "John", "lastName", "Doe");
-    var userJson = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(userMap);
+    var userJson = new JsonMapper().writerWithDefaultPrettyPrinter().writeValueAsString(userMap);
 
     // ==================================================================================
     // STEP 2: Build comprehensive SSE event data with multi-line content

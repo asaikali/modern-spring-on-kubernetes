@@ -1,6 +1,5 @@
 package com.example.one;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -10,6 +9,7 @@ import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Educational Spring WebFlux controller demonstrating Server-Sent Events (SSE).
@@ -60,8 +60,7 @@ public class WebFluxOneEventSseController {
       // ==================================================================================
 
       var userMap = Map.of("firstName", "John", "lastName", "Doe");
-      var userJson =
-          new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(userMap);
+      var userJson = new JsonMapper().writerWithDefaultPrettyPrinter().writeValueAsString(userMap);
 
       // ==================================================================================
       // STEP 2: Build comprehensive SSE event data with multi-line content

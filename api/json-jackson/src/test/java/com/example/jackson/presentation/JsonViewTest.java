@@ -3,10 +3,10 @@ package com.example.jackson.presentation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * This test demonstrates how to use Jackson Views to conditionally include fields in the output.
@@ -62,8 +62,8 @@ public class JsonViewTest {
 
   @Test
   @DisplayName("Serialize using Public view")
-  void serializeWithPublicView_shouldIncludePublicFieldsOnly() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeWithPublicView_shouldIncludePublicFieldsOnly() {
+    ObjectMapper mapper = new JsonMapper();
     String json =
         mapper
             .writerWithView(PublicView.class)
@@ -76,8 +76,8 @@ public class JsonViewTest {
 
   @Test
   @DisplayName("Serialize using Internal view")
-  void serializeWithInternalView_shouldIncludeAllFields() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeWithInternalView_shouldIncludeAllFields() {
+    ObjectMapper mapper = new JsonMapper();
     String json =
         mapper
             .writerWithView(InternalView.class)

@@ -3,12 +3,13 @@ package com.example.jackson.tree;
 import static org.assertj.core.api.Assertions.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 public class ConvertValueTest {
 
@@ -34,7 +35,7 @@ public class ConvertValueTest {
   @Test
   @DisplayName("Convert between POJOs, trees, and maps")
   void convertValue_shouldTransformCompatibleObjects() {
-    ObjectMapper mapper = new ObjectMapper();
+    ObjectMapper mapper = new JsonMapper();
 
     // 1. Convert SourcePerson to ObjectNode
     ObjectNode tree = mapper.convertValue(SOURCE_OBJECT, ObjectNode.class);

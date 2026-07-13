@@ -5,11 +5,11 @@ import static org.assertj.core.api.Assertions.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 public class PolymorphicTests {
 
@@ -72,8 +72,8 @@ public class PolymorphicTests {
 
   @Test
   @DisplayName("Deserialize single polymorphic object")
-  void deserializeSingleShape_shouldSucceed() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserializeSingleShape_shouldSucceed() {
+    ObjectMapper mapper = new JsonMapper();
     Shape shape = mapper.readValue(SHAPE_JSON, Shape.class);
     assertThat(shape).isInstanceOf(Circle.class);
     assertThat(((Circle) shape).radius()).isEqualTo(5.0);
@@ -81,16 +81,16 @@ public class PolymorphicTests {
 
   @Test
   @DisplayName("Deserialize wrapper with list of polymorphic objects")
-  void deserializeWrapper_shouldMatchObjectGraph() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserializeWrapper_shouldMatchObjectGraph() {
+    ObjectMapper mapper = new JsonMapper();
     Drawing drawing = mapper.readValue(WRAPPER_JSON, Drawing.class);
     assertThat(drawing).isEqualTo(WRAPPER_OBJECT);
   }
 
   @Test
   @DisplayName("Serialize wrapper with polymorphic types")
-  void serializeWrapper_shouldMatchExpectedFormat() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeWrapper_shouldMatchExpectedFormat() {
+    ObjectMapper mapper = new JsonMapper();
     String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(WRAPPER_OBJECT);
     System.out.println("Polymorphic object graph:\n" + json);
     Drawing parsed = mapper.readValue(json, Drawing.class);

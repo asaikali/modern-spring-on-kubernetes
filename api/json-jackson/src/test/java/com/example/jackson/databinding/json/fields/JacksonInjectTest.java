@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.InjectableValues;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Demonstrates the use of {@link JacksonInject} to inject values into fields that are NOT present
@@ -49,12 +49,14 @@ public class JacksonInjectTest {
 
   @Test
   @DisplayName("Inject value into deserialized object using @JacksonInject")
-  void deserializeWithInjectedValue() throws Exception {
-    ObjectMapper mapper = new ObjectMapper();
-
-    // Provide injectable values — simulate context like Spring bean or config
-    mapper.setInjectableValues(
-        new InjectableValues.Std().addValue(long.class, 42L)); // Inject `userId = 42L`
+  void deserializeWithInjectedValue() {
+    // Jackson 3 mappers are immutable, so injectable values are configured on the builder —
+    // simulate context like a Spring bean or config
+    JsonMapper mapper =
+        JsonMapper.builder()
+            .injectableValues(
+                new InjectableValues.Std().addValue(long.class, 42L)) // Inject `userId = 42L`
+            .build();
 
     UserWithInjectedId user = mapper.readValue(inputJson, UserWithInjectedId.class);
 

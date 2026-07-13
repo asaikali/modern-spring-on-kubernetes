@@ -1,10 +1,10 @@
 package com.example.stream_04.orders.sse.server;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.OffsetSpecification;
 import com.rabbitmq.stream.Producer;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Manages RabbitMQ streams for Server-Sent Events (SSE) communication.
