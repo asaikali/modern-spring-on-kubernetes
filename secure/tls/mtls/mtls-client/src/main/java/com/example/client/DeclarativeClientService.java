@@ -1,8 +1,8 @@
 package com.example.client;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.web.client.RestClientSsl;
-import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientSsl;
+import org.springframework.boot.restclient.autoconfigure.RestClientSsl;
+import org.springframework.boot.webclient.autoconfigure.WebClientSsl;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;

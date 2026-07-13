@@ -1,8 +1,8 @@
 package com.example.client;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.boot.ssl.SslBundles;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
