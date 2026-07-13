@@ -12,7 +12,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <description>Demo project showing how to use a custom resource</description>
     <properties>
-        <kubernetes.client.version>21.0.1</kubernetes.client.version>
+        <kubernetes.client.version>27.0.0</kubernetes.client.version>
     </properties>
     <dependencies>
         <dependency>
@@ -51,7 +51,6 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers-k3s</artifactId>
-            <version>1.20.0</version>
             <scope>test</scope>
         </dependency>
 
