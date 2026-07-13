@@ -12,22 +12,18 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>quotes-native</name>
 	<description>Demo project showing how to build a Native Image for a Spring App</description>
-	<properties>
-		<java.version>17</java.version>
-		<testcontainers.version>1.19.2</testcontainers.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -58,7 +54,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>junit-jupiter</artifactId>
+			<artifactId>testcontainers-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>		
 		<dependency>
@@ -69,17 +65,6 @@
 
 	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>testcontainers-bom</artifactId>
-			<version>${testcontainers.version}</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-		</dependencies>
-	</dependencyManagement>
 	<build>
 		<plugins>
 			<plugin>

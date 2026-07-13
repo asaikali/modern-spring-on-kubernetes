@@ -3,11 +3,10 @@ package com.example.jackson.databinding.json.fields;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Demonstrates how to use @JsonAlias to support multiple names for a field during deserialization.
@@ -36,8 +35,8 @@ public class JsonAliasTest {
 
   @Test
   @DisplayName("Deserialize using alias field names")
-  void deserializeWithAlias_shouldBindFieldsCorrectly() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserializeWithAlias_shouldBindFieldsCorrectly() {
+    JsonMapper mapper = new JsonMapper();
     Product product = mapper.readValue(ALIAS_JSON, Product.class);
 
     assertThat(product.id()).isEqualTo("p100");
@@ -47,8 +46,8 @@ public class JsonAliasTest {
 
   @Test
   @DisplayName("Serialize will use the actual field names, not aliases")
-  void serialize_shouldUseCanonicalFieldNames() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serialize_shouldUseCanonicalFieldNames() {
+    JsonMapper mapper = new JsonMapper();
     Product product = new Product("p100", "Widget", List.of("gadget", "tool"));
 
     String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(product);

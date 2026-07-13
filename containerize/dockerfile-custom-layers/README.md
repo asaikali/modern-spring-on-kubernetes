@@ -15,11 +15,11 @@ files that you want to put into a dedicated company dependencies layer.
 
 **Explore the container layers**
 * using the command line navigate to target folder `cd target`
-* execute the command `java -Djarmode=layertools -jar custom-layers-dockerfile-0.0.1-SNAPSHOT.jar`
-* execute the command `java -Djarmode=layertools -jar custom-layers-dockerfile-0.0.1-SNAPSHOT.jar list`
+* execute the command `java -Djarmode=tools -jar custom-layers-dockerfile-0.0.1-SNAPSHOT.jar`
+* execute the command `java -Djarmode=tools -jar custom-layers-dockerfile-0.0.1-SNAPSHOT.jar list-layers`
 * create a temporary directory `t`
 * navigate to the new directory `cd t`
-* execute the command `java -Djarmode=layertools -jar ../custom-layers-dockerfile-0.0.1-SNAPSHOT.jar extract`
+* execute the command `java -Djarmode=tools -jar ../custom-layers-dockerfile-0.0.1-SNAPSHOT.jar extract --layers --destination .`
 * using your file browser navigate into the `target/t` folder and check what is in those directories
   ** notice that it has an extra directory `company-dependencies`
 * examine the contents of the `Dockerfile` notice 

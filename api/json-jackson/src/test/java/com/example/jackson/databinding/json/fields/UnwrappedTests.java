@@ -3,10 +3,9 @@ package com.example.jackson.databinding.json.fields;
 import static org.assertj.core.api.Assertions.*;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 public class UnwrappedTests {
 
@@ -31,16 +30,16 @@ public class UnwrappedTests {
 
   @Test
   @DisplayName("Deserialization of flattened JSON with @JsonUnwrapped")
-  void deserializeFlattened_shouldSucceed() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserializeFlattened_shouldSucceed() {
+    JsonMapper mapper = new JsonMapper();
     Person person = mapper.readValue(FLATTENED_JSON, Person.class);
     assertThat(person).isEqualTo(FLATTENED_OBJECT);
   }
 
   @Test
   @DisplayName("Serialization of object to flattened JSON with @JsonUnwrapped")
-  void serializeFlattened_shouldIncludeUnwrappedFields() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeFlattened_shouldIncludeUnwrappedFields() {
+    JsonMapper mapper = new JsonMapper();
     String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(FLATTENED_OBJECT);
     System.out.println("Serialized flattened:\n" + json);
 

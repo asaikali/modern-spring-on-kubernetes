@@ -1,7 +1,5 @@
 package com.example.stream_04.orders.sse.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.stream.ConfirmationStatus;
 import com.rabbitmq.stream.Message;
 import com.rabbitmq.stream.Producer;
@@ -9,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * Publishes events to a RabbitMQ stream and waits for each event to be acknowledged by RabbitMQ.
@@ -52,40 +51,36 @@ public class RabbitStreamPublisher implements AutoCloseable {
    * @param type The type identifier for the message, stored in application properties
    * @return {@code true} if the message was successfully confirmed by RabbitMQ, {@code false}
    *     otherwise
-   * @throws RuntimeException if serialization of the object to JSON fails
+   * @throws tools.jackson.core.JacksonException if serialization of the object to JSON fails
+   *     (unchecked in Jackson 3)
    */
   public boolean publish(Object object, String type) {
-    try {
-      var bodyJson = this.objectMapper.writeValueAsString(object);
+    var bodyJson = this.objectMapper.writeValueAsString(object);
 
-      // create a Message to put on the stream
-      Message message =
-          producer
-              .messageBuilder()
-              .addData(bodyJson.getBytes(StandardCharsets.UTF_8))
-              .properties()
-              .messageId(index.incrementAndGet())
-              .contentType("application/json")
-              .messageBuilder()
-              .applicationProperties()
-              .entry("type", type)
-              .messageBuilder()
-              .build();
+    // create a Message to put on the stream
+    Message message =
+        producer
+            .messageBuilder()
+            .addData(bodyJson.getBytes(StandardCharsets.UTF_8))
+            .properties()
+            .messageId(index.incrementAndGet())
+            .contentType("application/json")
+            .messageBuilder()
+            .applicationProperties()
+            .entry("type", type)
+            .messageBuilder()
+            .build();
 
-      // send the message to the stream and wait for confirmation
-      CompletableFuture<ConfirmationStatus> confirmationStatusFuture = new CompletableFuture<>();
-      producer.send(
-          message,
-          confirmationStatus -> {
-            confirmationStatusFuture.complete(confirmationStatus);
-          });
+    // send the message to the stream and wait for confirmation
+    CompletableFuture<ConfirmationStatus> confirmationStatusFuture = new CompletableFuture<>();
+    producer.send(
+        message,
+        confirmationStatus -> {
+          confirmationStatusFuture.complete(confirmationStatus);
+        });
 
-      ConfirmationStatus status = confirmationStatusFuture.join();
-      return status.isConfirmed();
-
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
+    ConfirmationStatus status = confirmationStatusFuture.join();
+    return status.isConfirmed();
   }
 
   /**

@@ -3,13 +3,12 @@ package com.example.jackson.databinding;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonMerge;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectReader;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Demonstrates how to use @JsonMerge with mutable POJOs to apply partial updates.
@@ -64,8 +63,8 @@ public class JsonMergeTests {
 
   @Test
   @DisplayName("Apply JSON Merge Patch using @JsonMerge and readerForUpdating")
-  void mergePatch_shouldCombineFields() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void mergePatch_shouldCombineFields() {
+    JsonMapper mapper = new JsonMapper();
 
     // Step 1: Deserialize the original object
     User original = mapper.readValue(ORIGINAL_JSON, User.class);

@@ -4,11 +4,10 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 public class MissingFieldTests {
 
@@ -42,8 +41,8 @@ public class MissingFieldTests {
 
   @Test
   @DisplayName("Deserialization handles missing fields gracefully")
-  void deserializeWithMissing_shouldSucceed() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserializeWithMissing_shouldSucceed() {
+    JsonMapper mapper = new JsonMapper();
 
     var missing = mapper.readValue(MISSING_FIELD_JSON, Person.class);
     assertThat(missing.name()).isEqualTo("Alice");
@@ -54,8 +53,8 @@ public class MissingFieldTests {
 
   @Test
   @DisplayName("Deserialization handles missing fields gracefully")
-  void deserializeWithExtraFields_shouldSucceed() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserializeWithExtraFields_shouldSucceed() {
+    JsonMapper mapper = new JsonMapper();
 
     var extra = mapper.readValue(EXTRA_FIELD_JSON, Person.class);
     assertThat(extra.emails()).containsExactly("alice@example.com");

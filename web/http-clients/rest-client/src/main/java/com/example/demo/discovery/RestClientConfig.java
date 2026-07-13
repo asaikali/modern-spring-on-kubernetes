@@ -1,6 +1,6 @@
 package com.example.demo.discovery;
 
-import org.springframework.boot.autoconfigure.web.client.RestClientBuilderConfigurer;
+import org.springframework.boot.restclient.autoconfigure.RestClientBuilderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

@@ -4,11 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Demonstrates how to handle circular references using Jackson's {@code @JsonManagedReference} and
@@ -97,8 +97,8 @@ public class CircularReferenceTest {
 
   @Test
   @DisplayName("Serialize and deserialize with circular references using mutable classes")
-  void serializeAndDeserialize() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeAndDeserialize() {
+    ObjectMapper mapper = new JsonMapper();
 
     // ✅ Serialize: child.parent is skipped because of @JsonBackReference
     String serialized = mapper.writeValueAsString(original);

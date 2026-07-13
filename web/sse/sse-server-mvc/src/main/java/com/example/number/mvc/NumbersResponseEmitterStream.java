@@ -14,23 +14,27 @@ public class NumbersResponseEmitterStream {
 
   public ResponseBodyEmitter start() {
     // Register callback for normal completion
-    emitter.onCompletion(() -> {
-      log.info("SSE stream completed - client disconnected normally");
-      clientConnected = false;
-    });
+    emitter.onCompletion(
+        () -> {
+          log.info("SSE stream completed - client disconnected normally");
+          clientConnected = false;
+        });
 
     // Register callback for timeout
-    emitter.onTimeout(() -> {
-      log.info("SSE stream timed out");
-      clientConnected = false;
-    });
+    emitter.onTimeout(
+        () -> {
+          log.info("SSE stream timed out");
+          clientConnected = false;
+        });
 
     // Register callback for errors (abrupt disconnection)
-    emitter.onError(throwable -> {
-      log.info("SSE stream error (client likely disconnected abruptly): {}",
-          throwable.getClass().getSimpleName() + ": " + throwable.getMessage());
-      clientConnected = false;
-    });
+    emitter.onError(
+        throwable -> {
+          log.info(
+              "SSE stream error (client likely disconnected abruptly): {}",
+              throwable.getClass().getSimpleName() + ": " + throwable.getMessage());
+          clientConnected = false;
+        });
 
     // Start publishing in a separate thread
     Executors.newVirtualThreadPerTaskExecutor().submit(this::publishEvents);
@@ -52,8 +56,11 @@ public class NumbersResponseEmitterStream {
         // Log progress periodically (every 10k events)
         if (counter % 10000 == 0) {
           long elapsed = System.currentTimeMillis() - startTime;
-          log.debug("Still sending, counter={}, elapsed={}ms, rate={} events/sec",
-              counter, elapsed, (counter * 1000L) / elapsed);
+          log.debug(
+              "Still sending, counter={}, elapsed={}ms, rate={} events/sec",
+              counter,
+              elapsed,
+              (counter * 1000L) / elapsed);
         }
       }
 
@@ -63,12 +70,13 @@ public class NumbersResponseEmitterStream {
     } catch (IOException ex) {
       // IOException indicates network/write failure
       // Spring will handle completion - we don't need to call complete()
-      log.info("IOException detected disconnection: counter={}, exception={}",
-          counter, ex.getClass().getSimpleName() + ": " + ex.getMessage());
+      log.info(
+          "IOException detected disconnection: counter={}, exception={}",
+          counter,
+          ex.getClass().getSimpleName() + ": " + ex.getMessage());
     } catch (IllegalStateException ex) {
       // IllegalStateException thrown when emitter is already complete
-      log.info("Emitter already completed: counter={}, exception={}",
-          counter, ex.getMessage());
+      log.info("Emitter already completed: counter={}, exception={}", counter, ex.getMessage());
     } catch (Exception ex) {
       // Catch any unexpected exceptions
       log.error("Unexpected exception: counter={}", counter, ex);
@@ -76,8 +84,10 @@ public class NumbersResponseEmitterStream {
       // Just log final statistics - no need to call complete()
       // Spring handles completion automatically when IOException occurs
       long totalTime = System.currentTimeMillis() - startTime;
-      log.info("Publishing finished. Total events: {}, Time: {}ms, Rate: {} events/sec",
-          counter, totalTime,
+      log.info(
+          "Publishing finished. Total events: {}, Time: {}ms, Rate: {} events/sec",
+          counter,
+          totalTime,
           totalTime > 0 ? (counter * 1000L) / totalTime : 0);
     }
   }

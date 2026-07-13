@@ -1,8 +1,8 @@
 package com.example.client;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.boot.ssl.SslBundles;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,10 +15,7 @@ public class RestTemplateService implements CommandLineRunner {
 
   public RestTemplateService(RestTemplateBuilder builder, SslBundles sslBundles) {
     this.restTemplate =
-        builder
-            .rootUri("https://localhost:8443")
-            .setSslBundle(sslBundles.getBundle("client"))
-            .build();
+        builder.rootUri("https://localhost:8443").sslBundle(sslBundles.getBundle("client")).build();
   }
 
   @Override

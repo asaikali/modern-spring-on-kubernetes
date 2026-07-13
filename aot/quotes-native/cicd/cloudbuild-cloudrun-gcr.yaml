@@ -6,12 +6,12 @@
 #   _PIPELINE_NAME: demo-app-pipeline
 steps:
   # integration tests app with Maven
-  # - name: maven:3-openjdk-17-slim
+  # - name: maven:3-eclipse-temurin-25
   #   entrypoint: mvn
   #   args: ["verify"]
   #   dir: "aot/quotes-native"
   # build app with Maven
-  - name: maven:3-openjdk-17-slim
+  - name: maven:3-eclipse-temurin-25
     entrypoint: mvn
     args: ["package", "-Dmaven.test.skip=true"]
     dir: "aot/quotes-native"

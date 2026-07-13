@@ -5,11 +5,10 @@ import static org.assertj.core.api.Assertions.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 public class BasicObjectMappingTest {
 
@@ -90,16 +89,16 @@ public class BasicObjectMappingTest {
 
   @Test
   @DisplayName("Deserialization of object graph")
-  void deserialize_shouldSucceed() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserialize_shouldSucceed() {
+    JsonMapper mapper = new JsonMapper();
     Person person = mapper.readValue(PERSON_JSON, Person.class);
     assertThat(person).isEqualTo(PERSON_OBJECT);
   }
 
   @Test
   @DisplayName("Serialization of object graph")
-  void serialize_shouldMatchExpectedJson() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serialize_shouldMatchExpectedJson() {
+    JsonMapper mapper = new JsonMapper();
     String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(PERSON_OBJECT);
     System.out.println("Serialized object graph:\n" + json);
     Person person = mapper.readValue(json, Person.class);

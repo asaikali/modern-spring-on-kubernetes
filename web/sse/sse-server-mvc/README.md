@@ -20,7 +20,7 @@ using IntelliJ's built-in HTTP client.
 
 ## Prerequisites
 
-- Java 21+,  we use Virtual Threads in the sample 
+- Java 25+, we use Virtual Threads in the sample 
 - Maven 3.6+
 - RabbitMQ (for advanced stream examples)
 

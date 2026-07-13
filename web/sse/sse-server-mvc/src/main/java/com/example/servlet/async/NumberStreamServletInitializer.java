@@ -11,8 +11,8 @@ public class NumberStreamServletInitializer implements ServletContextInitializer
 
   @Override
   public void onStartup(ServletContext servletContext) throws ServletException {
-    ServletRegistration.Dynamic registration = servletContext.addServlet(
-        "numberStreamServlet", new NumberStreamServlet());
+    ServletRegistration.Dynamic registration =
+        servletContext.addServlet("numberStreamServlet", new NumberStreamServlet());
 
     registration.setAsyncSupported(true);
     registration.addMapping("/servlet/direct");

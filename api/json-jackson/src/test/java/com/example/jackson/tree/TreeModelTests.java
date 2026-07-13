@@ -2,12 +2,12 @@ package com.example.jackson.tree;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Demonstrates how to use Jackson's Tree Model API (JsonNode) to - read unknown or dynamic JSON
@@ -32,23 +32,24 @@ public class TreeModelTests {
 
   @Test
   @DisplayName("Read JSON into tree model and access fields")
-  void readTree_shouldParseDynamicJson() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void readTree_shouldParseDynamicJson() {
+    ObjectMapper mapper = new JsonMapper();
     JsonNode root = mapper.readTree(ORIGINAL_JSON);
 
     // Navigate into the tree
     JsonNode userNode = root.get("user");
     JsonNode metadataNode = root.get("metadata");
 
+    // Jackson 3 renamed JsonNode.asText() to asString()
     assertThat(userNode.get("id").asInt()).isEqualTo(123);
-    assertThat(userNode.get("name").asText()).isEqualTo("Alice");
-    assertThat(metadataNode.get("source").asText()).isEqualTo("mobile");
+    assertThat(userNode.get("name").asString()).isEqualTo("Alice");
+    assertThat(metadataNode.get("source").asString()).isEqualTo("mobile");
   }
 
   @Test
   @DisplayName("Write JSON tree programmatically")
-  void writeTree_shouldCreateJsonDynamically() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void writeTree_shouldCreateJsonDynamically() {
+    ObjectMapper mapper = new JsonMapper();
 
     // Build up an object tree dynamically
     ObjectNode userNode = mapper.createObjectNode();

@@ -1,0 +1,9 @@
+---
+applications:
+  - name: quotes-cds
+    path: target/dockerfile-cds-0.0.1-SNAPSHOT.jar
+    memory: 1G
+    instances: 1
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 25.+ } }'
+      JBP_CONFIG_SPRING_BOOT_EFFICIENCY: '{ "spring_aot_enabled": true, "aot_cache_enabled": true }'
