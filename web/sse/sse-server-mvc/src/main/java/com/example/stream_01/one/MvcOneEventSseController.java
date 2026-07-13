@@ -2,7 +2,6 @@ package com.example.stream_01.one;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Educational Spring MVC controller demonstrating Server-Sent Events (SSE) with background threads.
@@ -80,9 +80,9 @@ class MvcOneEventSseController {
             // Create sample user data as a Map for demonstration purposes
             var userMap = Map.of("firstName", "John", "lastName", "Doe");
 
-            // Convert the user data to a pretty-printed JSON string using Jackson ObjectMapper
+            // Convert the user data to a pretty-printed JSON string using Jackson's JsonMapper
             var userJson =
-                new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(userMap);
+                new JsonMapper().writerWithDefaultPrettyPrinter().writeValueAsString(userMap);
 
             // ==================================================================================
             // STEP 2: Build a comprehensive SSE event using all available fields

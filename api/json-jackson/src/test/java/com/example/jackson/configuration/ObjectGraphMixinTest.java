@@ -5,11 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 public class ObjectGraphMixinTest {
 
@@ -120,17 +120,18 @@ public class ObjectGraphMixinTest {
   }
 
   private static ObjectMapper objectMapperWithMixins() {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.addMixIn(Person.class, PersonMixin.class);
-    mapper.addMixIn(Role.class, RoleMixin.class);
-    mapper.addMixIn(Address.class, AddressMixin.class);
-    mapper.addMixIn(Status.class, StatusMixin.class);
-    return mapper;
+    // Jackson 3 mappers are immutable: mix-ins are registered on the builder
+    return JsonMapper.builder()
+        .addMixIn(Person.class, PersonMixin.class)
+        .addMixIn(Role.class, RoleMixin.class)
+        .addMixIn(Address.class, AddressMixin.class)
+        .addMixIn(Status.class, StatusMixin.class)
+        .build();
   }
 
   @Test
   @DisplayName("Deserialization of object graph with mixins")
-  void deserialize_withMixins_shouldSucceed() throws JsonProcessingException {
+  void deserialize_withMixins_shouldSucceed() {
     ObjectMapper mapper = objectMapperWithMixins();
     Person person = mapper.readValue(PERSON_JSON, Person.class);
     assertThat(person).isEqualTo(PERSON_OBJECT);
@@ -138,7 +139,7 @@ public class ObjectGraphMixinTest {
 
   @Test
   @DisplayName("Serialization of object graph with mixins")
-  void serialize_withMixins_shouldMatchExpectedJson() throws JsonProcessingException {
+  void serialize_withMixins_shouldMatchExpectedJson() {
     ObjectMapper mapper = objectMapperWithMixins();
     String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(PERSON_OBJECT);
     System.out.println("Serialized with mixins:\n" + json);

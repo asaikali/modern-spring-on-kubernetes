@@ -2,11 +2,11 @@ package com.example.jackson.databinding;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Demonstrates how to deserialize a JSON object into a Java object that uses the Builder pattern.
@@ -72,8 +72,8 @@ public class BuilderDeserializationTest {
 
   @Test
   @DisplayName("Deserialize JSON using Builder pattern with @JsonPOJOBuilder")
-  void deserializeWithBuilder() throws Exception {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserializeWithBuilder() {
+    JsonMapper mapper = new JsonMapper();
 
     Person result = mapper.readValue(inputJson, Person.class);
 

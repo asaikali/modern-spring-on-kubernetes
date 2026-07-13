@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 public class DynamicPropertiesTests {
 
@@ -98,16 +98,16 @@ public class DynamicPropertiesTests {
 
   @Test
   @DisplayName("Deserialization with dynamic properties")
-  void deserializeWithDynamicProperties_shouldSucceed() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserializeWithDynamicProperties_shouldSucceed() {
+    ObjectMapper mapper = new JsonMapper();
     User user = mapper.readValue(JSON_WITH_DYNAMIC_PROPS, User.class);
     assertThat(user).isEqualTo(USER_OBJECT);
   }
 
   @Test
   @DisplayName("Serialization includes dynamic properties")
-  void serializeWithDynamicProperties_shouldIncludeExtraFields() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeWithDynamicProperties_shouldIncludeExtraFields() {
+    ObjectMapper mapper = new JsonMapper();
     String json = mapper.writeValueAsString(USER_OBJECT);
     System.out.println("Serialized with dynamic properties:\n" + json);
 

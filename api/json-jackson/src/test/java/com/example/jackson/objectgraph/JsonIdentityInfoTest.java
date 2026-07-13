@@ -4,11 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Demonstrates how to preserve object identity during serialization and deserialization
@@ -68,26 +68,28 @@ public class JsonIdentityInfoTest {
           "Acme Corp",
           List.of(new Employee("Bob", sharedManager), new Employee("Charlie", sharedManager)));
 
+  // Note: Jackson 3 sorts properties alphabetically by default, so "employees"
+  // comes before "name", and each employee's "manager" comes before its "name".
   static final String expectedJson =
       """
       {
-        "name" : "Acme Corp",
         "employees" : [ {
-          "name" : "Bob",
           "manager" : {
             "name" : "Alice"
-          }
+          },
+          "name" : "Bob"
         }, {
-          "name" : "Charlie",
-          "manager" : "Alice"
-        } ]
+          "manager" : "Alice",
+          "name" : "Charlie"
+        } ],
+        "name" : "Acme Corp"
       }
       """;
 
   @Test
   @DisplayName("Serialize and deserialize using @JsonIdentityInfo to preserve shared references")
-  void serializeAndDeserializeWithIdentity() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeAndDeserializeWithIdentity() {
+    ObjectMapper mapper = new JsonMapper();
 
     // Serialize
     String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(originalCompany);

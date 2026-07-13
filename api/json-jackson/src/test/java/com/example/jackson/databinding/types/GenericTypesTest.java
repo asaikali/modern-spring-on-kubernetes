@@ -3,12 +3,11 @@ package com.example.jackson.databinding.types;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 public class GenericTypesTest {
 
@@ -31,8 +30,8 @@ public class GenericTypesTest {
 
   @Test
   @DisplayName("Deserialization of generic type with TypeReference")
-  void deserializeGeneric_shouldSucceed() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void deserializeGeneric_shouldSucceed() {
+    JsonMapper mapper = new JsonMapper();
 
     // TypeReference is used here to retain the generic type information (GenericWrapper<Person>)
     // at runtime. This is necessary because Java's type erasure removes generic type info,
@@ -44,8 +43,8 @@ public class GenericTypesTest {
 
   @Test
   @DisplayName("Serialization of generic type with TypeReference")
-  void serializeGeneric_shouldMatchExpectedJson() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeGeneric_shouldMatchExpectedJson() {
+    JsonMapper mapper = new JsonMapper();
 
     String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(GENERIC_OBJECT);
     System.out.println("Serialized generic object:\n" + json);

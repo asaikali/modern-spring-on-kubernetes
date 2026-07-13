@@ -4,16 +4,20 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
 
+/**
+ * Jackson 3 has java.time support built in (no JavaTimeModule to register) and, unlike Jackson 2,
+ * serializes dates as ISO-8601 strings by default: WRITE_DATES_AS_TIMESTAMPS (now on
+ * DateTimeFeature) is disabled out of the box.
+ */
 public class DateTimeTests {
 
   record Person(
@@ -48,29 +52,13 @@ public class DateTimeTests {
       """;
 
   @Test
-  @DisplayName("Default serialization writes timestamps")
-  void serializeWithDefaults_shouldUseTimestamps() throws JsonProcessingException {
+  @DisplayName("Default serialization writes ISO-8601 strings")
+  void serializeWithDefaults_shouldUseIsoStrings() {
     var input = new Person("Alice", DATE, ZDT, INSTANT);
-    var mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    var mapper = new JsonMapper();
 
     String json = mapper.writeValueAsString(input);
-    System.out.println("Default (timestamps):\n" + json);
-
-    assertThat(json).contains("[1990,5,1]");
-    assertThat(json).contains("\"createdAt\"");
-  }
-
-  @Test
-  @DisplayName("Global ISO config disables timestamps")
-  void serializeWithGlobalIsoConfig_shouldUseIsoStrings() throws JsonProcessingException {
-    var input = new Person("Alice", DATE, ZDT, INSTANT);
-    var mapper =
-        new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-    String json = mapper.writeValueAsString(input);
-    System.out.println("Global ISO format:\n" + json);
+    System.out.println("Default (ISO-8601 strings):\n" + json);
 
     assertThat(json).contains("\"birthday\":\"1990-05-01\"");
     assertThat(json).contains("\"lastLogin\":\"2024-07-26T09:00:00Z\"");
@@ -78,13 +66,26 @@ public class DateTimeTests {
   }
 
   @Test
+  @DisplayName("Enabling WRITE_DATES_AS_TIMESTAMPS restores numeric timestamps")
+  void serializeWithTimestampsEnabled_shouldUseTimestamps() {
+    var input = new Person("Alice", DATE, ZDT, INSTANT);
+    var mapper = JsonMapper.builder().enable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS).build();
+
+    String json = mapper.writeValueAsString(input);
+    System.out.println("Timestamps enabled:\n" + json);
+
+    assertThat(json).contains("[1990,5,1]");
+    assertThat(json).contains("\"createdAt\"");
+  }
+
+  @Test
   @DisplayName("Field-level @JsonFormat overrides global timestamp setting")
-  void serializeWithFieldLevelJsonFormat_shouldUseCustomPatterns() throws JsonProcessingException {
+  void serializeWithFieldLevelJsonFormat_shouldUseCustomPatterns() {
     var input = PERSON_OBJECT;
     var mapper =
-        new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // force timestamps globally
+        JsonMapper.builder()
+            .enable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS) // force timestamps globally
+            .build();
 
     String json = mapper.writeValueAsString(input);
     System.out.println("Field-level @JsonFormat overrides global timestamps:\n" + json);
@@ -96,12 +97,8 @@ public class DateTimeTests {
 
   @Test
   @DisplayName("Serialization matches ISO string with field-level @JsonFormat")
-  void serializeWithFormatAnnotations_shouldMatchJsonLiteral() throws JsonProcessingException {
-    ObjectMapper mapper =
-        new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .enable(SerializationFeature.INDENT_OUTPUT)
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+  void serializeWithFormatAnnotations_shouldMatchJsonLiteral() {
+    JsonMapper mapper = JsonMapper.builder().enable(SerializationFeature.INDENT_OUTPUT).build();
 
     String json = mapper.writeValueAsString(PERSON_OBJECT);
     System.out.println("Serialized with @JsonFormat:\n" + json);

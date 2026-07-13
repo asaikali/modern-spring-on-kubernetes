@@ -3,12 +3,12 @@ package com.example.jackson.presentation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.ser.std.SimpleBeanPropertyFilter;
+import tools.jackson.databind.ser.std.SimpleFilterProvider;
 
 public class JsonFilterTest {
 
@@ -19,8 +19,8 @@ public class JsonFilterTest {
 
   @Test
   @DisplayName("Serialize User with dynamic filter to exclude secretNote")
-  void serializeWithFilter_shouldOmitSecretNote() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeWithFilter_shouldOmitSecretNote() {
+    ObjectMapper mapper = new JsonMapper();
 
     var filter = SimpleBeanPropertyFilter.serializeAllExcept("secretNote");
     var filters = new SimpleFilterProvider().addFilter("UserFilter", filter);
@@ -34,8 +34,8 @@ public class JsonFilterTest {
 
   @Test
   @DisplayName("Serialize User with different filter to include all fields")
-  void serializeWithFilter_includeAllFields() throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
+  void serializeWithFilter_includeAllFields() {
+    ObjectMapper mapper = new JsonMapper();
 
     var filter = SimpleBeanPropertyFilter.serializeAll();
     var filters = new SimpleFilterProvider().addFilter("UserFilter", filter);
