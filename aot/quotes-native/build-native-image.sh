@@ -1,5 +1,4 @@
 #!/bin/bash
 set -x
-# ./gradlew bootBuildImage -Pnative --imageName quotes-native:aot
-./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=quotes-native:1
+./mvnw -Pnative spring-boot:build-image -Dspring-boot.build-image.imageName=quotes-native:aot
 docker images boot-*
