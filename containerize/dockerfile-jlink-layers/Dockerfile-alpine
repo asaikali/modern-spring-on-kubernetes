@@ -1,4 +1,4 @@
-FROM eclipse-temurin:24-alpine as builder
+FROM eclipse-temurin:25-alpine as builder
 
 RUN apk add --no-cache binutils
 

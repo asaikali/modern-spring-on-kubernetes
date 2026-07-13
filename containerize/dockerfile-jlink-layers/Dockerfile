@@ -1,4 +1,4 @@
-FROM eclipse-temurin:24 as builder
+FROM eclipse-temurin:25 as builder
 # create a custom JRE for the boot application
 RUN $JAVA_HOME/bin/jlink \
          --add-modules java.base,java.desktop,java.logging,java.management,java.naming,java.security.jgss,java.instrument,java.sql \
