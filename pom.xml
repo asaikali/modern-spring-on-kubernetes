@@ -17,7 +17,7 @@
     <properties>
         <java.version>25</java.version>
         <spring-cloud.version>2025.1.2</spring-cloud.version>
-        <dnsjava.version>3.6.1</dnsjava.version>
+        <dnsjava.version>3.6.5</dnsjava.version>
         <spotless.version>3.8.0</spotless.version>
     </properties>
     <modules>
