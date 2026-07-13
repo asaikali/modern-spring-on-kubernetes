@@ -18,6 +18,11 @@
 		<module>discovery-client</module>
 		<module>k8s-service</module>
 		<module>eureka</module>
+<!-- The dns module is intentionally parked (see GitHub issue #17): its
+		     samples need Docker for the CoreDNS Testcontainers setup and document
+		     an unresolved UDP port-mapping bug (BrokenTestStuckOnBugInUdp). It has
+		     not been built since the Spring Boot 4.1 upgrade; re-enable deliberately
+		     and expect to fix compilation/test fallout. -->
 <!--		<module>dns</module>-->
 	</modules>
 </project>
