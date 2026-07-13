@@ -15,10 +15,7 @@ public class RestTemplateService implements CommandLineRunner {
 
   public RestTemplateService(RestTemplateBuilder builder, SslBundles sslBundles) {
     this.restTemplate =
-        builder
-            .rootUri("https://localhost:8443")
-            .setSslBundle(sslBundles.getBundle("client"))
-            .build();
+        builder.rootUri("https://localhost:8443").sslBundle(sslBundles.getBundle("client")).build();
   }
 
   @Override
