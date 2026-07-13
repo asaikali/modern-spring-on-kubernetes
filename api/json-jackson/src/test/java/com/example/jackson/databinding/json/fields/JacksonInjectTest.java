@@ -17,7 +17,8 @@ import org.junit.jupiter.api.Test;
  */
 public class JacksonInjectTest {
 
-  static final String inputJson = """
+  static final String inputJson =
+      """
       {
         "username": "alice"
       }
