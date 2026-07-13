@@ -4,27 +4,26 @@ Example shows how to build JIT(JVM) and Native Java images with Spring Native an
 Instructions show you how to build/run both application and container images using `Maven`.
 
 ### Prerequisites
-* [Java 21 JDK](https://adoptium.net/)
-* [GraalVM 22.3 - Java 17](https://www.graalvm.org/22.3/docs/getting-started/) - to build Native Java application images `or`
-* [Liberica NIK 22.3 - Java 17](https://bell-sw.com/pages/downloads/native-image-kit/#) - alternate Native Java Image building tool based on open-source GraalVM 
+* [Java 25 JDK](https://adoptium.net/)
+* [GraalVM for Java 25](https://www.graalvm.org/) - to build Native Java application images `or`
+* [Liberica NIK](https://bell-sw.com/pages/downloads/native-image-kit/#) - alternate Native Java Image building tool based on open-source GraalVM 
 * [Docker](https://www.docker.com/products/docker-desktop) 
 * [dive](https://github.com/wagoodman/dive) tool for exploring container layers 
 * [cURL](https://curl.se/docs/manpage.html) or [HTTPie](https://httpie.io/) - app testing
 
 ### Install GraalVM 
-* [SDKMan - preferred method](https://sdkman.io/)
-    * GraalVM 22.3 
-        * `sdk install java  22.3.2.r17-grl` - select `Y` to set as default `or`
-        * `sdk use java 22.3.2.r17-grl`
-        * `gu install native-image`
-    * Liberica NIK 22.3: 
-        * `sdk install java 22.3.2.r17-nik`  - select `Y` to set as default `or`
-        * `sdk use java 22.3.2.r17-nik`
-* [GraalVM one-line installer]
-    * install script released with 22.3 on OCt 25, 2022
-    * `bash <(curl -sL https://get.graalvm.org/jdk) graalvm-ce-java17-22.3.0`
+* [SDKMan - preferred method](https://sdkman.io/) - run `sdk list java` to see the latest identifiers, e.g. for Java 25:
+    * GraalVM CE: 
+        * `sdk install java 25.0.2-graalce` - select `Y` to set as default `or`
+        * `sdk use java 25.0.2-graalce`
+    * Oracle GraalVM: 
+        * `sdk install java 25.0.3-graal`
+    * Liberica NIK: 
+        * `sdk install java 25.0.3.r25-nik`
 * [Using Homebrew](https://github.com/graalvm/homebrew-tap)
 * [From GraalVM Github repo](https://github.com/graalvm/graalvm-ce-builds/releases)
+
+Note: since GraalVM for JDK 21, `native-image` ships with the distribution - no separate `gu install native-image` step is needed.
 
 ### Known issues
 * `java.lang.management.ThreadInfo` is not exposed at this time in Spring Native, due to an [open issue](https://github.com/oracle/graal/issues/1039) in GraalVM - this can result in a failure of the Native Java application build with GraalVM

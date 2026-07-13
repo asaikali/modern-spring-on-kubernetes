@@ -84,7 +84,6 @@
 						<configuration>
 							<image>
 								<name>${project.artifactId}-maven:aot</name>
-								<!-- <builder>dashaun/java-native-builder-arm64:7.37.0</builder> -->
 							</image>
 						</configuration>
 					</plugin>
