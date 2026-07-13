@@ -15,11 +15,11 @@ that only containers the modules needed by the application.
 
 **Explore the container layers**
 * using the command line navigate to target folder `cd target`
-* execute the command `java -Djarmode=layertools -jar jlink-layers-dockerfile-0.0.1-SNAPSHOT.jar`
-* execute the command `java -Djarmode=layertools -jar jlink-layers-dockerfile-0.0.1-SNAPSHOT.jar list`
+* execute the command `java -Djarmode=tools -jar jlink-layers-dockerfile-0.0.1-SNAPSHOT.jar`
+* execute the command `java -Djarmode=tools -jar jlink-layers-dockerfile-0.0.1-SNAPSHOT.jar list-layers`
 * create a temporary directory `mkdir t`
 * navigate to the new directory `cd t`
-* execute the command `java -Djarmode=layertools -jar ../jlink-layers-dockerfile-0.0.1-SNAPSHOT.jar extract`
+* execute the command `java -Djarmode=tools -jar ../jlink-layers-dockerfile-0.0.1-SNAPSHOT.jar extract --layers --destination .`
 * using your file browser navigate into the `target/t` folder and check what is in those directories
 * examine the contents of the `Dockerfile` notice 
   * it is a multistage dockerfile  
