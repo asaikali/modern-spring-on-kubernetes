@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.util.Map;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.shaded.com.google.common.base.Preconditions;
 import org.testcontainers.utility.DockerImageName;
 
 public class CoreDnsContainer extends GenericContainer<CoreDnsContainer> {
@@ -64,9 +63,10 @@ public class CoreDnsContainer extends GenericContainer<CoreDnsContainer> {
   }
 
   private Integer getMappedPort(ExposedPort exposedPort) {
-    Preconditions.checkState(
-        this.getContainerId() != null,
-        "Mapped port can only be obtained after the container is started");
+    if (this.getContainerId() == null) {
+      throw new IllegalStateException(
+          "Mapped port can only be obtained after the container is started");
+    }
     InspectContainerResponse containerInfo = this.getContainerInfo();
     if (containerInfo == null) {
       throw new RuntimeException(

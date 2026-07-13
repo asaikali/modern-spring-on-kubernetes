@@ -2,7 +2,7 @@ package com.example.demo;
 
 import com.rabbitmq.stream.*;
 import org.junit.jupiter.api.*;
-import org.testcontainers.containers.RabbitMQContainer;
+import org.testcontainers.rabbitmq.RabbitMQContainer;
 import org.testcontainers.utility.DockerImageName;
 
 public class RabbitmqStreamIntegrationTest {
