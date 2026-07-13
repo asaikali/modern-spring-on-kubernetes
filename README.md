@@ -14,8 +14,8 @@ sample and points out interesting things to look at.
 
 ### Java tooling
 
-* [Java 21 JDK](https://sdkman.io/)
-* [Java 21 GraalVM](https://sdkman.io/)
+* [Java 25 JDK](https://sdkman.io/)
+* [Java 25 GraalVM](https://sdkman.io/)
 * [Maven](https://maven.apache.org/index.html)
 * [Gradle](https://gradle.org/)
 * Favourite Java IDE one of
@@ -98,16 +98,15 @@ can select the approach that works best for your situation.
 
 Technologies covered in the workshop
 
-* Declarative clients (New feature in Spring 6)
-* GraphQL (New feature in Spring 6)
+* Declarative clients
+* GraphQL
 * Spring Authorization Server (Customizable OIDC server)
 * Spring Cloud Gateway
-* Spring Cloud Sleuth
 * Spring Cloud Function
-* Observability with Micrometre 2 and Spring Framework 6
+* Observability with Micrometer and Micrometer Tracing
 * How to effectively containerize Spring Boot apps
 * How to effectively run Spring Boot apps on Kubernetes
-* Understand Ahead-of-Time(AOT) and Native Images in Spring Boot 3.0
+* Understand Ahead-of-Time(AOT) and Native Images in Spring Boot
 
 Architectural topics that we will discuss
 
@@ -121,6 +120,6 @@ Architectural topics that we will discuss
 * GraphQL vs. REST
 * Serverless Functions vs. Long Running Processes
 
-Come learn how to use new capabilities introduced in Spring Framework 6.1,
-Spring Boot 3.3, and Spring Cloud 2023, running on Kubernetes, to design and
+Come learn how to use new capabilities introduced in Spring Framework 7,
+Spring Boot 4.1, and Spring Cloud 2025.1, running on Kubernetes, to design and
 implement modern microservices.
