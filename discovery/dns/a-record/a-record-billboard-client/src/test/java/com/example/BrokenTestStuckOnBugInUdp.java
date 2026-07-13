@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.shaded.com.google.common.base.Preconditions;
+
 import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
@@ -75,9 +75,10 @@ public class BrokenTestStuckOnBugInUdp {
   }
 
   private Integer getMappedPort(GenericContainer<?> container, ExposedPort exposedPort, int count) {
-    Preconditions.checkState(
-        container.getContainerId() != null,
-        "Mapped port can only be obtained after the container is started");
+    if (container.getContainerId() == null) {
+      throw new IllegalStateException(
+          "Mapped port can only be obtained after the container is started");
+    }
     InspectContainerResponse containerInfo = container.getContainerInfo();
     if (containerInfo == null) {
       throw new RuntimeException(
