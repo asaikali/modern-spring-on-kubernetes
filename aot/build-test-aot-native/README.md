@@ -7,16 +7,14 @@ It showcases how reflection, serialization, proxying and resource loading can be
 This work expands on the sample built by [Stephane Nicoll](https://github.com/snicoll/demo-aot-native)
 
 ### Install GraalVM
-* [SDKMan - preferred method](https://sdkman.io/)
-    * GraalVM 21
-        * `sdk install java 21.0.1-graalce ` - select `Y` to set as default `or`
-        * `sdk use 21.0.1-graalce`
-        * `gu install native-image`
-* [GraalVM 22.3 one-line installer]
-    * install script released with 22.3 on OCt 25, 2022
-    * `bash <(curl -sL https://get.graalvm.org/jdk) graalvm-ce-java17-22.3.0`
+* [SDKMan - preferred method](https://sdkman.io/) - run `sdk list java` to see the latest identifiers, e.g. for Java 25:
+    * GraalVM CE
+        * `sdk install java 25.0.2-graalce` - select `Y` to set as default `or`
+        * `sdk use java 25.0.2-graalce`
 * [Using Homebrew](https://github.com/graalvm/homebrew-tap)
 * [From GraalVM Github repo](https://github.com/graalvm/graalvm-ce-builds/releases)
+
+Note: since GraalVM for JDK 21, `native-image` ships with the distribution - no separate `gu install native-image` step is needed.
 
 ### Test commands for the Application
 The following test commands allow you to test the JIT(JVM) and Native Java applications. The behaviour must be idempotent.

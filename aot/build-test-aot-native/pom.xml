@@ -64,7 +64,6 @@
 						<configuration>
 							<image>
 								<name>${project.artifactId}-maven:aot</name>
-								<builder>dashaun/java-native-builder-arm64:7.37.0</builder>
 							</image>
 						</configuration>
 					</plugin>
@@ -114,7 +113,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<builder>paketobuildpacks/builder:tiny</builder>
 						<name>${project.artifactId}-maven:jit</name>
 					</image>
 				</configuration>
