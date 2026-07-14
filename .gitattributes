@@ -1,0 +1,4 @@
+# Maven wrapper scripts: mvnw runs under /bin/sh and must stay LF;
+# mvnw.cmd runs under cmd.exe and must check out as CRLF on all platforms.
+mvnw text eol=lf
+*.cmd text eol=crlf
